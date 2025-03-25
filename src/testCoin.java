@@ -22,7 +22,7 @@ public class testCoin extends GraphicsProgram {
 	
 	private Timer timer;
     
-    // Player movement variables
+    //player movement variables
     private double playerVelocityX = 0;
     private double playerVelocityY = 0;
 	
@@ -36,10 +36,10 @@ public class testCoin extends GraphicsProgram {
 		coinsInLevel = new ArrayList<GOval>(); //creates a list of coins
 		coinCount = 3; //manages how many coins to add and how many are left remaining
 		for (int i = 0; i < coinCount; i++) {
-		addCoinToList(createCoin());
-		spawnCoins(coinsInLevel);
-		}
-		
+			addCoinToList(createCoin());
+			spawnCoins(coinsInLevel);
+			}
+	
 		//displays the number of coins in the level as well as the number of coins collected
 		coinsCollectedText = new GLabel("Coins Collected: " + coinsCollected, 5, 15);
 		add(coinsCollectedText);
@@ -51,20 +51,20 @@ public class testCoin extends GraphicsProgram {
         //a timer used to call actionPerformed at regular intervals
         timer = new Timer(50, this); //50 = milliseconds
         timer.start();
-	}
+        }
 	
 	//this method creates a single coin
     private GOval createCoin() {
-        	coin = new GOval(COIN_SIZE, COIN_SIZE);
-        	coin.setFillColor(Color.YELLOW);
-        	coin.setFilled(true);
-        	return coin;
-    }
+    	coin = new GOval(COIN_SIZE, COIN_SIZE);
+    	coin.setFillColor(Color.YELLOW);
+    	coin.setFilled(true);
+    	return coin;
+    	}
     
     //this method adds the coin to a list
     private void addCoinToList(GOval coin) {
     	coinsInLevel.add(coin);
-    }
+    	}
     
     //spawns the list of coins.
     //for now I have them spawn next to each other. maybe change it so that it spawns relative to a list of platforms.
@@ -75,10 +75,10 @@ public class testCoin extends GraphicsProgram {
             coinList.get(i).setLocation(coinLocationX, coinLocationY);
             add(coinList.get(i));
             coinLocationX += coinList.get(i).getWidth() + 10; //10 is the space between coins based on its diameter
+            }
         }
-    }
     
- //checks for player and coin collision
+    //checks for player and coin collision
     private void checkCoinCollision() {
     	//iterate over the coins in the list
         for (int i = 0; i < coinsInLevel.size(); i++) {
@@ -91,14 +91,14 @@ public class testCoin extends GraphicsProgram {
                 
                 coinsCollected++;
                 i--; //adjust the index since the list shrinks after removal
+                }
             }
-        }
         
         //update the UI
         coinsCollectedText.setLabel("Coins Collected: " + coinsCollected);
         coinsRemainingText.setLabel("Coins Remaining: " + coinsInLevel.size());
         System.out.println(coinsInLevel.size()); //used to check if properly removing from list
-    }
+        }
     
     // Handles key presses for movement
     @Override
@@ -117,8 +117,8 @@ public class testCoin extends GraphicsProgram {
             case KeyEvent.VK_D: // Move right
                 playerVelocityX = 10;
                 break;
+                }
         }
-    }
     // Handles key release to stop movement
     @Override
     public void keyReleased(KeyEvent e) {
@@ -135,8 +135,8 @@ public class testCoin extends GraphicsProgram {
             case KeyEvent.VK_D: // Stop moving right
                 playerVelocityX = 0;
                 break;
+                }
         }
-    }
     
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -147,7 +147,7 @@ public class testCoin extends GraphicsProgram {
         
         //after each movement, check for collisions
         checkCoinCollision();
-    }
+        }
 	
 	public void init() {
 		setSize(WINDOW_SIZE, WINDOW_SIZE);
@@ -155,5 +155,5 @@ public class testCoin extends GraphicsProgram {
 	
 	public static void main(String[] args) {
 		new testCoin().start();
-	}
+		}
 }
