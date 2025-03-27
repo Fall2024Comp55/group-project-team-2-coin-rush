@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.util.ArrayList;
 
+import javax.swing.Timer;
+
 import acm.graphics.*;
 import acm.program.GraphicsProgram;
 import acm.util.Platform;
@@ -18,6 +20,15 @@ public class Enemy extends GraphicsProgram{
    ArrayList<Integer> Xvelocity;
   ArrayList<GRect> platforms; 
   //Comment
+  
+  private GOval player;
+  private int healthPoint = 3;
+  // Player movement variables
+  private double playerVelocityX = 0;
+  private double playerVelocityY = 0;
+  private Timer timer;
+    
+
     
 //  creates a single enemy and adds into the array
    public void createEnemy() {  
