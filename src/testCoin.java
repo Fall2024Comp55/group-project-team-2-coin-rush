@@ -11,6 +11,17 @@ import acm.graphics.GOval;
 import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
+/* CHANGES/ToDos
+ * So I decided to just make two integers to track the amount of coins to add to where.
+ * Had AI clean up and organize my texts for readability.
+ * 
+ * SUGGESTIONS
+ * 1) Make a grid and spawn floating coins relative to a cell?
+ * 2) Make floating coins spawn to a mouse click and save position?
+ * 3) Drag the floating coins to a fixed position?
+ * Thank you for reading lol
+ */
+
 public class testCoin extends GraphicsProgram {
 	public static final int COIN_SIZE = 20; //default coin size
 
@@ -53,6 +64,7 @@ public class testCoin extends GraphicsProgram {
         // Create platforms
         ArrayList<GRect> platforms = new ArrayList<>();
         /*
+         * decided to test making platforms randomized to test if it works
         GRect platform1 = new GRect(100, 300, 100, 20);
         GRect platform2 = new GRect(250, 200, 300, 20);
         GRect platform3 = new GRect(300, 150, 50, 20);
@@ -199,7 +211,8 @@ public class testCoin extends GraphicsProgram {
     }
     
     
-    
+    //generates randomly sized/placed platforms of a fixed size
+    //primarily used for testing for now
     private ArrayList<GRect> generateRandomPlatforms(int numPlatforms) {
         ArrayList<GRect> platforms = new ArrayList<>();
         Random rand = new Random();
