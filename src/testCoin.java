@@ -10,8 +10,9 @@ import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
 /* CHANGES/ToDos
- * So I decided to just make two integers to track the amount of coins to add to where.
- * Had AI clean up and organize my texts for readability.
+ * I've simplified some of the code.
+ * I began to create a constructor. This constructor can pretty much automatically handles much of the data assigning (which I think is the way to do it?)
+ * I am trying to think in terms of how other classes my interact with this one
  * 
  * SUGGESTIONS
  * 1) Make a grid and spawn floating coins relative to a cell?
@@ -24,93 +25,72 @@ public class testCoin extends GraphicsProgram {
 	public static final int COIN_SIZE = 20; //default coin size
 
     ArrayList<GOval> coinsOnPlatforms; //list of coins on platforms
-    ArrayList<GOval> coinsInLevel; //list of coins floating within the level
+    ArrayList<GOval> coinsOnFloat; //list of coins floating within the level
+    private ArrayList<GRect> platforms; //used for testing
 
     private GOval coin;
     private GOval player;
 
-	private int coinCount;
-	private int coinsForPlatforms; //coins specifically for platforms
-	private int coinsForFloat; //coins that are not tied to platforms but float in level
+	private int coinCount; // might not need
+	private int coinsForPlatforms; // Coins specifically for platforms
+	private int coinsForFloat; // Coins that are not tied to platforms but float in level
 	private int coinsCollected = 0;
+	private int numPlatforms; // might not need
 	
 	private GLabel coinsCollectedText;
 	private GLabel coinsRemainingText;
 	
 	private Timer timer;
     
-    //player movement variables
+    // Player movement variables
     private double playerVelocityX = 0;
     private double playerVelocityY = 0;
+    
+    
+    // Constructor to assign data
+    public testCoin(int coinsForFloat, int coinsForPlatforms, int numPlatforms) {
+        this.coinsOnFloat = new ArrayList<>();
+        this.coinsOnPlatforms = new ArrayList<>();
+        this.platforms = new ArrayList<>();
+        this.coinsForFloat = coinsForFloat;
+        this.coinsForPlatforms = coinsForPlatforms;
+        this.numPlatforms = numPlatforms; // Might change this later to just take an array of GRect platforms and uses to assign coins to said platforms
+        
+        coinsOnFloat = generateCoins(coinsForFloat); // Automatically assigns the number of coins to be made and added to list
+        coinsOnPlatforms = generateCoins(coinsForPlatforms); // Automatically assigns the number of coins to be made and added to list
+        platforms = generateRandomPlatforms(numPlatforms); // Automatically assigns the number of platforms to be made and added to list
+        }
+
 	
+    
+    
     public void run() {
-        // Generate player
-        player = new GOval(50, 50, 30, 30); // (x, y, width, height)
-        player.setColor(Color.RED);
-        player.setFilled(true);
-        add(player);
+        // Create and Adds player to the screen
+    	 player = new GOval(50, 50, 30, 30);
+         player.setColor(Color.RED);
+         player.setFilled(true);
+         add(player);
 
-        // Initialize coin lists
-        coinsInLevel = new ArrayList<>();
-        coinsOnPlatforms = new ArrayList<>();
-
-        // Define the number of coins
-        coinsForFloat = 3;
-        coinsForPlatforms = 3;
-        coinCount = coinsForFloat + coinsForPlatforms;
-
-        // Create platforms
-        ArrayList<GRect> platforms = new ArrayList<>();
-        /*
-         * decided to test making platforms randomized to test if it works
-        GRect platform1 = new GRect(100, 300, 100, 20);
-        GRect platform2 = new GRect(250, 200, 300, 20);
-        GRect platform3 = new GRect(300, 150, 50, 20);
-        platforms.add(platform1);
-        platforms.add(platform2);
-        platforms.add(platform3);
-		
-        // Add platforms to the screen
-        for (GRect platform : platforms) {
-            platform.setFilled(true);
-            add(platform);
-        }
-		*/
-        
-        platforms = generateRandomPlatforms(5); // Create 5 random platforms
-        
-        // Generate and spawn floating coins
-        for (int i = 0; i < coinsForFloat; i++) {
-            GOval coin = createCoin();
-            coinsInLevel.add(coin);
-        }
-        spawnCoinsToScreen(coinsInLevel, MainApplication.WINDOW_WIDTH, MainApplication.WINDOW_HEIGHT);
-
-        // Generate and spawn platform coins
-        for (int i = 0; i < coinsForPlatforms; i++) {
-            GOval coin = createCoin();
-            coinsOnPlatforms.add(coin);
-        }
-        spawnCoinsToPlatforms(coinsOnPlatforms, platforms);
-
-        // Add UI elements
-        coinsCollectedText = new GLabel("Coins Collected: " + coinsCollected, 5, 15);
-        add(coinsCollectedText);
-        coinsRemainingText = new GLabel("Coins Remaining: " + (coinsInLevel.size() + coinsOnPlatforms.size()), 5, 30);
-        add(coinsRemainingText);
-
-        // Enable keyboard input
-        addKeyListeners();
-
-        // Start the game loop timer
-        timer = new Timer(30, this); // 30ms for smoother updates
-        timer.start();
+         addPlatformsToScreen(); // Adds platforms to screen
+         spawnCoinsToPlatforms(coinsOnFloat, platforms); //Sets a list of coin's location to fixed location of platform, centered
+         addCoinsToScreen(); // Adds all coins to screen
+         
+         // Temporary labels to track coin collection within this class
+         coinsCollectedText = new GLabel("Coins Collected: " + coinsCollected, 5, 15);
+         add(coinsCollectedText);
+         coinsRemainingText = new GLabel("Coins Remaining: " + (coinsOnFloat.size() + coinsOnPlatforms.size()), 5, 30);
+         add(coinsRemainingText);
+         
+         
+         addKeyListeners();
+         timer = new Timer(30, this); // Used for movement and collision detection
+         timer.start();
     }
 
 	
 
 	
-	//this method creates a single coin
+	// Creates a single coin
     private GOval createCoin() {
     	coin = new GOval(COIN_SIZE, COIN_SIZE);
     	coin.setFillColor(Color.YELLOW);
@@ -120,27 +100,58 @@ public class testCoin extends GraphicsProgram {
     
     
     
-    
-    //this method adds the coin to a platform list
+    // Adds GOval coins for platforms to a list of coins that go on platforms
     private void addToCoinsOnPlatformList(GOval coin) {
-    	coinsOnPlatforms.add(coin);
+    	this.coinsOnPlatforms.add(coin);
     	}
-    
+    // Adds GOval coins that are unassigned to any platform to a list of free roam floating list of coins 
     private void addToCoinsInLevelList(GOval coin) {
-    	coinsInLevel.add(coin);
+    	this.coinsOnFloat.add(coin);
     }
     
-    
+    // Might not need these two functions
     private void addCoinsForPlatforms(int number) {
-    	coinsForPlatforms = number;
+    	this.coinsForPlatforms = number;
     }
-    
     private void addCoinsForFloat(int number) {
-    	coinsForFloat = number;
+    	this.coinsForFloat = number;
     }
     
     
-    //spawns a list of coins centered to a list of platforms
+    // Uses createCoin() and a given integer to generate a list of coins and return said list
+    private ArrayList<GOval> generateCoins(int numCoins) {
+        ArrayList<GOval> coins = new ArrayList<>();
+        for (int i = 0; i < numCoins; i++) {
+            Random rand = new Random();
+            int width = rand.nextInt(150) + 50; // Platform width between 50-200
+            int x = rand.nextInt(MainApplication.WINDOW_WIDTH - width); // Ensure it stays inside the window
+            int y = rand.nextInt(MainApplication.WINDOW_HEIGHT - 100) + 100; // Avoid spawning too high or low
+            GOval coin = createCoin();
+            coin.setLocation(x, y);
+            coins.add(coin);
+        }
+        return coins;
+    }
+    
+    // Generates randomly sized/placed list of platforms of a fixed size within the screen. The amount created is dictated by the given integer.
+    //primarily used for testing for now. Once we get platforms class going I can remove this.
+    private ArrayList<GRect> generateRandomPlatforms(int numPlatforms) {
+        ArrayList<GRect> platforms = new ArrayList<>();
+        Random rand = new Random();
+
+        for (int i = 0; i < numPlatforms; i++) {
+            int width = rand.nextInt(150) + 50; // Platform width between 50-200
+            int x = rand.nextInt(MainApplication.WINDOW_WIDTH - width); // Ensure it stays inside the window
+            int y = rand.nextInt(MainApplication.WINDOW_HEIGHT - 100) + 100; // Avoid spawning too high or low
+            GRect platform = new GRect(x, y, width, 20);
+            platform.setFilled(true);
+            platform.setColor(Color.DARK_GRAY);
+            platforms.add(platform);
+        }
+        return platforms;
+    }
+    
+    // Specifically sets the location of a list of coins to the center of platforms of a list of platforms
     private void spawnCoinsToPlatforms(ArrayList<GOval> coinList, ArrayList<GRect> platforms) {
         if (platforms.isEmpty() || coinList.isEmpty()) return; //prevents errors
 
@@ -155,36 +166,39 @@ public class testCoin extends GraphicsProgram {
         }
     }
     
-    //spawns a list of coins to the screen
-    //For now I have it spawn randomly within the screen
-    private void spawnCoinsToScreen(ArrayList<GOval> coinList, int windowWidth, int windowHeight) {
-        Random random = new Random();
-        int i = 0; //used for testing
 
-        for (GOval coin : coinList) {
-            double x = random.nextInt(windowWidth - COIN_SIZE);
-            double y = random.nextInt(windowHeight - COIN_SIZE);
-            
-            coin.setLocation(x, y);
+    
+
+    // These two functions essentially adds to screen
+    private void addPlatformsToScreen() {
+        for (GRect platform : platforms) {
+            add(platform);
+        }
+    }
+    
+    private void addCoinsToScreen() {
+        for (GOval coin : coinsOnPlatforms) {
             add(coin);
-            
-            System.out.println("Coins Floating " + i + " " + x + ", " + y); //used for testing.
-            i++; //used for testing
+        }
+        for (GOval coin : coinsOnFloat) {
+            add(coin);
         }
     }
 
     
     
     
+    //large spaces here for my own readability lol
     
- // Checks for player and coin collision
+    
+     // Checks for player and coin collision
     private void checkCoinCollision() {
         // Check floating coins (iterate backward to avoid index errors)
-        for (int i = coinsInLevel.size() - 1; i >= 0; i--) {
-            GOval coin = coinsInLevel.get(i);
+        for (int i = coinsOnFloat.size() - 1; i >= 0; i--) {
+            GOval coin = coinsOnFloat.get(i);
             if (player.getBounds().intersects(coin.getBounds())) {
                 remove(coin); // Remove from screen
-                coinsInLevel.remove(i); // Remove from list
+                coinsOnFloat.remove(i); // Remove from list
                 coinsCollected++; // Update count
             }
         }
@@ -198,42 +212,14 @@ public class testCoin extends GraphicsProgram {
                 coinsCollected++; // Update count
             }
         }
-        
         updateCoinUI(); //updates UI through a method instead
     }
 
     //updates the UI
     private void updateCoinUI() {
         coinsCollectedText.setLabel("Coins Collected: " + coinsCollected);
-        coinsRemainingText.setLabel("Coins Remaining: " + (coinsInLevel.size() + coinsOnPlatforms.size()));
+        coinsRemainingText.setLabel("Coins Remaining: " + (coinsOnFloat.size() + coinsOnPlatforms.size()));
     }
-    
-    
-    //generates randomly sized/placed platforms of a fixed size
-    //primarily used for testing for now
-    private ArrayList<GRect> generateRandomPlatforms(int numPlatforms) {
-        ArrayList<GRect> platforms = new ArrayList<>();
-        Random rand = new Random();
-
-        for (int i = 0; i < numPlatforms; i++) {
-            int width = rand.nextInt(150) + 50; // Platform width between 50-200
-            int x = rand.nextInt(MainApplication.WINDOW_WIDTH - width); // Ensure it stays inside the window
-            int y = rand.nextInt(MainApplication.WINDOW_HEIGHT - 100) + 100; // Avoid spawning too high or low
-
-            GRect platform = new GRect(x, y, width, 20);
-            platform.setFilled(true);
-            platform.setColor(Color.DARK_GRAY);
-            platforms.add(platform);
-            add(platform);
-        }
-        return platforms;
-    }
-
-    
-    
-    
-    
-    
     
     
     // Handles key presses for movement
@@ -241,49 +227,28 @@ public class testCoin extends GraphicsProgram {
     public void keyPressed(KeyEvent e) {
         // Move the player based on key pressed
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W: // Move up
-                playerVelocityY = -10;
-                break;
-            case KeyEvent.VK_A: // Move left
-                playerVelocityX = -10;
-                break;
-            case KeyEvent.VK_S: // Move down
-                playerVelocityY = 10;
-                break;
-            case KeyEvent.VK_D: // Move right
-                playerVelocityX = 10;
-                break;
-                }
+        case KeyEvent.VK_W -> playerVelocityY = -10;
+        case KeyEvent.VK_A -> playerVelocityX = -10;
+        case KeyEvent.VK_S -> playerVelocityY = 10;
+        case KeyEvent.VK_D -> playerVelocityX = 10;
         }
+        
+    }
+    
     // Handles key release to stop movement
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W: // Stop moving up
-                playerVelocityY = 0;
-                break;
-            case KeyEvent.VK_A: // Stop moving left
-                playerVelocityX = 0;
-                break;
-            case KeyEvent.VK_S: // Stop moving down
-                playerVelocityY = 0;
-                break;
-            case KeyEvent.VK_D: // Stop moving right
-                playerVelocityX = 0;
-                break;
-                }
+            case KeyEvent.VK_W, KeyEvent.VK_S -> playerVelocityY = 0;
+            case KeyEvent.VK_A, KeyEvent.VK_D -> playerVelocityX = 0;
         }
+    }
     
     @Override
-    public void actionPerformed(ActionEvent e) {
-        //move the player based on the velocity
-        double newX = player.getX() + playerVelocityX;
-        double newY = player.getY() + playerVelocityY;
-        player.setLocation(newX, newY);
-        
-        //after each movement, check for collisions
-        checkCoinCollision();
-        }
+    public void actionPerformed(ActionEvent e)  {
+        player.setLocation(player.getX() + playerVelocityX, player.getY() + playerVelocityY); //moves the player to new location
+        checkCoinCollision(); //after each movement, check for collision
+    }
     
 	//generates a random number given an bound
 	public static int generateRandomNumber(int bound) {
@@ -296,6 +261,6 @@ public class testCoin extends GraphicsProgram {
 		}
 	
 	public static void main(String[] args) {
-		new testCoin().start();
+		new testCoin(3, 3, 5).start();
 		}
 }
