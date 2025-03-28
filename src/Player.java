@@ -18,8 +18,8 @@ public static final int JUMPFORCE = -10;
 public static final double GRAVITY = .5;
 public double jumpMulti =1 ;
 private final double TERMINAL_VELOCITY =50; // Maximum falling speed
-private boolean right, left , up , down;
-private boolean grounded;
+private boolean right, left , up , down;// player movement booleans
+private boolean grounded;//The player check if they are touching the ground
 private GOval player; // The player's graphical representation
 public static final int PLAYER_SIZE = 30; // Diameter of the player
 private double yVelocity = 0;
