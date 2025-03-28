@@ -16,13 +16,15 @@ private double x, y; // is the location of the player
 public static final int VELOCITY = 5;// player movement speed
 public static final int JUMPFORCE = -10;
 public static final double GRAVITY = .5;
-private final double TERMINAL_VELOCITY = 10; // Maximum falling speed
+public double jumpMulti =1 ;
+private final double TERMINAL_VELOCITY =50; // Maximum falling speed
 private boolean right, left , up , down;
 private boolean grounded;
 private GOval player; // The player's graphical representation
 public static final int PLAYER_SIZE = 30; // Diameter of the player
 private double yVelocity = 0;
 private double xVelocity = 0;
+
 
 public int getHP(){
 		return HealthPoints; 
@@ -47,6 +49,12 @@ public double getY() {
 
 private void setY(double Y) {
 	this.y = Y;
+}
+public double getjumpMulti() {
+	return jumpMulti;
+}
+private void setjumpMulti(double Multi) {
+	this.jumpMulti = Multi;
 }
 private double lerp(double start, double end, double t) {
     return start + (end - start) * t;
@@ -91,8 +99,8 @@ public void run() {
     addKeyListeners(); // Enable key input
 
     // Initialize player's position in the center of the window
-    x = (WINDOW_SIZE - PLAYER_SIZE) / 2.0;
-    y = (WINDOW_SIZE - PLAYER_SIZE) / 2.0;
+    x = (MainApplication.WINDOW_WIDTH - PLAYER_SIZE) / 2.0;
+    y = (MainApplication.WINDOW_HEIGHT - PLAYER_SIZE) / 2.0;
 
     // Create and add the player GOval to the canvas
     player = new GOval(x, y, PLAYER_SIZE, PLAYER_SIZE);
@@ -103,15 +111,17 @@ public void run() {
     // Main game loop
     while (true) {
         movePlayer(); // Update player position
-        pause(20); // Control frame rate
+        pause(15); // Control frame rate
     }
 }
 
 private void movePlayer() {
     // Horizontal movement
+	
     if (right) x += VELOCITY; // Move right
     if (left) x -= VELOCITY;  // Move left
     x = lerp(x, player.getX(), .01);
+	
     // Apply gravity
     if (!grounded) {
         yVelocity += GRAVITY; // Gravity accelerates downward
@@ -120,7 +130,7 @@ private void movePlayer() {
 
     // Jumping
     if (up && grounded) {
-        yVelocity = JUMPFORCE; // Apply an upward force
+        yVelocity = JUMPFORCE*jumpMulti; // Apply an upward force
         grounded = false; // Player is now airborne
     }
 
@@ -128,14 +138,14 @@ private void movePlayer() {
     y += yVelocity;
 
     // Ground collision detection
-    if (y >= WINDOW_SIZE - PLAYER_SIZE) { // Check if player hits the ground
-        y = WINDOW_SIZE - PLAYER_SIZE; // Snap player to ground level
+    if (y >= MainApplication.WINDOW_HEIGHT - PLAYER_SIZE) { // Check if player hits the ground
+        y = MainApplication.WINDOW_HEIGHT - PLAYER_SIZE; // Snap player to ground level
         grounded = true; // Player is now on the ground
         yVelocity = 0; // Stop vertical movement
     }
 
     // Ensure the player stays within horizontal bounds
-    x = Math.max(0, Math.min(WINDOW_SIZE - PLAYER_SIZE, x));
+    x = Math.max(0, Math.min(MainApplication.WINDOW_WIDTH - PLAYER_SIZE, x));
 
     // Update the position of the GOval
     player.setLocation(x, y);
@@ -143,7 +153,7 @@ private void movePlayer() {
 
 
 public void init() {
-	setSize(WINDOW_SIZE, WINDOW_SIZE);
+	setSize(MainApplication.WINDOW_WIDTH,MainApplication.WINDOW_HEIGHT);
 	}
 public static void main(String[] args) {
     // Start the GraphicsProgram
