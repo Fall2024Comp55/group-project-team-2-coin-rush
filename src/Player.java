@@ -9,27 +9,29 @@ import acm.graphics.GOval;
 import acm.program.GraphicsProgram;
 
 
-public class Player extends GraphicsProgram implements  KeyListener {
-	public static final int WINDOW_SIZE= 500;
+public class Player extends  MainApplication {
+
 private int HealthPoints;// is the value for the health points of the player
 private double x, y; // is the location of the player
 public static final int VELOCITY = 5;// player movement speed
-public static final int JUMPFORCE = -10;
-public static final double GRAVITY = .5;
-public double jumpMulti =1 ;
+public static final int JUMPFORCE = -10;// how much jump power the player has.
+public static final double GRAVITY = .5;// a constant pull downwards that the player has should be changed by level or static.
+public double jumpMulti =1 ;// Changes the jump force of the player
 private final double TERMINAL_VELOCITY =50; // Maximum falling speed
 private boolean right, left , up , down;// player movement booleans
 private boolean grounded;//The player check if they are touching the ground
 private GOval player; // The player's graphical representation
 public static final int PLAYER_SIZE = 30; // Diameter of the player
-private double yVelocity = 0;
-private double xVelocity = 0;
+private double yVelocity = 0;// current upwards or falling speed of the player
+private double xVelocity = 0;// not used right now
+private static final double MAX_HORIZONTAL_SPEED = 10.0; // Terminal Horizontal Velocity 
+
 
 
 public int getHP(){
 		return HealthPoints; 
 		//gets the health points of the player
-	}
+}
 
 private void setHP(int HP){
 	this.HealthPoints = HP;
@@ -50,12 +52,15 @@ public double getY() {
 private void setY(double Y) {
 	this.y = Y;
 }
+
 public double getjumpMulti() {
 	return jumpMulti;
 }
+
 private void setjumpMulti(double Multi) {
 	this.jumpMulti = Multi;
 }
+
 private double lerp(double start, double end, double t) {
     return start + (end - start) * t;
 }
@@ -111,23 +116,42 @@ public void run() {
     // Main game loop
     while (true) {
         movePlayer(); // Update player position
-        pause(15); // Control frame rate
+        pause(16.66); // Control frame rate
+        System.out.println(xVelocity+ " " + yVelocity);
     }
 }
 
 private void movePlayer() {
     // Horizontal movement
 	
-    if (right) x += VELOCITY; // Move right
-    if (left) x -= VELOCITY;  // Move left
-    x = lerp(x, player.getX(), .01);
-	
+    if (right) {
+    	xVelocity += VELOCITY; // Move right
+    	
+    }
+    	
+    if (left) {
+    	xVelocity -= VELOCITY;  // Move left
+    	
+    }
+   
+   
+    x = lerp(player.getX(), x, .7);
+    xVelocity = Math.max(-MAX_HORIZONTAL_SPEED, Math.min(xVelocity, MAX_HORIZONTAL_SPEED));
+    
+    if (!right && !left) {
+        xVelocity = lerp(xVelocity, 0, 0.1); // Gradually slows velocity to 0
+        if (Math.abs(xVelocity) < 0.1) { // Stop completely when velocity is negligible
+            xVelocity = 0;
+           
+        }
+    }
     // Apply gravity
     if (!grounded) {
-        yVelocity += GRAVITY; // Gravity accelerates downward
+        yVelocity += GRAVITY;// Gravity accelerates downward
+       if(down) yVelocity += VELOCITY/2;
         yVelocity = Math.min(yVelocity, TERMINAL_VELOCITY); // Cap falling speed
+       
     }
-
     // Jumping
     if (up && grounded) {
         yVelocity = JUMPFORCE*jumpMulti; // Apply an upward force
@@ -136,13 +160,14 @@ private void movePlayer() {
 
     // Update vertical position
     y += yVelocity;
-
+    //Update Horizontal position
+  x += xVelocity;
     // Ground collision detection
     if (y >= MainApplication.WINDOW_HEIGHT - PLAYER_SIZE) { // Check if player hits the ground
         y = MainApplication.WINDOW_HEIGHT - PLAYER_SIZE; // Snap player to ground level
         grounded = true; // Player is now on the ground
         yVelocity = 0; // Stop vertical movement
-    }
+           }
 
     // Ensure the player stays within horizontal bounds
     x = Math.max(0, Math.min(MainApplication.WINDOW_WIDTH - PLAYER_SIZE, x));
@@ -155,11 +180,11 @@ private void movePlayer() {
 public void init() {
 	setSize(MainApplication.WINDOW_WIDTH,MainApplication.WINDOW_HEIGHT);
 	}
-public static void main(String[] args) {
+/*public static void main(String[] args) {
     // Start the GraphicsProgram
     new Player().start();
 }
-
+*/
 
 
 }
