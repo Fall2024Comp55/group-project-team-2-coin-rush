@@ -234,5 +234,6 @@ public class Enemy extends GraphicsProgram{
                 score++;
                 scoreLabel.setLabel("Score: " + score*10);
             }
+            
         }
  */
