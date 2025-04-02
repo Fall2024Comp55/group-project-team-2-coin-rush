@@ -17,21 +17,34 @@ private final double TERMINAL_VELOCITY =50; // Maximum falling speed
 private boolean right, left , up , down;// player movement booleans
 private boolean grounded;//The player check if they are touching the ground
 private GImage player; // The player's graphical representation
-public static final int PLAYER_SIZE = 30; // Diameter of the player
+public static final int PLAYER_SIZE = 30; // Diameter of the player 
 private double yVelocity = 0;// current upwards or falling speed of the player
 private double xVelocity = 0;// not used right now
-private static final double MAX_HORIZONTAL_SPEED = 10.0; // Terminal Horizontal Velocity 
+private static final double MAX_HORIZONTAL_SPEED = 4.0; // Terminal Horizontal Velocity 
 
 private static final int TEMP_WINDOW_SIZE = 400;
 //changed 'MainApplication.WINDOW_WIDTH' and 'MainApplication.WINDOW_HEIGHT' to TEMP_WINDOW_SIZE for now because it doesnt fit my screen
 
-private ArrayList<GImage> idleAni, movingAni, jumpingAni;
+private ArrayList<GImage> idleAni, movingAni, jumpingAni; //Stores the sprite images
 private boolean moving = false;
 private int aniTick, aniIndex;
 private int aniSpeed = 10; // Adjust for animation speed
 private int playerAction = 0; // 0 = idle, 1 = moving, 2 = jumping
 
-//Pulls the files from the Media sub folder(s) to add to a list of GImages
+//Load the images automatically in the appropriate GImage lists
+public Player() {
+    loadAnimations();
+}
+
+//Makes use of a function to load images from my sprite sub folders of Media folder to their respective lists 
+private void loadAnimations() {
+    idleAni = loadImagesFromFolder("Media/Sprite_IDLE");
+    movingAni = loadImagesFromFolder("Media/Sprite_MOVING");
+    jumpingAni = loadImagesFromFolder("Media/Sprite_JUMPING");
+}
+
+
+//Pulls the image files from the Media sub folder(s) to add to a list of GImages and return said list
 private ArrayList<GImage> loadImagesFromFolder(String folderPath) {
  ArrayList<GImage> images = new ArrayList<>();
  File folder = new File(folderPath);
@@ -46,7 +59,7 @@ private ArrayList<GImage> loadImagesFromFolder(String folderPath) {
  return images;
 }
 
-//used for testing if the "loadImaesFromFolder" function works
+//Used for testing if the "loadImaesFromFolder" function works [might delete later]
 private void printGImageList(ArrayList<GImage> list) {		
 	int x = 20;
 	int y = 20;
@@ -59,6 +72,23 @@ private void printGImageList(ArrayList<GImage> list) {
 	return;
 }
 
+//Cycles through animation frames based on the player's action (idle(0), moving(1), jumping(2)).
+private void updateAnimation() {
+    aniTick++;
+    if (aniTick >= aniSpeed) {
+        aniTick = 0;
+        aniIndex++;
+        if (playerAction == 0 && aniIndex >= idleAni.size()) aniIndex = 0;
+        else if (playerAction == 1 && aniIndex >= movingAni.size()) aniIndex = 0;
+        else if (playerAction == 2 && aniIndex >= jumpingAni.size()) aniIndex = 0;
+
+        switch (playerAction) {
+            case 0 -> player.setImage(idleAni.get(aniIndex).getImage());
+            case 1 -> player.setImage(movingAni.get(aniIndex).getImage());
+            case 2 -> player.setImage(jumpingAni.get(aniIndex).getImage());
+        }
+    }
+}
 
 
 public int getHP(){
@@ -118,13 +148,18 @@ public void keyPressed(KeyEvent e) {
 public void keyReleased(KeyEvent e) {
     if (e.getKeyCode() == KeyEvent.VK_D|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
         right = false;
+        playerAction = 1; //Adjusts the playerAction depending on the action (in this case we're moving)
     } else if (e.getKeyCode() == KeyEvent.VK_A|| e.getKeyCode() == KeyEvent.VK_LEFT) {
         left = false;
+        playerAction = 1;
     } else if ((e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_UP) /*&& grounded*/){
         up = false;
+        playerAction = 2;
     } else if (e.getKeyCode() == KeyEvent.VK_S|| e.getKeyCode() == KeyEvent.VK_DOWN) {
         down = false;
+        //playerAction
     }
+    if (!right && !left) playerAction = 0; //Sets the idle animation
 }
 
 @Override
@@ -140,18 +175,19 @@ public void run() {
     x = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
     y = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
 
-    // Create and add the player GImage to the canvas
-    player = new GImage("Media/Sprite_IDLE/Idle 01.png", x, y);
-   // player.setSize(64, 20);
+    //The player
+    player = idleAni.get(0); //Sets the idle animation
+    player.setLocation(200, 200);
     add(player);
     grounded = true;
     
-   idleAni = loadImagesFromFolder("Media/Sprite_IDLE");
-   printGImageList(idleAni);
+  // idleAni = loadImagesFromFolder("Media/Sprite_IDLE");
+  // printGImageList(idleAni);
     
     // Main game loop
     while (true) {
         movePlayer(); // Update player position
+        updateAnimation(); //Updates the animation
         pause(16.66); // Control frame rate
         System.out.println(xVelocity+ " " + yVelocity);
     }
@@ -161,15 +197,11 @@ private void movePlayer() {
     // Horizontal movement
 	
     if (right) {
-    	xVelocity += VELOCITY; // Move right
-    	
+    	xVelocity += VELOCITY; // Move right	
     }
-    	
     if (left) {
     	xVelocity -= VELOCITY;  // Move left
-    	
     }
-   
    
     x = lerp(player.getX(), x, .7);
     xVelocity = Math.max(-MAX_HORIZONTAL_SPEED, Math.min(xVelocity, MAX_HORIZONTAL_SPEED));
@@ -178,7 +210,6 @@ private void movePlayer() {
         xVelocity = lerp(xVelocity, 0, 0.1); // Gradually slows velocity to 0
         if (Math.abs(xVelocity) < 0.1) { // Stop completely when velocity is negligible
             xVelocity = 0;
-           
         }
     }
     // Apply gravity
@@ -186,7 +217,6 @@ private void movePlayer() {
         yVelocity += GRAVITY;// Gravity accelerates downward
        if(down) yVelocity += VELOCITY/2;
         yVelocity = Math.min(yVelocity, TERMINAL_VELOCITY); // Cap falling speed
-       
     }
     // Jumping
     if (up && grounded) {
@@ -197,18 +227,24 @@ private void movePlayer() {
     // Update vertical position
     y += yVelocity;
     //Update Horizontal position
-  x += xVelocity;
+    x += xVelocity;
     // Ground collision detection
     if (y >= TEMP_WINDOW_SIZE - PLAYER_SIZE) { // Check if player hits the ground
         y = TEMP_WINDOW_SIZE - PLAYER_SIZE; // Snap player to ground level
         grounded = true; // Player is now on the ground
         yVelocity = 0; // Stop vertical movement
-           }
+        }
 
     // Ensure the player stays within horizontal bounds
     x = Math.max(0, Math.min(TEMP_WINDOW_SIZE - PLAYER_SIZE, x));
 
-    // Update the position of the GOval
+    
+    if (y >= 400 - player.getHeight()) {
+        y = 400 - player.getHeight();
+        grounded = true;
+        yVelocity = 0;
+    }
+    // Update the position of the GImage
     player.setLocation(x, y);
 }
 
