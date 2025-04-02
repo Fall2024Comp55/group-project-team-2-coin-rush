@@ -224,3 +224,12 @@ public class Enemy extends GraphicsProgram{
         enemies.start();
 	}
 }
+/*
+ *  GObject obj = getElementAt(ball.getX() + ball.getWidth() + 1, ball.getY() + ball.getHeight() / 2);
+            if (obj instanceof GRect && enemies.contains(obj)) {
+                enemiesToRemove.add((GRect) obj);
+                score++;
+                scoreLabel.setLabel("Score: " + score*10);
+            }
+        }
+ */
