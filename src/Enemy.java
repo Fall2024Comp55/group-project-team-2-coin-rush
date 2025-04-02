@@ -39,7 +39,8 @@ public class Enemy extends GraphicsProgram{
 	public static int PLAYER_SPAWN = 50;
 	ArrayList<GRect> enemies; 
    ArrayList<Integer> Xvelocity;
-  ArrayList<GRect> platforms; 
+  ArrayList<GRect> platforms;
+  private ArrayList<GImage> enemiesImages; 
   
   private int healthPoint = 3;
   private GLabel healthText;
@@ -48,6 +49,8 @@ public class Enemy extends GraphicsProgram{
   private double playerVelocityX = 0;
   private double playerVelocityY = 0;
   
+  
+ 
 //  creates a single enemy and adds into the array
        public void createEnemy() {  
 	   for(int i=0;i<NUM_ENEMIES;++i) {
@@ -80,7 +83,6 @@ public class Enemy extends GraphicsProgram{
 //ensures the enemy  doesn't go out of window or platform
 		if(enemies.get(i).getX() <= platforms.get(i).getX() || 
 				enemies.get(i).getX() + RECT_X >= platforms.get(i).getX() + platforms.get(i).getWidth()) {
-				 System.out.println(i);
 		      Xvelocity.set(i, -velocity); 
 		}	
 	}
@@ -88,7 +90,8 @@ public class Enemy extends GraphicsProgram{
        	public void collisionCheck() {
        	 for (int i=0;i<enemies.size();++i) {
        	     GRect enemy = enemies.get(i);
- GObject collision = getElementAt(enemy.getX()+ enemy.getWidth() , enemy.getY());
+       	  
+ GObject collision = getElementAt(enemy.getY()+ enemy.getWidth()/2, enemy.getY());
        		if(collision instanceof GOval) {
        			remove(enemies.get(i));
        			enemies.remove(i);
