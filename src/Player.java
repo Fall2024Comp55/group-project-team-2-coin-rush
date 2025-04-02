@@ -1,6 +1,7 @@
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import acm.graphics.GImage;
 
@@ -26,10 +27,12 @@ private static final int TEMP_WINDOW_SIZE = 400;
 //changed 'MainApplication.WINDOW_WIDTH' and 'MainApplication.WINDOW_HEIGHT' to TEMP_WINDOW_SIZE for now because it doesnt fit my screen
 
 private ArrayList<GImage> idleAni, movingAni, jumpingAni; //Stores the sprite images
-private boolean moving = false;
-private int aniTick, aniIndex;
-private int aniSpeed = 10; // Adjust for animation speed
-private int playerAction = 0; // 0 = idle, 1 = moving, 2 = jumping
+private int playerAction = IDLE; //Default animation
+private int aniTickSpeed = 5; //Adjust to change speed of animation speed
+private int aniIndex = 0; //Determines which frame of the animation to display
+private int aniTick = 0; //Acts as a timer for controlling the animation speed
+
+private static final int IDLE = 0, MOVING = 1, JUMPING = 2; //Adjust to add more player actions
 
 //Load the images automatically in the appropriate GImage lists
 public Player() {
@@ -73,22 +76,22 @@ private void printGImageList(ArrayList<GImage> list) {
 }
 
 //Cycles through animation frames based on the player's action (idle(0), moving(1), jumping(2)).
+//When aniTick reaches aniTickSpeed, it resets to 0, and aniIndex is incremented.
 private void updateAnimation() {
     aniTick++;
-    if (aniTick >= aniSpeed) {
+    if (aniTick >= aniTickSpeed) {
         aniTick = 0;
         aniIndex++;
-        if (playerAction == 0 && aniIndex >= idleAni.size()) aniIndex = 0;
-        else if (playerAction == 1 && aniIndex >= movingAni.size()) aniIndex = 0;
-        else if (playerAction == 2 && aniIndex >= jumpingAni.size()) aniIndex = 0;
-
-        switch (playerAction) {
-            case 0 -> player.setImage(idleAni.get(aniIndex).getImage());
-            case 1 -> player.setImage(movingAni.get(aniIndex).getImage());
-            case 2 -> player.setImage(jumpingAni.get(aniIndex).getImage());
-        }
+        List<GImage> currentAni = switch (playerAction) {
+            case MOVING -> movingAni;
+            case JUMPING -> jumpingAni;
+            default -> idleAni;
+        };
+        if (aniIndex >= currentAni.size()) aniIndex = 0;
+        player.setImage(currentAni.get(aniIndex).getImage());
     }
 }
+
 
 
 public int getHP(){
@@ -138,7 +141,7 @@ public void keyPressed(KeyEvent e) {
         left = true;
     } else if ((e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_UP) && grounded) { // Check if the "W" key is pressed and the ball is on the ground
         up = true;
-        grounded= false; // The ball is no longer on the ground
+        grounded= false; // The player is no longer on the ground
     } else if (e.getKeyCode() == KeyEvent.VK_S|| e.getKeyCode() == KeyEvent.VK_DOWN) { // Check if the "S" key is pressed
         down = true;
     }
@@ -187,7 +190,6 @@ public void run() {
     // Main game loop
     while (true) {
         movePlayer(); // Update player position
-        updateAnimation(); //Updates the animation
         pause(16.66); // Control frame rate
         System.out.println(xVelocity+ " " + yVelocity);
     }
@@ -195,7 +197,6 @@ public void run() {
 
 private void movePlayer() {
     // Horizontal movement
-	
     if (right) {
     	xVelocity += VELOCITY; // Move right	
     }
@@ -239,13 +240,22 @@ private void movePlayer() {
     x = Math.max(0, Math.min(TEMP_WINDOW_SIZE - PLAYER_SIZE, x));
 
     
-    if (y >= 400 - player.getHeight()) {
-        y = 400 - player.getHeight();
+    if (y >= TEMP_WINDOW_SIZE - player.getHeight()) {
+        y = TEMP_WINDOW_SIZE - player.getHeight();
         grounded = true;
         yVelocity = 0;
     }
     // Update the position of the GImage
     player.setLocation(x, y);
+    
+    //Sets player actions
+    if (xVelocity != 0) {
+        playerAction = MOVING;
+    } else {
+        playerAction = IDLE;
+    }
+    if (!grounded) playerAction = JUMPING;
+    updateAnimation(); //Updates the animation bases on player actions
 }
 
 
