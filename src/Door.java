@@ -1,49 +1,81 @@
+import acm.program.GraphicsProgram;
 import acm.graphics.GImage;
 
-public class Door {
+/**
+ * The Door class represents a door that opens when the player collects
+ * a required number of coins.
+ */
+public class Door extends GraphicsProgram {
 	private boolean status;
 	 private int requiredCoins;
 	 private GImage doorImage;
 	 
-	 public static final double DOOR_WIDTH_SIZE = 50;
-	 public static final double DOOR_HEIGHT_SIZE = 100;
+	 public static final int WINDOW_WIDTH = 600;
+	 public static final int WINDOW_HEIGHT = 600;
 	 
 	 private double doorX;
 	 private double doorY;
 	 
-	 public Door(int requiredCoins, double doorX, double doorY, GImage doorImage) {
+	 private String closedImage = "Media/Close.jpg";
+	 private String openImage = "Media/Open.jpg";
+	 
+	 
+	 
+	 public Door(int requiredCoins, double doorX, double doorY) {
 	  this.requiredCoins = requiredCoins;
 	  this.doorX = doorX;
 	  this.doorY = doorY;
-	  this.doorImage = doorImage;
 	  this.status = false;
+	  doorImage = new GImage(closedImage, doorX, doorY);
 	  
 	 }
+	 
+	 public void init() {
+		 setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+		 requestFocus();
+		 add(doorImage);
+	 } 
+	 
+	 public void run() {
+		 
+	 }
+	 
+	 public boolean checkIfplayerCanExit(int coinsCollected) {
+		  if (coinsCollected >= requiredCoins) {
+			  if (!status) {
+				  openDoor();
+			  }
+			  return true;
+		  }
+		  
+		  else {
+			  if (status) {
+				  status =false;
+				  doorImage.setImage(closedImage);
+			  }
+			  return false;
+		  }
+	 }
+	 
+	 public void openDoor() {
+		  this.status = true;
+		  doorImage.setImage(openImage);
+		 }
+	 
 	 
 	 public boolean isOpen() {
 	  return status;
 	 }
 	 
-	 public void openDoor() {
-	  this.status = true;
-	 }
-	 
-	 public boolean checkIfplayerCanExit(int coinsCollected) {
-	  if (coinsCollected >= requiredCoins) {
-	   openDoor();
-	   return true;
-	  }
-	  
-	  return false;
-	 }
 	 
 	 public void setDoorPosition(double x, double y) {
 	  this.doorX = x;
 	  this.doorY =  y;
+	  doorImage.setLocation(x, y);
 	 }
 	 
 	 public double[] getDoorPosition() {
-	  return new double[] {doorX,doorY};
+	  return new double[] {doorX, doorY};
 	 }
 	 
 	 public void setRequiredCoins(int coinCount) {
@@ -53,6 +85,9 @@ public class Door {
 	 public int serRequiredCoins() {
 	  return this.requiredCoins;
 	 }
-
+	 
+	 public static void main(String[] args) {
+		 new Door(3, 50, 100).start();
+	 }
 
 }
