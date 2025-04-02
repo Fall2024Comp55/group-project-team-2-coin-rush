@@ -31,19 +31,19 @@ private int aniTick, aniIndex;
 private int aniSpeed = 10; // Adjust for animation speed
 private int playerAction = 0; // 0 = idle, 1 = moving, 2 = jumping
 
-// Pulls the files from the Media sub folder(s) to add to a list of GImages
+//Pulls the files from the Media sub folder(s) to add to a list of GImages
 private ArrayList<GImage> loadImagesFromFolder(String folderPath) {
-    ArrayList<GImage> images = new ArrayList<>();
-    File folder = new File(folderPath);
-    File[] files = folder.listFiles();
-    if (files != null) {
-        for (File file : files) {
-            if (file.isFile() && file.getName().endsWith(".png")) {
-                images.add(new GImage(file.getPath()));
-            }
-        }
-    }
-    return images;
+ ArrayList<GImage> images = new ArrayList<>();
+ File folder = new File(folderPath);
+ File[] files = folder.listFiles();
+ if (files != null) {
+     for (File file : files) {
+         if (file.isFile() && file.getName().endsWith(".png")) {
+             images.add(new GImage(file.getPath()));
+         }
+     }
+ }
+ return images;
 }
 
 //used for testing if the "loadImaesFromFolder" function works
