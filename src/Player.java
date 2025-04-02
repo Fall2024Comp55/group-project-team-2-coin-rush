@@ -1,12 +1,9 @@
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import javax.swing.Timer;
-import acm.graphics.GLabel;
+
+import acm.graphics.GImage;
 import acm.graphics.GOval;
-import acm.program.GraphicsProgram;
 
 
 public class Player extends  MainApplication {
@@ -20,11 +17,25 @@ public double jumpMulti =1 ;// Changes the jump force of the player
 private final double TERMINAL_VELOCITY =50; // Maximum falling speed
 private boolean right, left , up , down;// player movement booleans
 private boolean grounded;//The player check if they are touching the ground
-private GOval player; // The player's graphical representation
+private GImage player; // The player's graphical representation
 public static final int PLAYER_SIZE = 30; // Diameter of the player
 private double yVelocity = 0;// current upwards or falling speed of the player
 private double xVelocity = 0;// not used right now
 private static final double MAX_HORIZONTAL_SPEED = 10.0; // Terminal Horizontal Velocity 
+
+private static final int TEMP_WINDOW_SIZE = 400;
+//changed 'MainApplication.WINDOW_WIDTH' and 'MainApplication.WINDOW_HEIGHT' to TEMP_WINDOW_SIZE for now because it doesnt fit my screen
+
+private ArrayList<GImage> idleAni, movingAni, jumpingAni;
+private boolean moving;
+private int aniTickSpeed;
+
+//private int getFolderFileSize();
+//private void isMoving();
+//private void loadAnimations();
+//private void addImagesToList();
+
+
 
 
 
@@ -104,15 +115,15 @@ public void run() {
     addKeyListeners(); // Enable key input
 
     // Initialize player's position in the center of the window
-    x = (MainApplication.WINDOW_WIDTH - PLAYER_SIZE) / 2.0;
-    y = (MainApplication.WINDOW_HEIGHT - PLAYER_SIZE) / 2.0;
+    x = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
+    y = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
 
-    // Create and add the player GOval to the canvas
-    player = new GOval(x, y, PLAYER_SIZE, PLAYER_SIZE);
-    player.setColor(Color.GREEN);
-    player.setFilled(true);
+    // Create and add the player GImage to the canvas
+    player = new GImage("Media/Sprite_IDLE/Idle 01.png", x, y);
+   // player.setSize(64, 20);
     add(player);
     grounded = true;
+    
     // Main game loop
     while (true) {
         movePlayer(); // Update player position
@@ -163,14 +174,14 @@ private void movePlayer() {
     //Update Horizontal position
   x += xVelocity;
     // Ground collision detection
-    if (y >= MainApplication.WINDOW_HEIGHT - PLAYER_SIZE) { // Check if player hits the ground
-        y = MainApplication.WINDOW_HEIGHT - PLAYER_SIZE; // Snap player to ground level
+    if (y >= TEMP_WINDOW_SIZE - PLAYER_SIZE) { // Check if player hits the ground
+        y = TEMP_WINDOW_SIZE - PLAYER_SIZE; // Snap player to ground level
         grounded = true; // Player is now on the ground
         yVelocity = 0; // Stop vertical movement
            }
 
     // Ensure the player stays within horizontal bounds
-    x = Math.max(0, Math.min(MainApplication.WINDOW_WIDTH - PLAYER_SIZE, x));
+    x = Math.max(0, Math.min(TEMP_WINDOW_SIZE - PLAYER_SIZE, x));
 
     // Update the position of the GOval
     player.setLocation(x, y);
@@ -178,13 +189,13 @@ private void movePlayer() {
 
 
 public void init() {
-	setSize(MainApplication.WINDOW_WIDTH,MainApplication.WINDOW_HEIGHT);
+	setSize(TEMP_WINDOW_SIZE,TEMP_WINDOW_SIZE);
 	}
-/*public static void main(String[] args) {
+public static void main(String[] args) {
     // Start the GraphicsProgram
     new Player().start();
 }
-*/
+
 
 
 }
