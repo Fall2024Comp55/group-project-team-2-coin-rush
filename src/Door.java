@@ -33,6 +33,7 @@ public class Door extends GraphicsProgram {
 	 public void init() {
 		 setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		 requestFocus();
+		 doorImage.scale(0.05);
 		 add(doorImage);
 	 } 
 	 
@@ -87,7 +88,7 @@ public class Door extends GraphicsProgram {
 	 }
 	 
 	 public static void main(String[] args) {
-		 new Door(3, 50, 100).start();
+		 new Door(3, 550, 500).start();
 	 }
 
 }
