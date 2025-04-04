@@ -55,7 +55,7 @@ public class WelcomePane extends GraphicsPane{
 	private void addPicture2() {
 		GImage moreButton2 = new GImage("more.jpeg", 200, 400);
 		moreButton2.scale(0.3, 0.3);
-		moreButton2.setLocation((mainScreen.getWidth() - moreButton2.getWidth())/ 2, 600);
+		moreButton2.setLocation((mainScreen.getWidth() - moreButton2.getWidth())/ 2, 700);
 		
 		contents.add(moreButton2);
 		mainScreen.add(moreButton2);
