@@ -7,7 +7,7 @@ import acm.graphics.GImage;
 
 
 public class Player extends  MainApplication {
-
+	
 private int HealthPoints;// is the value for the health points of the player
 private double x, y; // is the location of the player
 public static final int VELOCITY = 5;// player movement speed
@@ -31,12 +31,15 @@ private int playerAction = IDLE; //Default animation
 private int aniTickSpeed = 5; //Adjust to change speed of animation speed
 private int aniIndex = 0; //Determines which frame of the animation to display
 private int aniTick = 0; //Acts as a timer for controlling the animation speed
+private int playerSizeX = 64;
+private int playerSizeY = 40;
+private boolean facingRight = true; // Tracks the direction the player is facing
 
 private static final int IDLE = 0, MOVING = 1, JUMPING = 2; //Adjust to add more player actions
 
 //Load the images automatically in the appropriate GImage lists
 public Player() {
-    loadAnimations();
+   loadAnimations();
 }
 
 //Makes use of a function to load images from my sprite sub folders of Media folder to their respective lists 
@@ -91,6 +94,56 @@ private void updateAnimation() {
         player.setImage(currentAni.get(aniIndex).getImage());
     }
 }
+
+
+//Replaces all current animation frame images with their horizontally flipped versions.
+//This is used to flip the character's direction when turning left or right.
+private void flipArrayList() {
+ ArrayList<GImage> flippedIdle = new ArrayList<>();
+ ArrayList<GImage> flippedMoving = new ArrayList<>();
+ ArrayList<GImage> flippedJumping = new ArrayList<>();
+
+ for (GImage image : idleAni) {
+     flippedIdle.add(flipGImageHorizontally(image));
+ }
+
+ for (GImage image : movingAni) {
+     flippedMoving.add(flipGImageHorizontally(image));
+ }
+
+ for (GImage image : jumpingAni) {
+     flippedJumping.add(flipGImageHorizontally(image));
+ }
+
+ // Replace the current animation frame lists with the flipped versions
+ idleAni = flippedIdle;
+ movingAni = flippedMoving;
+ jumpingAni = flippedJumping;
+}
+
+
+
+/* Flips a GImage horizontally by reversing its pixel array.
+ * This was a fix I found since GImage doesn't support flipping. 
+ * I also found that using negative width with setSize() does not visually flip the image.
+*/
+private GImage flipGImageHorizontally(GImage original) {
+ int[][] pixels = original.getPixelArray();// Get the 2D array of pixels from the image
+ int height = pixels.length;
+ int width = pixels[0].length;
+
+ int[][] flippedPixels = new int[height][width]; // Create a new pixel array for the flipped image
+
+ // Copy pixels in reverse order horizontally (mirror effect)
+ for (int row = 0; row < height; row++) {
+     for (int col = 0; col < width; col++) {
+         flippedPixels[row][col] = pixels[row][width - col - 1];
+     }
+ }
+
+ return new GImage(flippedPixels); // Return a new GImage using the flipped pixel data
+}
+
 
 
 
@@ -179,7 +232,8 @@ public void run() {
     y = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
 
     //The player
-    player = idleAni.get(0); //Sets the idle animation
+    player = idleAni.get(0); //Sets the idle animation    
+
     player.setLocation(200, 200);
     add(player);
     grounded = true;
@@ -187,22 +241,32 @@ public void run() {
   // idleAni = loadImagesFromFolder("Media/Sprite_IDLE");
   // printGImageList(idleAni);
     
+    System.out.println("Player size: X" + player.getWidth() + " Y" + player.getHeight());
     // Main game loop
     while (true) {
         movePlayer(); // Update player position
         pause(16.66); // Control frame rate
-        System.out.println(xVelocity+ " " + yVelocity);
+       // System.out.println(xVelocity+ " " + yVelocity);
     }
 }
 
 private void movePlayer() {
     // Horizontal movement
-    if (right) {
-    	xVelocity += VELOCITY; // Move right	
-    }
-    if (left) {
-    	xVelocity -= VELOCITY;  // Move left
-    }
+	if (right) {
+	    xVelocity += VELOCITY; // Move right	
+	    if (!facingRight) {
+	        flipArrayList(); // Only flip if changing direction
+	        facingRight = true;
+	    }
+	}
+	if (left) {
+	    xVelocity -= VELOCITY;  // Move left
+	    if (facingRight) {
+	        flipArrayList(); // Only flip if changing direction
+	        facingRight = false;
+	    }
+	}
+
    
     x = lerp(player.getX(), x, .7);
     xVelocity = Math.max(-MAX_HORIZONTAL_SPEED, Math.min(xVelocity, MAX_HORIZONTAL_SPEED));

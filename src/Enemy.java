@@ -1,12 +1,13 @@
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.*;
 
 import javax.swing.Timer;
 
 import acm.graphics.*;
-import javax.swing.Timer;
 import acm.program.GraphicsProgram;
 
 /* CHANGES
@@ -34,13 +35,18 @@ public class Enemy extends GraphicsProgram{
 	public static int NUM_ENEMIES = 3;
 	public static int NUM_PLATFORMS = 3; 
 	public static int Y_VAL = 100; 
+	public static int ENEMY_SPEED = 5; 
+	public static int PLAYER_SPAWN = 50;
+	public static final int DEFAULT =0,MOVING = 1;
 	private GOval player;
 	private Timer timer;
-	public static int PLAYER_SPAWN = 50;
-	ArrayList<GRect> enemies; 
-   ArrayList<Integer> Xvelocity;
-  ArrayList<GRect> platforms; 
+	ArrayList<GImage> enemies; 
+    ArrayList<Integer> Xvelocity;
+    ArrayList<GRect> platforms;
+  private ArrayList<GImage> enemiesImages;
   
+ private GImage enemy;
+  private int playerAction = DEFAULT; 
   private int healthPoint = 3;
   private GLabel healthText;
 
@@ -48,15 +54,44 @@ public class Enemy extends GraphicsProgram{
   private double playerVelocityX = 0;
   private double playerVelocityY = 0;
   
+  public int aniTick =0, aniSpeed = 25, aniIndex=0 , maxImages ; 
+  public void loadImages() {
+	  enemiesImages = loadImagesFromFolder("Media/Enemy Sprite");
+  }
+
+//  loading images from the folder
+  public ArrayList<GImage> loadImagesFromFolder(String folderPath) {
+	  ArrayList<GImage> images = new ArrayList<>(); 
+	  File file = new File(folderPath);
+	  File[] fileList  = file.listFiles();
+	  if(fileList != null) {
+		  for(File file1 : fileList) {
+			  if(file1.isFile() && file1.getName().endsWith(".png")) {
+				  images.add(new GImage(file.getPath()));
+			  }
+		  }
+	  }
+	  return images;
+  }
+  
+  
+//  animating enemy not yet completed. 
+  public void animateEnemy() {
+		  aniTick++;
+		  if(aniTick >= aniSpeed) {
+			  aniTick = 0; 
+			  aniIndex++; 
+	  }
+		  
+  }
+ 
 //  creates a single enemy and adds into the array
        public void createEnemy() {  
 	   for(int i=0;i<NUM_ENEMIES;++i) {
-	 GRect enemy=new GRect(RECT_X,RECT_Y);
-    	enemy.setColor(Color.RED);
-    	enemy.setFilled(true);
-    	enemies.add(enemy);
-        add(enemy);
-        Xvelocity.add(X_VELOCITY);
+		   GImage enemy = new GImage("Media/Enemy Sprite/Run 01.png");
+		   enemies.add(enemy);
+	        add(enemy);
+	        Xvelocity.add(X_VELOCITY);
 	   }
    }
 //    spawns the list of enemies and sets the location
@@ -75,28 +110,58 @@ public class Enemy extends GraphicsProgram{
        	for(int i=0;i<enemies.size();++i) {
 		int velocity = Xvelocity.get(i);
 		enemies.get(i).move(velocity, 0);
-       	GRect enemy = enemies.get(i);
-       	
+	
 //ensures the enemy  doesn't go out of window or platform
 		if(enemies.get(i).getX() <= platforms.get(i).getX() || 
 				enemies.get(i).getX() + RECT_X >= platforms.get(i).getX() + platforms.get(i).getWidth()) {
-				 System.out.println(i);
-		      Xvelocity.set(i, -velocity); 
+		      Xvelocity.set(i, -velocity);
+		
 		}	
 	}
 }
-       	public void collisionCheck() {
-       	 for (int i=0;i<enemies.size();++i) {
-       	     GRect enemy = enemies.get(i);
- GObject collision = getElementAt(enemy.getX()+ enemy.getWidth() , enemy.getY());
-       		if(collision instanceof GOval) {
-       			remove(enemies.get(i));
-       			enemies.remove(i);
-       			System.out.println("removed " + i + " " + collision);
-           		}
+//    checks for collision whenever player bottom touches the enemy the enemy will be killed
+// not working as expected will keep working on it. 
+       public void collisionCheck() {
+    	   
+       for (int i=0;i<enemies.size();++i) {
+       GObject collision = getElementAt(enemies.get(i).getX()+enemies.get(i).getWidth()/2,enemies.get(i).getY()+enemies.get(i).getHeight()+1);
+       if(collision == player) {
+       healthPoint--; // Reduce health
+       System.out.println("collision detected Health: " + healthPoint); //used for testing
+       respawnPlayer();
+       updateHealthUI();
+         	 }
+       	 }
+   
+       	for (int i=0; i < enemies.size();++i) {
+// 			GObject collision = getElementAt(ball.getX()+ball.getWidth()+1,ball.getY() + ball.getHeight()/2); 
+
+        GObject collision1 = getElementAt(player.getX()+player.getWidth()/2, player.getY() + player.getHeight());
+        if(enemies.get(i) != null && collision1 == enemies.get(i)) {
+       	remove(enemies.get(i));
+       	enemies.remove(i);
+       	Xvelocity.remove(i);
+       	i--;
+       	System.out.println("removed " + i + " " + collision1);
        		}
-       	}
-       	
+       	}    
+}
+       	///////
+//       	public void checkPlayerCollision() {
+//            for (GImage enemy : enemies) {
+//                if (player.getBounds().intersects(enemy.getBounds())) {
+//                    healthPoint--; // Reduce health
+//                    System.out.println("collision detected Health: " + healthPoint); //used for testing
+//                    respawnPlayer();
+//                    updateHealthUI();
+//                    
+//                    /* maybe add a case if health reaches 0
+//                    if (healthPoint <= 0)
+//                    */
+//                    break;
+//                }
+//            }
+//        }
 // creates temporary platforms
        	
 	@Override
@@ -132,7 +197,7 @@ public class Enemy extends GraphicsProgram{
         add(healthText);
 
         
-		enemies = new ArrayList<GRect>();
+		enemies = new ArrayList<GImage>();
 		Xvelocity = new ArrayList<Integer>();
 		createEnemy();
 		spawnEnemies();
@@ -144,21 +209,7 @@ public class Enemy extends GraphicsProgram{
 	
 	
 	// Checks if player collides with enemies
-    public void checkPlayerCollision() {
-        for (GRect enemy : enemies) {
-            if (player.getBounds().intersects(enemy.getBounds())) {
-                healthPoint--; // Reduce health
-                System.out.println("collision detected Health: " + healthPoint); //used for testing
-                respawnPlayer();
-                updateHealthUI();
-                
-                /* maybe add a case if health reaches 0
-                if (healthPoint <= 0)
-                */
-                break;
-            }
-        }
-    }
+    
     
     // Respawn player to a fixed starting position
     public void respawnPlayer() {
@@ -175,7 +226,8 @@ public class Enemy extends GraphicsProgram{
     public void actionPerformed(ActionEvent e)  {
         player.setLocation(player.getX() + playerVelocityX, player.getY() + playerVelocityY); // Moves the player to new location
 		enemyMovement(); // With actionEvent i moved the enemy movement here instead
-        checkPlayerCollision(); // After each movement, check for collision
+//        checkPlayerCollision(); // After each movement, check for collision
+		collisionCheck();
     }
     
     public void init() {
@@ -224,3 +276,4 @@ public class Enemy extends GraphicsProgram{
         enemies.start();
 	}
 }
+
