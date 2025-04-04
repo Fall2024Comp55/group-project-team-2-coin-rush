@@ -7,7 +7,7 @@ import acm.graphics.GImage;
 
 
 public class Player extends  MainApplication {
-
+	
 private int HealthPoints;// is the value for the health points of the player
 private double x, y; // is the location of the player
 public static final int VELOCITY = 5;// player movement speed
