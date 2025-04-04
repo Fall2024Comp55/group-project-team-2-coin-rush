@@ -13,6 +13,7 @@ public class WelcomePane extends GraphicsPane{
 		addPicture();
 		addDescriptionButton();
 		addPicture1();
+		addPicture2();
 	}
 
 	@Override
@@ -49,6 +50,15 @@ public class WelcomePane extends GraphicsPane{
 		
 		contents.add(moreButton1);
 		mainScreen.add(moreButton1);
+	}
+	
+	private void addPicture2() {
+		GImage moreButton2 = new GImage("more.jpeg", 200, 400);
+		moreButton2.scale(0.3, 0.3);
+		moreButton2.setLocation((mainScreen.getWidth() - moreButton2.getWidth())/ 2, 600);
+		
+		contents.add(moreButton2);
+		mainScreen.add(moreButton2);
 	}
 	
 	@Override
