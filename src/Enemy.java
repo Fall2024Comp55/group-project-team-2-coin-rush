@@ -45,7 +45,7 @@ public class Enemy extends GraphicsProgram{
     ArrayList<GRect> platforms;
   private ArrayList<GImage> enemiesImages;
   
- private GImage enemy;
+  private GImage enemy;
   private int playerAction = DEFAULT; 
   private int healthPoint = 3;
   private GLabel healthText;
