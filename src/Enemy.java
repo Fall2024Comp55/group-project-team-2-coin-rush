@@ -9,6 +9,7 @@ import javax.swing.Timer;
 
 import acm.graphics.*;
 import acm.program.GraphicsProgram;
+import acm.util.Platform;
 
 /* CHANGES
  * I added the player I used for testCoin here to mess around with collision.
@@ -32,12 +33,12 @@ public class Enemy extends GraphicsProgram{
 	public static int WINDOW_HEIGHT = 600; 
 	public static int WINDOW_WIDTH = 600; 
 	public static int X_VELOCITY = 3; 
-	public static int NUM_ENEMIES = 3;
-	public static int NUM_PLATFORMS = 3; 
+	public static int NUM_ENEMIES = 4;
+	public static int NUM_PLATFORMS = 4; 
 	public static int Y_VAL = 100; 
 	public static int ENEMY_SPEED = 5; 
 	public static int PLAYER_SPAWN = 50;
-	public static final int DEFAULT =0,MOVING = 1;
+	public static final int DEFAULT =0, MOVING = 1;
 	private GOval player;
 	private Timer timer;
 	ArrayList<GImage> enemies; 
@@ -45,7 +46,8 @@ public class Enemy extends GraphicsProgram{
     ArrayList<GRect> platforms;
   private ArrayList<GImage> enemiesImages;
   
-  private GImage enemy;
+ private GImage enemy;
+  private GRect platform;
   private int playerAction = DEFAULT; 
   private int healthPoint = 3;
   private GLabel healthText;
@@ -65,9 +67,9 @@ public class Enemy extends GraphicsProgram{
 	  File file = new File(folderPath);
 	  File[] fileList  = file.listFiles();
 	  if(fileList != null) {
-		  for(File file1 : fileList) {
-			  if(file1.isFile() && file1.getName().endsWith(".png")) {
-				  images.add(new GImage(file.getPath()));
+	 for(File file1 : fileList) {
+	 if(file1.isFile() && file1.getName().endsWith(".png")) {
+	 images.add(new GImage(file.getPath()));
 			  }
 		  }
 	  }
@@ -88,7 +90,7 @@ public class Enemy extends GraphicsProgram{
 //  creates a single enemy and adds into the array
        public void createEnemy() {  
 	   for(int i=0;i<NUM_ENEMIES;++i) {
-		   GImage enemy = new GImage("Media/Enemy Sprite/Run 01.png");
+		enemy = new GImage("Media/Enemy Sprite/Run 01.png");
 		   enemies.add(enemy);
 	        add(enemy);
 	        Xvelocity.add(X_VELOCITY);
@@ -97,30 +99,36 @@ public class Enemy extends GraphicsProgram{
 //    spawns the list of enemies and sets the location
        	public void spawnEnemies() {
 	    for(int i=0;i<enemies.size();++i) {
-		add(enemies.get(i));
-		enemies.get(0).setLocation(100, 100);
-		enemies.get(1).setLocation(400,300);
-	    enemies.get(2).setLocation(50,400);
-		Y_VAL += enemies.get(i).getHeight() + 150;
+//		Y_VAL += enemies.get(i).getHeight() + 150; #extra may need later
+	    	 GRect platform = platforms.get(i % platforms.size());
+	    	    enemies.get(i).setLocation(platform.getX(), platform.getY() - enemies.get(i).getHeight());
 	   }
    }
    
 //   handles enemy movement according to the area of platform
        	public void enemyMovement() {
        	for(int i=0;i<enemies.size();++i) {
+        	enemy = enemies.get(i);
 		int velocity = Xvelocity.get(i);
 		enemies.get(i).move(velocity, 0);
-	
-//ensures the enemy  doesn't go out of window or platform
-		if(enemies.get(i).getX() <= platforms.get(i).getX() || 
-				enemies.get(i).getX() + RECT_X >= platforms.get(i).getX() + platforms.get(i).getWidth()) {
-		for(GRect platform : platforms) {
 		
-		      Xvelocity.set(i, -velocity);
-			}
-	}
-       	}
+//		fixed. ensures enemy doesn't go out of platform
+		for(GRect platform1 : platforms) {
+		boolean ifonTop = (enemy.getY()+enemy.getHeight() == platform1.getY()) ;
+		if(ifonTop) {
+		boolean leftOfPlatform = enemy.getX()  <= platform1.getX();
+		boolean rightOfPlatform = enemy.getX() + enemy.getWidth() >= platform1.getX() + platform1.getWidth();
+			
+		if( leftOfPlatform || rightOfPlatform){
+ 	    Xvelocity.set(i, -velocity);
+ 	    break;
+		}	
+	  }
+     }
+    }
+       	
 }
+       	
 //    checks for collision whenever player bottom touches the enemy the enemy will be killed
 // not working as expected will keep working on it. 
        public void collisionCheck() {
@@ -153,7 +161,6 @@ public class Enemy extends GraphicsProgram{
       remove(enemies.get(i));
       enemies.remove(i);
       Xvelocity.remove(i);
-      platforms.remove(i);
       i--;
       System.out.println("removed " + i + " " + collision1);
       break;
@@ -192,7 +199,7 @@ public class Enemy extends GraphicsProgram{
 				
 		platforms = new ArrayList<GRect>();
 		for(int i=0;i<NUM_PLATFORMS; ++i) {
-		GRect platform = new GRect(200, 20);
+	    platform = new GRect(200, 20);
 	    platform.setColor(Color.BLACK);
 	    platform.setFilled(true);
 	    platforms.add(platform);
@@ -204,6 +211,7 @@ public class Enemy extends GraphicsProgram{
 			platforms.get(0).setLocation(100, 140);
 			platforms.get(1).setLocation(400, 340);
 			platforms.get(2).setLocation(50, 440);
+			platforms.get(3).setLocation(20, 300);
 			Y_VAL += platforms.get(i).getHeight() + 150;
 		}
 		
