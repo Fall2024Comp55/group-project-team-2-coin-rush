@@ -114,15 +114,23 @@ public class Enemy extends GraphicsProgram{
 //ensures the enemy  doesn't go out of window or platform
 		if(enemies.get(i).getX() <= platforms.get(i).getX() || 
 				enemies.get(i).getX() + RECT_X >= platforms.get(i).getX() + platforms.get(i).getWidth()) {
-		      Xvelocity.set(i, -velocity);
+		for(GRect platform : platforms) {
 		
-		}	
+		      Xvelocity.set(i, -velocity);
+			}
 	}
+       	}
 }
 //    checks for collision whenever player bottom touches the enemy the enemy will be killed
 // not working as expected will keep working on it. 
        public void collisionCheck() {
     	   
+       for (int i=0;i<enemies.size();++i) {
+       GObject collision1 = getElementAt(player.getX()+player.getWidth()/2, player.getY() + player.getHeight());
+       if(enemies.get(i) != null && collision1 == enemies.get(i)) {
+       removeEnemy();	   
+       }
+       }
        for (int i=0;i<enemies.size();++i) {
        GObject collision = getElementAt(enemies.get(i).getX()+enemies.get(i).getWidth()/2,enemies.get(i).getY()+enemies.get(i).getHeight()+1);
        if(collision == player) {
@@ -130,22 +138,28 @@ public class Enemy extends GraphicsProgram{
        System.out.println("collision detected Health: " + healthPoint); //used for testing
        respawnPlayer();
        updateHealthUI();
-         	 }
-       	 }
+		
    
-       	for (int i=0; i < enemies.size();++i) {
-// 			GObject collision = getElementAt(ball.getX()+ball.getWidth()+1,ball.getY() + ball.getHeight()/2); 
-
-        GObject collision1 = getElementAt(player.getX()+player.getWidth()/2, player.getY() + player.getHeight());
-        if(enemies.get(i) != null && collision1 == enemies.get(i)) {
-       	remove(enemies.get(i));
-       	enemies.remove(i);
-       	Xvelocity.remove(i);
-       	i--;
-       	System.out.println("removed " + i + " " + collision1);
-       		}
-       	}    
+       }
+       	 }
 }
+//       function for the removal of enemy
+     public void removeEnemy() {
+     for (int i=0; i < enemies.size();++i) {
+ 	//		GObject collision = getElementAt(ball.getX()+ball.getWidth()+1,ball.getY() + ball.getHeight()/2); 
+      		
+      GObject collision1 = getElementAt(player.getX()+player.getWidth()/2, player.getY() + player.getHeight());
+      if(enemies.get(i) != null && collision1 == enemies.get(i)) {
+      remove(enemies.get(i));
+      enemies.remove(i);
+      Xvelocity.remove(i);
+      platforms.remove(i);
+      i--;
+      System.out.println("removed " + i + " " + collision1);
+      break;
+      }
+     }    
+   }
        	///////
 //       	public void checkPlayerCollision() {
 //            for (GImage enemy : enemies) {
@@ -226,7 +240,7 @@ public class Enemy extends GraphicsProgram{
     public void actionPerformed(ActionEvent e)  {
         player.setLocation(player.getX() + playerVelocityX, player.getY() + playerVelocityY); // Moves the player to new location
 		enemyMovement(); // With actionEvent i moved the enemy movement here instead
-//        checkPlayerCollision(); // After each movement, check for collision
+//        checkPlayerCollision(); // commented out so I can have the old version if new didn't work
 		collisionCheck();
     }
     
