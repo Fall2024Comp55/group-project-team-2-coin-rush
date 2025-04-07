@@ -34,7 +34,7 @@ public class WelcomePane extends GraphicsPane{
 	}
 	
 	private void addDescriptionButton() {
-		GImage moreButton = new GImage("more.jpeg", 200, 400);
+		GImage moreButton = new GImage("CGB02-yellow_L_btn.png", 200, 400);
 		moreButton.scale(0.3, 0.3);
 		moreButton.setLocation((mainScreen.getWidth() - moreButton.getWidth())/ 2, 400);
 		
@@ -44,18 +44,18 @@ public class WelcomePane extends GraphicsPane{
 	}
 	
 	private void addPicture1() {
-		GImage moreButton1 = new GImage("more.jpeg", 200, 400);
+		GImage moreButton1 = new GImage("CGB02-yellow_L_btn.png", 200, 400);
 		moreButton1.scale(0.3, 0.3);
-		moreButton1.setLocation((mainScreen.getWidth() - moreButton1.getWidth())/ 2, 500);
+		moreButton1.setLocation((mainScreen.getWidth() - moreButton1.getWidth())/ 2, 450);
 		
 		contents.add(moreButton1);
 		mainScreen.add(moreButton1);
 	}
 	
 	private void addPicture2() {
-		GImage moreButton2 = new GImage("more.jpeg", 200, 400);
+		GImage moreButton2 = new GImage("CGB02-yellow_L_btn.png", 200, 400);
 		moreButton2.scale(0.3, 0.3);
-		moreButton2.setLocation((mainScreen.getWidth() - moreButton2.getWidth())/ 2, 700);
+		moreButton2.setLocation((mainScreen.getWidth() - moreButton2.getWidth())/ 2, 500);
 		
 		contents.add(moreButton2);
 		mainScreen.add(moreButton2);
