@@ -113,6 +113,8 @@ private void flipArrayList() {
 
  for (GImage image : jumpingAni) {
      flippedJumping.add(flipGImageHorizontally(image));
+  // Reset the player image after flipping so it points to the new frame list
+     player.setImage(idleAni.get(aniIndex % idleAni.size()).getImage());
  }
 
  // Replace the current animation frame lists with the flipped versions
