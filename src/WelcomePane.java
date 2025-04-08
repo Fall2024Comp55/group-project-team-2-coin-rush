@@ -1,6 +1,9 @@
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 
+import acm.graphics.GCompound;
 import acm.graphics.GImage;
+import acm.graphics.GLabel;
 import acm.graphics.GObject;
 
 public class WelcomePane extends GraphicsPane{
@@ -33,13 +36,38 @@ public class WelcomePane extends GraphicsPane{
 		mainScreen.add(startImage);
 	}
 	
+	// Add a button with "START" label using GCompound
 	private void addDescriptionButton() {
 		GImage moreButton = new GImage("CGB02-yellow_L_btn.png", 200, 400);
 		moreButton.scale(0.3, 0.3);
-		moreButton.setLocation((mainScreen.getWidth() - moreButton.getWidth())/ 2, 400);
 		
-		contents.add(moreButton);
-		mainScreen.add(moreButton);
+		// Create a GLabel object with the text "START"
+		GLabel buttonLabel = new GLabel("START");
+		// Set the font and color of the label
+		buttonLabel.setFont("SansSerif-bold-18");
+		buttonLabel.setColor(Color.WHITE);
+		
+		// create a GCompound to group the image and text together
+		GCompound buttonCompound = new GCompound();
+		// Add the moreButton image to the compound at position(0,0)
+		buttonCompound.add(moreButton, 0, 0);
+		
+		// Calculate the horizontal center position for the label on the image
+		double labelX = (moreButton.getWidth() - buttonLabel.getWidth()) / 2;
+		// Calculate the vertical center position for the label. 
+		double labelY =  (moreButton.getHeight() + buttonLabel.getAscent())/ 2;
+		// Add the label to the compound at the computed position
+		buttonCompound.add(buttonLabel,labelX, labelY);
+		
+		// Center the entire compound horizontally on the main screen at a fixed y-coordinate (400)
+		double x = (mainScreen.getWidth() - buttonCompound.getWidth()) / 2;
+		double y = 400;
+		
+		buttonCompound.setLocation(x,y);
+		
+		// Add the compound to the contents list and display it on the main screen
+		contents.add(buttonCompound);
+		mainScreen.add(buttonCompound);
 
 	}
 	
