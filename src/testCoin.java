@@ -1,12 +1,11 @@
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
-import javax.swing.Timer;
+
 import acm.graphics.GLabel;
 import acm.graphics.GOval;
 import acm.graphics.GRect;
+import acm.graphics.GRectangle;
 import acm.program.GraphicsProgram;
 
 /* CHANGES/ToDos
@@ -28,8 +27,6 @@ public class testCoin {
     ArrayList<GOval> coinsOnFloat; //list of coins floating within the level
     private ArrayList<GRect> platforms; //used for testing
 
-
-
 	private int coinCount; // might not need
 	private int coinsForPlatforms; // Coins specifically for platforms
 	private int coinsForFloat; // Coins that are not tied to platforms but float in level
@@ -38,6 +35,9 @@ public class testCoin {
 	
 	private GLabel coinsCollectedText;
 	private GLabel coinsRemainingText;    
+	
+    private GraphicsProgram program;
+
     
     // Constructor to assign data
     public testCoin(int coinsForFloat, int coinsForPlatforms, int numPlatforms) {
@@ -53,6 +53,10 @@ public class testCoin {
         platforms = generateRandomPlatforms(numPlatforms); // Automatically assigns the number of platforms to be made and added to list
         }
 
+
+    public void setProgram(GraphicsProgram program) {
+        this.program = program;
+    }
     
     // Adds GOval coins for platforms to a list of coins that go on platforms
     private void addToCoinsOnPlatformList(GOval coin) {
@@ -138,32 +142,35 @@ public class testCoin {
             add(coin);
         }
     } 
+
+    public void update(GRectangle playerBounds) {
+        checkCoinCollision(playerBounds);
+    }
     
-    
-     // Checks for player and coin collision
-    private void checkCoinCollision() {
+    // Checks for player and coin collision
+    private void checkCoinCollision(GRectangle playerBounds) {
         // Check floating coins (iterate backward to avoid index errors)
         for (int i = coinsOnFloat.size() - 1; i >= 0; i--) {
             GOval coin = coinsOnFloat.get(i);
-            if (player.getBounds().intersects(coin.getBounds())) {
-                remove(coin); // Remove from screen
-                coinsOnFloat.remove(i); // Remove from list
-                coinsCollected++; // Update count
+            if (playerBounds.intersects(coin.getBounds())) {
+                program.remove(coin); //remove from screen
+                coinsOnFloat.remove(i); //remove from list
+                coinsCollected++; //update count
             }
         }
 
         // Check platform coins (iterate backward to avoid index errors)
         for (int i = coinsOnPlatforms.size() - 1; i >= 0; i--) {
             GOval coin = coinsOnPlatforms.get(i);
-            if (player.getBounds().intersects(coin.getBounds())) {
-                remove(coin); // Remove from screen
-                coinsOnPlatforms.remove(i); // Remove from list
-                coinsCollected++; // Update count
+            if (playerBounds.intersects(coin.getBounds())) {
+                program.remove(coin); //remove from screen
+                coinsOnPlatforms.remove(i); //remove from list
+                coinsCollected++; //update count
             }
         }
-        updateCoinUI(); //updates UI through a method instead
+        updateCoinUI();//updates UI through a method instead
     }
-
+    
     //updates the UI
     private void updateCoinUI() {
         coinsCollectedText.setLabel("Coins Collected: " + coinsCollected);
