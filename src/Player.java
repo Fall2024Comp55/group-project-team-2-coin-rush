@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import acm.graphics.GImage;
+import acm.graphics.GRectangle;
+import acm.program.GraphicsProgram;
 
 
-public class Player extends  MainApplication {
+public class Player extends GraphicsPane {
 	
 private int HealthPoints;// is the value for the health points of the player
 private double x, y; // is the location of the player
@@ -33,13 +35,32 @@ private int aniIndex = 0; //Determines which frame of the animation to display
 private int aniTick = 0; //Acts as a timer for controlling the animation speed
 private int playerSizeX = 64;
 private int playerSizeY = 40;
-private boolean facingRight = true; // Tracks the direction the player is facing
+private boolean facingRight = true; //Tracks the direction the player is facing
 
 private static final int IDLE = 0, MOVING = 1, JUMPING = 2; //Adjust to add more player actions
+
+private GraphicsProgram program; //Allows screen access from outside
+
 
 //Load the images automatically in the appropriate GImage lists
 public Player() {
    loadAnimations();
+}
+
+//Used by Level_0_tests
+public void setProgram(GraphicsProgram program) {
+ this.program = program;
+}
+
+//creates and sets player on screen
+public void spawn(int spawnX, int spawnY) {
+    loadAnimations();
+    x = spawnX;
+    y = spawnY;
+    player = idleAni.get(0);
+    player.setLocation(x, y);
+    program.add(player);
+    grounded = true;
 }
 
 //Makes use of a function to load images from my sprite sub folders of Media folder to their respective lists 
@@ -66,6 +87,7 @@ private ArrayList<GImage> loadImagesFromFolder(String folderPath) {
 }
 
 //Used for testing if the "loadImaesFromFolder" function works [might delete later]
+/*
 private void printGImageList(ArrayList<GImage> list) {		
 	int x = 20;
 	int y = 20;
@@ -77,6 +99,7 @@ private void printGImageList(ArrayList<GImage> list) {
 	}
 	return;
 }
+*/
 
 //Cycles through animation frames based on the player's action (idle(0), moving(1), jumping(2)).
 //When aniTick reaches aniTickSpeed, it resets to 0, and aniIndex is incremented.
@@ -227,6 +250,8 @@ public void keyTyped(KeyEvent e) {
 }
 
 
+
+
 private void movePlayer() {
     // Horizontal movement
 	if (right) {
@@ -299,7 +324,16 @@ private void movePlayer() {
     updateAnimation(); //Updates the animation bases on player actions
 }
 
+//acts like a "hitbox" in that it just returns the area of the player image.
+public GRectangle getBounds() {
+    return player.getBounds();
+}
 
+public void update() {
+    movePlayer();
+}
+
+/*
 @Override
 public void run() {
     addKeyListeners(); // Enable key input
@@ -326,7 +360,6 @@ public void run() {
        // System.out.println(xVelocity+ " " + yVelocity);
     }
 }
-
 public void init() {
 	setSize(TEMP_WINDOW_SIZE,TEMP_WINDOW_SIZE);
 	}
@@ -335,6 +368,6 @@ public static void main(String[] args) {
     new Player().start();
 }
 
-
+*/
 
 }
