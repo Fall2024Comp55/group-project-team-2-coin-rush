@@ -226,32 +226,6 @@ public void keyTyped(KeyEvent e) {
     // Optional: Add behavior for key typing if needed
 }
 
-@Override
-public void run() {
-    addKeyListeners(); // Enable key input
-
-    // Initialize player's position in the center of the window
-    x = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
-    y = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
-
-    //The player
-    player = idleAni.get(0); //Sets the idle animation    
-
-    player.setLocation(200, 200);
-    add(player);
-    grounded = true;
-    
-  // idleAni = loadImagesFromFolder("Media/Sprite_IDLE");
-  // printGImageList(idleAni);
-    
-    System.out.println("Player size: X" + player.getWidth() + " Y" + player.getHeight());
-    // Main game loop
-    while (true) {
-        movePlayer(); // Update player position
-        pause(16.66); // Control frame rate
-       // System.out.println(xVelocity+ " " + yVelocity);
-    }
-}
 
 private void movePlayer() {
     // Horizontal movement
@@ -325,6 +299,33 @@ private void movePlayer() {
     updateAnimation(); //Updates the animation bases on player actions
 }
 
+
+@Override
+public void run() {
+    addKeyListeners(); // Enable key input
+
+    // Initialize player's position in the center of the window
+    x = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
+    y = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
+
+    //The player
+    player = idleAni.get(0); //Sets the idle animation    
+
+    player.setLocation(200, 200);
+    add(player);
+    grounded = true;
+    
+  // idleAni = loadImagesFromFolder("Media/Sprite_IDLE");
+  // printGImageList(idleAni);
+    
+    System.out.println("Player size: X" + player.getWidth() + " Y" + player.getHeight());
+    // Main game loop
+    while (true) {
+        movePlayer(); // Update player position
+        pause(16.66); // Control frame rate
+       // System.out.println(xVelocity+ " " + yVelocity);
+    }
+}
 
 public void init() {
 	setSize(TEMP_WINDOW_SIZE,TEMP_WINDOW_SIZE);
