@@ -80,7 +80,7 @@ private void updateAnimation() {
         // Set the image for the enemy
         enemy.setImage(currentAni.get(aniIndex).getImage());
     }
-}
+} 
 //  loading images from the folder
 public ArrayList<GImage> loadImagesFromFolder(String folderPath) {
 	   ArrayList<GImage> images = new ArrayList<>();
