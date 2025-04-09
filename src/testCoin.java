@@ -21,15 +21,14 @@ import acm.program.GraphicsProgram;
  * Thank you for reading lol
  */
 
-public class testCoin extends GraphicsProgram {
+public class testCoin {
 	public static final int COIN_SIZE = 20; //default coin size
 
     ArrayList<GOval> coinsOnPlatforms; //list of coins on platforms
     ArrayList<GOval> coinsOnFloat; //list of coins floating within the level
     private ArrayList<GRect> platforms; //used for testing
 
-    private GOval coin;
-    private GOval player;
+
 
 	private int coinCount; // might not need
 	private int coinsForPlatforms; // Coins specifically for platforms
@@ -38,14 +37,7 @@ public class testCoin extends GraphicsProgram {
 	private int numPlatforms; // might not need
 	
 	private GLabel coinsCollectedText;
-	private GLabel coinsRemainingText;
-	
-	private Timer timer;
-    
-    // Player movement variables
-    private double playerVelocityX = 0;
-    private double playerVelocityY = 0;
-    
+	private GLabel coinsRemainingText;    
     
     // Constructor to assign data
     public testCoin(int coinsForFloat, int coinsForPlatforms, int numPlatforms) {
@@ -61,44 +53,6 @@ public class testCoin extends GraphicsProgram {
         platforms = generateRandomPlatforms(numPlatforms); // Automatically assigns the number of platforms to be made and added to list
         }
 
-	
-    
-    
-    public void run() {
-        // Create and Adds player to the screen
-    	 player = new GOval(50, 50, 30, 30);
-         player.setColor(Color.RED);
-         player.setFilled(true);
-         add(player);
-
-         addPlatformsToScreen(); // Adds platforms to screen
-         spawnCoinsToPlatforms(coinsOnFloat, platforms); //Sets a list of coin's location to fixed location of platform, centered
-         addCoinsToScreen(); // Adds all coins to screen
-         
-         // Temporary labels to track coin collection within this class
-         coinsCollectedText = new GLabel("Coins Collected: " + coinsCollected, 5, 15);
-         add(coinsCollectedText);
-         coinsRemainingText = new GLabel("Coins Remaining: " + (coinsOnFloat.size() + coinsOnPlatforms.size()), 5, 30);
-         add(coinsRemainingText);
-         
-         
-         addKeyListeners();
-         timer = new Timer(30, this); // Used for movement and collision detection
-         timer.start();
-    }
-
-	
-
-	
-	// Creates a single coin
-    private GOval createCoin() {
-    	coin = new GOval(COIN_SIZE, COIN_SIZE);
-    	coin.setFillColor(Color.YELLOW);
-    	coin.setFilled(true);
-    	return coin;
-    	}
-    
-    
     
     // Adds GOval coins for platforms to a list of coins that go on platforms
     private void addToCoinsOnPlatformList(GOval coin) {
@@ -183,12 +137,7 @@ public class testCoin extends GraphicsProgram {
         for (GOval coin : coinsOnFloat) {
             add(coin);
         }
-    }
-
-    
-    
-    
-    //large spaces here for my own readability lol
+    } 
     
     
      // Checks for player and coin collision
@@ -222,6 +171,41 @@ public class testCoin extends GraphicsProgram {
     }
     
     
+    
+    
+    
+    /*
+	private GOval coin;
+    private GOval player;
+	private Timer timer;
+    
+    // Player movement variables
+    private double playerVelocityX = 0;
+    private double playerVelocityY = 0;
+    
+    public void run() {
+        // Create and Adds player to the screen
+    	 player = new GOval(50, 50, 30, 30);
+         player.setColor(Color.RED);
+         player.setFilled(true);
+         add(player);
+
+         addPlatformsToScreen(); // Adds platforms to screen
+         spawnCoinsToPlatforms(coinsOnFloat, platforms); //Sets a list of coin's location to fixed location of platform, centered
+         addCoinsToScreen(); // Adds all coins to screen
+         
+         // Temporary labels to track coin collection within this class
+         coinsCollectedText = new GLabel("Coins Collected: " + coinsCollected, 5, 15);
+         add(coinsCollectedText);
+         coinsRemainingText = new GLabel("Coins Remaining: " + (coinsOnFloat.size() + coinsOnPlatforms.size()), 5, 30);
+         add(coinsRemainingText);
+         
+         
+         addKeyListeners();
+         timer = new Timer(30, this); // Used for movement and collision detection
+         timer.start();
+    }
+    
     // Handles key presses for movement
     @Override
     public void keyPressed(KeyEvent e) {
@@ -250,6 +234,15 @@ public class testCoin extends GraphicsProgram {
         checkCoinCollision(); //after each movement, check for collision
     }
     
+    	// Creates a single coin
+    private GOval createCoin() {
+    	coin = new GOval(COIN_SIZE, COIN_SIZE);
+    	coin.setFillColor(Color.YELLOW);
+    	coin.setFilled(true);
+    	return coin;
+    	}
+    
+    
 	//generates a random number given an bound
 	public static int generateRandomNumber(int bound) {
         Random random = new Random();
@@ -263,4 +256,5 @@ public class testCoin extends GraphicsProgram {
 	public static void main(String[] args) {
 		new testCoin(3, 3, 5).start();
 		}
+	*/
 }
