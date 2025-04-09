@@ -39,6 +39,11 @@ private boolean facingRight = true; //Tracks the direction the player is facing
 
 private static final int IDLE = 0, MOVING = 1, JUMPING = 2; //Adjust to add more player actions
 
+//Replace aniTick-related variables
+private long lastFrameTime = System.nanoTime();
+private long frameDurationNs = 100_000_000; // 100ms = 0.1s per frame (adjust speed here)
+
+
 private GraphicsProgram program; //Allows screen access from outside
 
 
@@ -54,7 +59,6 @@ public void setProgram(GraphicsProgram program) {
 
 //creates and sets player on screen
 public void spawn(int spawnX, int spawnY) {
-    loadAnimations();
     x = spawnX;
     y = spawnY;
     player = idleAni.get(0);
@@ -104,19 +108,26 @@ private void printGImageList(ArrayList<GImage> list) {
 //Cycles through animation frames based on the player's action (idle(0), moving(1), jumping(2)).
 //When aniTick reaches aniTickSpeed, it resets to 0, and aniIndex is incremented.
 private void updateAnimation() {
-    aniTick++;
-    if (aniTick >= aniTickSpeed) {
-        aniTick = 0;
-        aniIndex++;
-        List<GImage> currentAni = switch (playerAction) {
-            case MOVING -> movingAni;
-            case JUMPING -> jumpingAni;
-            default -> idleAni;
-        };
-        if (aniIndex >= currentAni.size()) aniIndex = 0;
+    List<GImage> currentAni = switch (playerAction) {
+        case MOVING -> movingAni;
+        case JUMPING -> jumpingAni;
+        default -> idleAni;
+    };
+
+    long currentTime = System.nanoTime();
+    frameDurationNs = switch (playerAction) {
+    case MOVING -> 75_000_000L;  // Faster animation
+    case JUMPING -> 120_000_000L;
+    default -> 150_000_000L;
+};
+//Replace tick-based variables with time-based ones
+    if (currentTime - lastFrameTime >= frameDurationNs) {
+        aniIndex = (aniIndex + 1) % currentAni.size();
+        lastFrameTime = currentTime;
         player.setImage(currentAni.get(aniIndex).getImage());
     }
 }
+
 
 
 //Replaces all current animation frame images with their horizontally flipped versions.
