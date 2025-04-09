@@ -47,11 +47,10 @@ private ArrayList<GImage> enemiesImages;
 private GImage enemy;
 private GRect enemyHitbox;
 private GRect platform;
-private int playerAction = DEFAULT; 
+private int playerAction = DEFAULT; //may use later
 private int healthPoint = 3;
 private int count = 0; 
 private GLabel healthText;
-public GImage left1;
 private int aniTickSpeed = 5; //Adjust to change speed of animation speed
 private int aniIndex = 0; //Determines which frame of the animation to display
 private int aniTick = 0;
@@ -59,13 +58,10 @@ private int aniTick = 0;
 private double playerVelocityX = 0;
 private double playerVelocityY = 0;
 
-
-
 public Enemy() {
 loadAnimation();
-
  }
-
+//loading animations to enemiesimages
 public void loadAnimation() {
 	enemiesImages = loadImagesFromFolder("Media/Enemy_Sprite"); 
 }
@@ -87,24 +83,23 @@ private void updateAnimation() {
 }
 //  loading images from the folder
 public ArrayList<GImage> loadImagesFromFolder(String folderPath) {
-		 ArrayList<GImage> images = new ArrayList<>();
-		 File folder = new File(folderPath);
-		 File[] files = folder.listFiles();
-		 if (files != null) {
-		     for (File file : files) {
-		         if (file.isFile() && file.getName().endsWith(".png")) {
-		             images.add(new GImage(file.getPath()));
-		         }
-		     }
-		 }
-
-return images;
-  }
+	   ArrayList<GImage> images = new ArrayList<>();
+	   File folder = new File(folderPath);
+	   File[] files = folder.listFiles();
+	   if (files != null) {
+       for (File file : files) {
+	   if (file.isFile() && file.getName().endsWith(".png")) {
+		  images.add(new GImage(file.getPath()));
+		  }
+		}
+	  }
+      return images;
+    }
 
  
 //  creates a single enemy and adds into the array
 public void createEnemy() {  
-	if(enemiesImages.size() > 0) {
+	  if(enemiesImages.size() > 0) {
 	  for(int i=0;i<NUM_ENEMIES;++i) {
 		  GImage enemy = new GImage(enemiesImages.get(0).getImage());
 		  enemyHitbox = new GRect(enemy.getWidth(),enemy.getHeight());
@@ -122,22 +117,6 @@ public void createEnemy() {
 	   }
 	}
    }
-
-//public void addEnemy(int x, int y) {
-//	enemy = new GImage("Media/Enemy Sprite/Run 01.png");
-//	enemyHitbox = new GRect(enemy.getWidth(),enemy.getHeight());
-//	enemy.setLocation(x, y);
-//	enemyHitbox.setVisible(false);
-//	 
-//	spawnEnemies();
-//	enemies.add(enemy);
-//	count++; 
-//    Xvelocity.add(X_VELOCITY);
-//    hitBoxes.add(enemyHitbox);
-//    
-//    add(enemy);
-//    add(enemyHitbox);
-//}
       
 //    spawns the list of enemies and sets the location
        	public void spawnEnemies() {
@@ -247,11 +226,8 @@ public void createEnemy() {
 		enemies = new ArrayList<GImage>();
 		Xvelocity = new ArrayList<Integer>();
 		hitBoxes = new ArrayList<GRect>();
-//		addEnemy(100, 600);
-		//addEnemy(200, 600);
 		createEnemy();
 		
-	
         // I needed to use a timer instead of a while(true) loop for the player movement and collision detection
         timer = new Timer(30, this);
         timer.start();
@@ -289,7 +265,6 @@ public void createEnemy() {
     public void actionPerformed(ActionEvent e)  {
         player.setLocation(player.getX() + playerVelocityX, player.getY() + playerVelocityY); // Moves the player to new location
 		enemyMovement(); // With actionEvent i moved the enemy movement here instead
-//        checkPlayerCollision(); // commented out so I can have the old version if new didn't work
 		collisionCheck();
 		
     }
