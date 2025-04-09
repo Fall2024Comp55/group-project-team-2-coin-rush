@@ -12,13 +12,19 @@ public class Level_0_tests extends GraphicsProgram {
         setSize(800, 600); // Window size
         addKeyListeners();
 
-        // Initialize player (if separated from Platform logic)
+        //player
         player = new Player();
         player.setProgram(this);
         player.spawn(100, 300);
+        
+        //test coins
+        coin = new testCoin(3, 3, 5);
+        coin.setProgram(this);
+        coin.init();
 
         while (true) {
-            player.update();
+            player.update(); //updates the Player animation loop & movement
+            coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
             pause(16.66); // 60 FPS
         }
     }

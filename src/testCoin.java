@@ -52,6 +52,17 @@ public class testCoin {
         coinsOnPlatforms = generateCoins(coinsForPlatforms); // Automatically assigns the number of coins to be made and added to list
         platforms = generateRandomPlatforms(numPlatforms); // Automatically assigns the number of platforms to be made and added to list
         }
+    
+    public void init() {
+        addPlatformsToScreen();
+        spawnCoinsToPlatforms(coinsOnFloat, platforms);
+        addCoinsToScreen();
+
+        coinsCollectedText = new GLabel("Coins Collected: " + coinsCollected, 5, 15);
+        program.add(coinsCollectedText);
+        coinsRemainingText = new GLabel("Coins Remaining: " + (coinsOnFloat.size() + coinsOnPlatforms.size()), 5, 30);
+        program.add(coinsRemainingText);
+    }
 
 
     public void setProgram(GraphicsProgram program) {
@@ -84,7 +95,9 @@ public class testCoin {
             int width = rand.nextInt(150) + 50; // Platform width between 50-200
             int x = rand.nextInt(MainApplication.WINDOW_WIDTH - width); // Ensure it stays inside the window
             int y = rand.nextInt(MainApplication.WINDOW_HEIGHT - 100) + 100; // Avoid spawning too high or low
-            GOval coin = createCoin();
+            GOval coin = new GOval(COIN_SIZE, COIN_SIZE);
+            coin.setFillColor(Color.YELLOW);
+            coin.setFilled(true);
             coin.setLocation(x, y);
             coins.add(coin);
         }
@@ -111,19 +124,18 @@ public class testCoin {
     
     // Specifically sets the location of a list of coins to the center of platforms of a list of platforms
     private void spawnCoinsToPlatforms(ArrayList<GOval> coinList, ArrayList<GRect> platforms) {
-        if (platforms.isEmpty() || coinList.isEmpty()) return; //prevents errors
+        if (platforms.isEmpty() || coinList.isEmpty()) return;
 
         for (int i = 0; i < coinList.size(); i++) {
             GRect platform = platforms.get(i % platforms.size()); //avoid out-of-bounds
-            double coinLocationX = platform.getX() + (platform.getWidth() - coinList.get(i).getWidth()) / 2; //spawns the coin centered on top of the platform
+            double coinLocationX = platform.getX() + (platform.getWidth() - coinList.get(i).getWidth()) / 2; //spawns the ocin centered on top of the platform
             double coinLocationY = platform.getY() - coinList.get(i).getHeight() - 5; //5px above the platform
 
             coinList.get(i).setLocation(coinLocationX, coinLocationY); //sets coin to location
-            add(coinList.get(i)); //adds to screen
+            program.add(coinList.get(i)); //adds to screen
             System.out.println("Coins On Platforms " + i + " spawned at: " + coinLocationX + ", " + coinLocationY); //used just for testing.
         }
     }
-    
 
     
 
