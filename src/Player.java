@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import acm.graphics.GImage;
+import acm.graphics.GRectangle;
+import acm.program.GraphicsProgram;
 
 
-public class Player extends  MainApplication {
+public class Player extends GraphicsPane {
 	
 private int HealthPoints;// is the value for the health points of the player
 private double x, y; // is the location of the player
@@ -33,13 +35,36 @@ private int aniIndex = 0; //Determines which frame of the animation to display
 private int aniTick = 0; //Acts as a timer for controlling the animation speed
 private int playerSizeX = 64;
 private int playerSizeY = 40;
-private boolean facingRight = true; // Tracks the direction the player is facing
+private boolean facingRight = true; //Tracks the direction the player is facing
 
 private static final int IDLE = 0, MOVING = 1, JUMPING = 2; //Adjust to add more player actions
+
+//Replace aniTick-related variables
+private long lastFrameTime = System.nanoTime();
+private long frameDurationNs = 100_000_000; // 100ms = 0.1s per frame (adjust speed here)
+
+
+private GraphicsProgram program; //Allows screen access from outside
+
 
 //Load the images automatically in the appropriate GImage lists
 public Player() {
    loadAnimations();
+}
+
+//Used by Level_0_tests
+public void setProgram(GraphicsProgram program) {
+ this.program = program;
+}
+
+//creates and sets player on screen
+public void spawn(int spawnX, int spawnY) {
+    x = spawnX;
+    y = spawnY;
+    player = idleAni.get(0);
+    player.setLocation(x, y);
+    program.add(player);
+    grounded = true;
 }
 
 //Makes use of a function to load images from my sprite sub folders of Media folder to their respective lists 
@@ -66,6 +91,7 @@ private ArrayList<GImage> loadImagesFromFolder(String folderPath) {
 }
 
 //Used for testing if the "loadImaesFromFolder" function works [might delete later]
+/*
 private void printGImageList(ArrayList<GImage> list) {		
 	int x = 20;
 	int y = 20;
@@ -77,23 +103,31 @@ private void printGImageList(ArrayList<GImage> list) {
 	}
 	return;
 }
+*/
 
 //Cycles through animation frames based on the player's action (idle(0), moving(1), jumping(2)).
 //When aniTick reaches aniTickSpeed, it resets to 0, and aniIndex is incremented.
 private void updateAnimation() {
-    aniTick++;
-    if (aniTick >= aniTickSpeed) {
-        aniTick = 0;
-        aniIndex++;
-        List<GImage> currentAni = switch (playerAction) {
-            case MOVING -> movingAni;
-            case JUMPING -> jumpingAni;
-            default -> idleAni;
-        };
-        if (aniIndex >= currentAni.size()) aniIndex = 0;
+    List<GImage> currentAni = switch (playerAction) {
+        case MOVING -> movingAni;
+        case JUMPING -> jumpingAni;
+        default -> idleAni;
+    };
+
+    long currentTime = System.nanoTime();
+    frameDurationNs = switch (playerAction) {
+    case MOVING -> 75_000_000L;  // Faster animation
+    case JUMPING -> 120_000_000L;
+    default -> 150_000_000L;
+};
+//Replace tick-based variables with time-based ones
+    if (currentTime - lastFrameTime >= frameDurationNs) {
+        aniIndex = (aniIndex + 1) % currentAni.size();
+        lastFrameTime = currentTime;
         player.setImage(currentAni.get(aniIndex).getImage());
     }
 }
+
 
 
 //Replaces all current animation frame images with their horizontally flipped versions.
@@ -113,6 +147,9 @@ private void flipArrayList() {
 
  for (GImage image : jumpingAni) {
      flippedJumping.add(flipGImageHorizontally(image));
+     
+  // Reset the player image after flipping so it points to the new frame list
+     player.setImage(idleAni.get(aniIndex % idleAni.size()).getImage());
  }
 
  // Replace the current animation frame lists with the flipped versions
@@ -223,32 +260,8 @@ public void keyTyped(KeyEvent e) {
     // Optional: Add behavior for key typing if needed
 }
 
-@Override
-public void run() {
-    addKeyListeners(); // Enable key input
 
-    // Initialize player's position in the center of the window
-    x = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
-    y = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
 
-    //The player
-    player = idleAni.get(0); //Sets the idle animation    
-
-    player.setLocation(200, 200);
-    add(player);
-    grounded = true;
-    
-  // idleAni = loadImagesFromFolder("Media/Sprite_IDLE");
-  // printGImageList(idleAni);
-    
-    System.out.println("Player size: X" + player.getWidth() + " Y" + player.getHeight());
-    // Main game loop
-    while (true) {
-        movePlayer(); // Update player position
-        pause(16.66); // Control frame rate
-       // System.out.println(xVelocity+ " " + yVelocity);
-    }
-}
 
 private void movePlayer() {
     // Horizontal movement
@@ -322,7 +335,42 @@ private void movePlayer() {
     updateAnimation(); //Updates the animation bases on player actions
 }
 
+//acts like a "hitbox" in that it just returns the area of the player image.
+public GRectangle getBounds() {
+    return player.getBounds();
+}
 
+public void update() {
+    movePlayer();
+}
+
+/*
+@Override
+public void run() {
+    addKeyListeners(); // Enable key input
+
+    // Initialize player's position in the center of the window
+    x = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
+    y = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
+
+    //The player
+    player = idleAni.get(0); //Sets the idle animation    
+
+    player.setLocation(200, 200);
+    add(player);
+    grounded = true;
+    
+  // idleAni = loadImagesFromFolder("Media/Sprite_IDLE");
+  // printGImageList(idleAni);
+    
+    System.out.println("Player size: X" + player.getWidth() + " Y" + player.getHeight());
+    // Main game loop
+    while (true) {
+        movePlayer(); // Update player position
+        pause(16.66); // Control frame rate
+       // System.out.println(xVelocity+ " " + yVelocity);
+    }
+}
 public void init() {
 	setSize(TEMP_WINDOW_SIZE,TEMP_WINDOW_SIZE);
 	}
@@ -331,6 +379,6 @@ public static void main(String[] args) {
     new Player().start();
 }
 
-
+*/
 
 }
