@@ -130,18 +130,20 @@ public class testCoin {
     // These two functions essentially adds to screen
     private void addPlatformsToScreen() {
         for (GRect platform : platforms) {
-            add(platform);
+            program.add(platform);
+        }
+    }
+
+    private void addCoinsToScreen() {
+        for (GOval coin : coinsOnPlatforms) {
+            program.add(coin);
+        }
+        for (GOval coin : coinsOnFloat) {
+            program.add(coin);
         }
     }
     
-    private void addCoinsToScreen() {
-        for (GOval coin : coinsOnPlatforms) {
-            add(coin);
-        }
-        for (GOval coin : coinsOnFloat) {
-            add(coin);
-        }
-    } 
+    
 
     public void update(GRectangle playerBounds) {
         checkCoinCollision(playerBounds);
