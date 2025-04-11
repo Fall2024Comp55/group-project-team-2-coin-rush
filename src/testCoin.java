@@ -64,7 +64,6 @@ public class testCoin {
         program.add(coinsRemainingText);
     }
 
-
     public void setProgram(GraphicsProgram program) {
         this.program = program;
     }
