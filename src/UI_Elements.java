@@ -8,4 +8,5 @@ public class UI_Elements {
 	private int coinsCollected(testCoin coin) {
 		return coin.getCoinsCollected();
 	}
+	
 }
