@@ -28,16 +28,21 @@ private static final double MAX_HORIZONTAL_SPEED = 4.0; // Terminal Horizontal V
 private static final int TEMP_WINDOW_SIZE = 400;
 //changed 'MainApplication.WINDOW_WIDTH' and 'MainApplication.WINDOW_HEIGHT' to TEMP_WINDOW_SIZE for now because it doesnt fit my screen
 
-private ArrayList<GImage> idleAni, movingAni, jumpingAni; //Stores the sprite images
-private int playerAction = IDLE; //Default animation
-private int aniTickSpeed = 5; //Adjust to change speed of animation speed
+private ArrayList<GImage> idleAniRight, movingAniRight, jumpingAniRight; //Original right-facing
+private ArrayList<GImage> idleAniLeft, movingAniLeft, jumpingAniLeft;   //Flipped left-facing
+
+private int playerAction; //Default animation
+private int lastPlayerAction = IDLE_RIGHT;
+
+//private int aniTickSpeed = 5; //Adjust to change speed of animation speed
 private int aniIndex = 0; //Determines which frame of the animation to display
-private int aniTick = 0; //Acts as a timer for controlling the animation speed
 private int playerSizeX = 64;
 private int playerSizeY = 40;
 private boolean facingRight = true; //Tracks the direction the player is facing
 
-private static final int IDLE = 0, MOVING = 1, JUMPING = 2; //Adjust to add more player actions
+private static final int IDLE_LEFT = -0, MOVING_LEFT = -1, JUMPING_LEFT = -2; //Adjust to add more player actions
+private static final int IDLE_RIGHT = 0, MOVING_RIGHT = 1, JUMPING_RIGHT = 2; //Adjust to add more player actions
+
 
 //Replace aniTick-related variables
 private long lastFrameTime = System.nanoTime();
@@ -61,7 +66,7 @@ public void setProgram(GraphicsProgram program) {
 public void spawn(int spawnX, int spawnY) {
     x = spawnX;
     y = spawnY;
-    player = idleAni.get(0);
+    player = idleAniRight.get(0);
     player.setLocation(x, y);
     program.add(player);
     grounded = true;
@@ -69,10 +74,15 @@ public void spawn(int spawnX, int spawnY) {
 
 //Makes use of a function to load images from my sprite sub folders of Media folder to their respective lists 
 private void loadAnimations() {
-    idleAni = loadImagesFromFolder("Media/Sprite_IDLE");
-    movingAni = loadImagesFromFolder("Media/Sprite_MOVING");
-    jumpingAni = loadImagesFromFolder("Media/Sprite_JUMPING");
+    idleAniRight = loadImagesFromFolder("Media/Sprite_IDLE");
+    movingAniRight = loadImagesFromFolder("Media/Sprite_MOVING");
+    jumpingAniRight = loadImagesFromFolder("Media/Sprite_JUMPING");
+
+    idleAniLeft = flipImageList(idleAniRight);
+    movingAniLeft = flipImageList(movingAniRight);
+    jumpingAniLeft = flipImageList(jumpingAniRight);
 }
+
 
 
 //Pulls the image files from the Media sub folder(s) to add to a list of GImages and return said list
@@ -90,37 +100,24 @@ private ArrayList<GImage> loadImagesFromFolder(String folderPath) {
  return images;
 }
 
-//Used for testing if the "loadImaesFromFolder" function works [might delete later]
-/*
-private void printGImageList(ArrayList<GImage> list) {		
-	int x = 20;
-	int y = 20;
-
-	for (GImage peep : list) {
-		peep.setLocation(x, y);
-		add(peep);
-		x = x + 40;
-	}
-	return;
-}
-*/
-
 //Cycles through animation frames based on the player's action (idle(0), moving(1), jumping(2)).
 //When aniTick reaches aniTickSpeed, it resets to 0, and aniIndex is incremented.
 private void updateAnimation() {
     List<GImage> currentAni = switch (playerAction) {
-        case MOVING -> movingAni;
-        case JUMPING -> jumpingAni;
-        default -> idleAni;
+        case MOVING_RIGHT -> movingAniRight;
+        case JUMPING_RIGHT -> jumpingAniRight;
+        case MOVING_LEFT -> movingAniLeft;
+        case JUMPING_LEFT -> jumpingAniLeft;
+        default -> facingRight ? idleAniRight : idleAniLeft;
     };
 
     long currentTime = System.nanoTime();
     frameDurationNs = switch (playerAction) {
-    case MOVING -> 75_000_000L;  // Faster animation
-    case JUMPING -> 120_000_000L;
-    default -> 150_000_000L;
-};
-//Replace tick-based variables with time-based ones
+        case MOVING_RIGHT, MOVING_LEFT -> 75_000_000L;
+        case JUMPING_RIGHT, JUMPING_LEFT -> 120_000_000L;
+        default -> 150_000_000L;
+    };
+
     if (currentTime - lastFrameTime >= frameDurationNs) {
         aniIndex = (aniIndex + 1) % currentAni.size();
         lastFrameTime = currentTime;
@@ -132,30 +129,14 @@ private void updateAnimation() {
 
 //Replaces all current animation frame images with their horizontally flipped versions.
 //This is used to flip the character's direction when turning left or right.
-private void flipArrayList() {
- ArrayList<GImage> flippedIdle = new ArrayList<>();
- ArrayList<GImage> flippedMoving = new ArrayList<>();
- ArrayList<GImage> flippedJumping = new ArrayList<>();
-
- for (GImage image : idleAni) {
-     flippedIdle.add(flipGImageHorizontally(image));
- }
-
- for (GImage image : movingAni) {
-     flippedMoving.add(flipGImageHorizontally(image));
- }
-
- for (GImage image : jumpingAni) {
-     flippedJumping.add(flipGImageHorizontally(image));
-     
-  // Reset the player image after flipping so it points to the new frame list
-     player.setImage(idleAni.get(aniIndex % idleAni.size()).getImage());
- }
-
- // Replace the current animation frame lists with the flipped versions
- idleAni = flippedIdle;
- movingAni = flippedMoving;
- jumpingAni = flippedJumping;
+private ArrayList<GImage> flipImageList(ArrayList<GImage> originals) {
+    ArrayList<GImage> flipped = new ArrayList<>();
+    for (GImage img : originals) {
+        GImage flippedImg = flipGImageHorizontally(img);
+        flippedImg.setSize(PLAYER_SIZE, PLAYER_SIZE);
+        flipped.add(flippedImg);
+    }
+    return flipped;
 }
 
 
@@ -241,26 +222,21 @@ public void keyPressed(KeyEvent e) {
 public void keyReleased(KeyEvent e) {
     if (e.getKeyCode() == KeyEvent.VK_D|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
         right = false;
-        playerAction = 1; //Adjusts the playerAction depending on the action (in this case we're moving)
+        playerAction = MOVING_RIGHT; //Adjusts the playerAction depending on the action (in this case we're moving)
     } else if (e.getKeyCode() == KeyEvent.VK_A|| e.getKeyCode() == KeyEvent.VK_LEFT) {
         left = false;
-        playerAction = 1;
+        playerAction = MOVING_LEFT;
     } else if ((e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_UP) /*&& grounded*/){
         up = false;
-        playerAction = 2;
+        playerAction = facingRight ? JUMPING_RIGHT : JUMPING_LEFT;
     } else if (e.getKeyCode() == KeyEvent.VK_S|| e.getKeyCode() == KeyEvent.VK_DOWN) {
         down = false;
         //playerAction
     }
-    if (!right && !left) playerAction = 0; //Sets the idle animation
+    if (!right && !left) {
+    	playerAction = facingRight ? IDLE_RIGHT : IDLE_LEFT;  //Sets the idle animation
+    }
 }
-
-@Override
-public void keyTyped(KeyEvent e) {
-    // Optional: Add behavior for key typing if needed
-}
-
-
 
 
 private void movePlayer() {
@@ -268,14 +244,12 @@ private void movePlayer() {
 	if (right) {
 	    xVelocity += VELOCITY; // Move right	
 	    if (!facingRight) {
-	        flipArrayList(); // Only flip if changing direction
 	        facingRight = true;
 	    }
 	}
 	if (left) {
 	    xVelocity -= VELOCITY;  // Move left
 	    if (facingRight) {
-	        flipArrayList(); // Only flip if changing direction
 	        facingRight = false;
 	    }
 	}
@@ -326,13 +300,19 @@ private void movePlayer() {
     player.setLocation(x, y);
     
     //Sets player actions
-    if (xVelocity != 0) {
-        playerAction = MOVING;
+    if (!grounded) {
+        playerAction = facingRight ? JUMPING_RIGHT : JUMPING_LEFT;
+    } else if (xVelocity != 0) {
+        playerAction = facingRight ? MOVING_RIGHT : MOVING_LEFT;
     } else {
-        playerAction = IDLE;
+        playerAction = facingRight ? IDLE_RIGHT : IDLE_LEFT;
     }
-    if (!grounded) playerAction = JUMPING;
+
     updateAnimation(); //Updates the animation bases on player actions
+    if (playerAction != lastPlayerAction) {
+        aniIndex = 0;
+        lastPlayerAction = playerAction;
+    }
 }
 
 //acts like a "hitbox" in that it just returns the area of the player image.
@@ -343,42 +323,5 @@ public GRectangle getBounds() {
 public void update() {
     movePlayer();
 }
-
-/*
-@Override
-public void run() {
-    addKeyListeners(); // Enable key input
-
-    // Initialize player's position in the center of the window
-    x = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
-    y = (TEMP_WINDOW_SIZE - PLAYER_SIZE) / 2.0;
-
-    //The player
-    player = idleAni.get(0); //Sets the idle animation    
-
-    player.setLocation(200, 200);
-    add(player);
-    grounded = true;
-    
-  // idleAni = loadImagesFromFolder("Media/Sprite_IDLE");
-  // printGImageList(idleAni);
-    
-    System.out.println("Player size: X" + player.getWidth() + " Y" + player.getHeight());
-    // Main game loop
-    while (true) {
-        movePlayer(); // Update player position
-        pause(16.66); // Control frame rate
-       // System.out.println(xVelocity+ " " + yVelocity);
-    }
-}
-public void init() {
-	setSize(TEMP_WINDOW_SIZE,TEMP_WINDOW_SIZE);
-	}
-public static void main(String[] args) {
-    // Start the GraphicsProgram
-    new Player().start();
-}
-
-*/
 
 }
