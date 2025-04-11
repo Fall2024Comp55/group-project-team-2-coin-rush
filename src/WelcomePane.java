@@ -86,7 +86,7 @@ public class WelcomePane extends GraphicsPane{
 		double labelY = (moreButton1.getHeight() + buttonLabel.getAscent()) / 2;
 		buttonCompound.add(buttonLabel, labelX, labelY);
 		
-		double x =  (mainScreen.getWidth() - buttonCompound.getWidth()) / 2;
+		double x = (mainScreen.getWidth() - buttonCompound.getWidth()) / 2;
 		double y = 450;
 		buttonCompound.setLocation(x, y);
 		
@@ -97,10 +97,23 @@ public class WelcomePane extends GraphicsPane{
 	private void AddButton2() {
 		GImage moreButton2 = new GImage("CGB02-yellow_L_btn.png", 200, 400);
 		moreButton2.scale(0.3, 0.3);
-		moreButton2.setLocation((mainScreen.getWidth() - moreButton2.getWidth())/ 2, 500);
+		GLabel buttonLabel = new GLabel("EXIT");
+		buttonLabel.setFont("SansSerif-bold-18");
+		buttonLabel.setColor(Color.WHITE);
 		
-		contents.add(moreButton2);
-		mainScreen.add(moreButton2);
+		GCompound buttonCompound = new GCompound();
+		buttonCompound.add(moreButton2, 0, 0);
+		
+		double labelX = (moreButton2.getWidth() - buttonLabel.getWidth()) / 2;
+		double labelY = (moreButton2.getHeight() + buttonLabel.getAscent()) / 2;
+		buttonCompound.add(buttonLabel, labelX, labelY);
+		
+		double x = (mainScreen.getWidth() - buttonCompound.getWidth()) / 2;
+		double y = 500;
+		buttonCompound.setLocation(x, y);
+		
+		contents.add(buttonCompound);
+		mainScreen.add(buttonCompound);
 	}
 	
 	@Override
