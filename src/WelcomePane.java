@@ -42,7 +42,7 @@ public class WelcomePane extends GraphicsPane{
 		moreButton.scale(0.3, 0.3);
 		
 		// Create a GLabel object with the text "START"
-		GLabel buttonLabel = new GLabel("START");
+		GLabel buttonLabel = new GLabel("START LEVEL 0");
 		// Set the font and color of the label
 		buttonLabel.setFont("SansSerif-bold-18");
 		buttonLabel.setColor(Color.WHITE);
