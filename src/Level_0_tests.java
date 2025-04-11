@@ -16,6 +16,7 @@ public class Level_0_tests extends GraphicsProgram {
     private ArrayList<GLine> gridLines = new ArrayList<>(); //stores the grid lines
     public static final int GRID_SIZE = 40; //size of grid cell
 
+    
 //draws the grid to screen
     private void drawGrid(int cellSize) {
     	/*	Each grid cell is 40 pixels wide and 40 pixels tall (GRID_SIZE)
