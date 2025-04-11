@@ -86,6 +86,10 @@ public class testCoin {
     	this.coinsForFloat = number;
     }
     
+    public int getCoinsCollected() {
+    	return coinsCollected;
+    }
+    
     
     // Uses createCoin() and a given integer to generate a list of coins and return said list
     private ArrayList<GOval> generateCoins(int numCoins) {
@@ -136,8 +140,6 @@ public class testCoin {
             System.out.println("Coins On Platforms " + i + " spawned at: " + coinLocationX + ", " + coinLocationY); //used just for testing.
         }
     }
-
-    
 
     // These two functions essentially adds to screen
     private void addPlatformsToScreen() {
@@ -279,3 +281,4 @@ public class testCoin {
 		}
 	*/
 }
+

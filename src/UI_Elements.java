@@ -1,9 +1,11 @@
 
 public class UI_Elements {
-
-	public static void main(String[] args) {
-		System.out.print("UI");
-
+	
+	private void healthBar(Player player) {
+		player.getHP();
 	}
-
+	
+	private int coinsCollected(testCoin coin) {
+		return coin.getCoinsCollected();
+	}
 }
