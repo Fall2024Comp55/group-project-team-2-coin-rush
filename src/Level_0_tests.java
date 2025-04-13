@@ -5,7 +5,7 @@ public class Level_0_tests extends GraphicsProgram {
 
     private Player player;
     private Platform platform;
-    private Enemy enemy;
+    private Enemies enemy;
     private testCoin coin;
 
     public void run() {
@@ -17,8 +17,11 @@ public class Level_0_tests extends GraphicsProgram {
         player.setProgram(this);
         player.spawn(100, 300);
         
+        enemy = new Enemies();
+        enemy.setProgram(this);
+        enemy.addEnemy(100, 200);
         //test coins
-        coin = new testCoin(3, 3, 5);
+        coin = new testCoin(3, 3, 5);   
         coin.setProgram(this);
         coin.init();
 
