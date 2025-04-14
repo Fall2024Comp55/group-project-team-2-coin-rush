@@ -1,15 +1,16 @@
 import acm.graphics.GRect;
+import acm.graphics.GRectangle;
 import acm.program.GraphicsProgram;
 import java.awt.Color;
 import java.util.ArrayList;
 
 public class Platform extends MainApplication {
-    private int Width;
-    private int Height;
-    private double x;
-    private double y;
-    private int speed;
-    private int Distance;
+    private int Width;//platform width
+    private int Height;//platform height
+    private double x;// Starting y
+    private double y;//starting x
+    private int speed;//speed of the platform moving
+    private int Distance;// max distance the platform can move
     private PlatformTypes Type;
     private ArrayList<GRect> Platforms = new ArrayList<>(); // Manages multiple platform objects
     private GraphicsProgram program; // Reference to GraphicsProgram
@@ -35,9 +36,10 @@ public class Platform extends MainApplication {
     public void setProgram(GraphicsProgram program) {
         this.program = program;
     }
+    
 
     // Adds a platform to the list and spawns it
-    public void addPlatform(double locX, double locY, int width, int height, PlatformTypes type, int speed, int maxDistance) {
+    public void addPlatform(double width, double height, int locX , int locY , PlatformTypes type, int speed, int maxDistance) {
         GRect rect = new GRect(locX, locY, width, height);
         rect.setColor(Color.RED);
         rect.setFilled(true);
@@ -77,4 +79,12 @@ public class Platform extends MainApplication {
         program.add(platform); // Adds platform to the GraphicsProgram
         Platforms.add(platform); // Keeps track of platforms
     }
+   
+
+	public void collision(GRectangle bounds) {
+		//if(bounds.intersects(platform.getbounds)) {
+			//Player.setGrounded;
+		//}
+		
+	}
 }

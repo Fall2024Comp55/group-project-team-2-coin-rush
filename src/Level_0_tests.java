@@ -83,6 +83,7 @@ public class Level_0_tests extends GraphicsProgram {
        // coin.init();
         
         platform = new Platform(120, 40,40, 120, Platform.PlatformTypes.STATIC, 0, 0);
+        
         platform = new Platform(120, 40,240, 240, Platform.PlatformTypes.STATIC, 0, 0);
         
 
@@ -98,7 +99,7 @@ public class Level_0_tests extends GraphicsProgram {
         while (true) {
             player.update(); //updates the Player animation loop & movement
             //coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
-           // platform.update(player);
+            platform.collision(player.getBounds());
             pause(16.66); // 60 FPS
         }
     }
@@ -128,6 +129,7 @@ public class Level_0_tests extends GraphicsProgram {
     public void keyTyped(KeyEvent e) {
         player.keyTyped(e);
     }
+    
 
     public static void main(String[] args) {
         new Level_0_tests().start();
