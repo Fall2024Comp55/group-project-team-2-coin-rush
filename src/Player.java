@@ -163,7 +163,12 @@ private GImage flipGImageHorizontally(GImage original) {
 }
 
 
-
+public void canjump() {
+	
+}
+public void setGrounded(boolean Grounded) {
+	this.grounded = Grounded;
+}
 
 public int getHP(){
 		return HealthPoints; 
