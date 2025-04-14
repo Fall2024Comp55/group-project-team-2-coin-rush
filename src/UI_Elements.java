@@ -1,28 +1,11 @@
-import java.util.ArrayList;
 
-import acm.graphics.GImage;
-import acm.program.GraphicsProgram;
-
-public class UI_Elements extends GraphicsProgram{
-	public static final int HP_IMAGE_WIDTH_SIZE = 20; 
-	public static final int HP_IMAGE_HEIGHT_SIZE = 20; 
-	public static final int COIN_IMAGE_SIZE = 20; 
-	public static final int DOOR_UI_IMAGE_WIDTH_SIZE = 20; 
-	public static final int DOOR_UI_IMAGE_HEIGTH_SIZE = 20; 
-	public static final int UI_IMAGE_WIDTH_SIZE = 20; 
-	public static final int UI_IMAGE_HEIGTH_SIZE = 20; 
-
+public class UI_Elements {
 	
-	public ArrayList<GImage> HP; 
-	int coinsCollected; 
-	public GImage coins; 
-	public GImage Door; 
-	public GImage UIscreen; 
+	private void healthBar(Player player) {
+		player.getHP();
+	}
 	
-
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
+	private int coinsCollected(testCoin coin) {
+		return coin.getCoinsCollected();
 	}
 }

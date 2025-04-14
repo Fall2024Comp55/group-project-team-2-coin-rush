@@ -12,7 +12,7 @@ public class Level_0_tests extends GraphicsProgram {
     private Platform platform;
     private Enemies enemy;
     private testCoin coin;
-
+    
     private boolean gridVisible = true; //used for key presse
     private ArrayList<GLine> gridLines = new ArrayList<>(); //stores the grid lines
     private ArrayList<GLabel> gridLabels = new ArrayList<>(); //stores the labels that visually show the size of each cell
@@ -77,16 +77,27 @@ public class Level_0_tests extends GraphicsProgram {
         enemy.setProgram(this);
         enemy.addEnemy(100, 200);
         //test coins
+
+        //coin = new testCoin(5);
+        //coin.setProgram(this);
+       // coin.init();
+        
+        platform = new Platform(120, 40,40, 120, Platform.PlatformTypes.STATIC, 0, 0);
+        platform = new Platform(120, 40,240, 240, Platform.PlatformTypes.STATIC, 0, 0);
+        
+
         coin = new testCoin(3, 3, 5);   
         coin.setProgram(this);
         coin.init();
-        /*
-        platform = new Platform();
+        
+    
+ 
         platform.setProgram(this);
-        */
+        platform.SpawnPlatform();
+        
         while (true) {
             player.update(); //updates the Player animation loop & movement
-            coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
+            //coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
            // platform.update(player);
             pause(16.66); // 60 FPS
         }
