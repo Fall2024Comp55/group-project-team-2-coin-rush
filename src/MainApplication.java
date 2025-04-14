@@ -14,11 +14,14 @@ public class MainApplication extends GraphicsProgram{
 	private WelcomePane welcomePane;
 	private DescriptionPane descriptionPane;
 	private GraphicsPane currentScreen;
+	private Level0Pane level0Pane;
+	
 
 
 	public MainApplication() {
 		super();
 	}
+	
 	
 	protected void setupInteractions() {
 		requestFocus();
@@ -54,6 +57,12 @@ public class MainApplication extends GraphicsProgram{
 	public void switchToWelcomeScreen() {
 		switchToScreen(welcomePane);
 	}
+	
+	public void switchToLevel0Screen() {
+		switchToScreen(level0Pane);
+	}
+	
+	
 	
 	
 	protected void switchToScreen(GraphicsPane newScreen) {
