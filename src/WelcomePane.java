@@ -36,7 +36,7 @@ public class WelcomePane extends GraphicsPane{
 		mainScreen.add(startImage);
 	}
 	
-	// Add a button with "START" label using GCompound
+	// Add a button with "START LEVEL 0" label using GCompound
 	private void AddButton() {
 		GImage moreButton = new GImage("CGB02-yellow_L_btn.png", 200, 400);
 		moreButton.scale(0.3, 0.3);
@@ -119,7 +119,11 @@ public class WelcomePane extends GraphicsPane{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (mainScreen.getElementAtLocation(e.getX(), e.getY()) == contents.get(1)) {
-			mainScreen.switchToDescriptionScreen();
+			Level_0_tests level0Test = new Level_0_tests();
+			level0Test.start();
+		}
+		else if (mainScreen.getElementAtLocation(e.getX(), e.getY()) == contents.get(3))  {
+			System.exit(0);
 		}
 	}
 
