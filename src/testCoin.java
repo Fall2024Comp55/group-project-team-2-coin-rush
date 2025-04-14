@@ -64,7 +64,6 @@ public class testCoin {
         program.add(coinsRemainingText);
     }
 
-
     public void setProgram(GraphicsProgram program) {
         this.program = program;
     }
@@ -84,6 +83,10 @@ public class testCoin {
     }
     private void addCoinsForFloat(int number) {
     	this.coinsForFloat = number;
+    }
+    
+    public int getCoinsCollected() {
+    	return coinsCollected;
     }
     
     
@@ -136,8 +139,6 @@ public class testCoin {
             System.out.println("Coins On Platforms " + i + " spawned at: " + coinLocationX + ", " + coinLocationY); //used just for testing.
         }
     }
-
-    
 
     // These two functions essentially adds to screen
     private void addPlatformsToScreen() {
@@ -279,3 +280,4 @@ public class testCoin {
 		}
 	*/
 }
+

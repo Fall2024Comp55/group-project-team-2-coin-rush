@@ -14,9 +14,9 @@ public class WelcomePane extends GraphicsPane{
 	@Override
 	public void showContent() {
 		addPicture();
-		addDescriptionButton();
-		addPicture1();
-		addPicture2();
+		AddButton();
+		AddButton1();
+		AddButton2();
 	}
 
 	@Override
@@ -36,13 +36,13 @@ public class WelcomePane extends GraphicsPane{
 		mainScreen.add(startImage);
 	}
 	
-	// Add a button with "START" label using GCompound
-	private void addDescriptionButton() {
+	// Add a button with "START LEVEL 0" label using GCompound
+	private void AddButton() {
 		GImage moreButton = new GImage("CGB02-yellow_L_btn.png", 200, 400);
 		moreButton.scale(0.3, 0.3);
 		
 		// Create a GLabel object with the text "START"
-		GLabel buttonLabel = new GLabel("START");
+		GLabel buttonLabel = new GLabel("START LEVEL 0");
 		// Set the font and color of the label
 		buttonLabel.setFont("SansSerif-bold-18");
 		buttonLabel.setColor(Color.WHITE);
@@ -71,28 +71,59 @@ public class WelcomePane extends GraphicsPane{
 
 	}
 	
-	private void addPicture1() {
+	private void AddButton1() {
 		GImage moreButton1 = new GImage("CGB02-yellow_L_btn.png", 200, 400);
 		moreButton1.scale(0.3, 0.3);
-		moreButton1.setLocation((mainScreen.getWidth() - moreButton1.getWidth())/ 2, 450);
 		
-		contents.add(moreButton1);
-		mainScreen.add(moreButton1);
+		GLabel buttonLabel = new GLabel("START LEVEL 1");
+		buttonLabel.setFont("SansSerif-bold-18");
+		buttonLabel.setColor(Color.WHITE);
+		
+		GCompound buttonCompound = new GCompound();
+		buttonCompound.add(moreButton1, 0, 0);
+		
+		double labelX = (moreButton1.getWidth() - buttonLabel.getWidth()) / 2;
+		double labelY = (moreButton1.getHeight() + buttonLabel.getAscent()) / 2;
+		buttonCompound.add(buttonLabel, labelX, labelY);
+		
+		double x = (mainScreen.getWidth() - buttonCompound.getWidth()) / 2;
+		double y = 450;
+		buttonCompound.setLocation(x, y);
+		
+		contents.add(buttonCompound);
+		mainScreen.add(buttonCompound);
 	}
 	
-	private void addPicture2() {
+	private void AddButton2() {
 		GImage moreButton2 = new GImage("CGB02-yellow_L_btn.png", 200, 400);
 		moreButton2.scale(0.3, 0.3);
-		moreButton2.setLocation((mainScreen.getWidth() - moreButton2.getWidth())/ 2, 500);
+		GLabel buttonLabel = new GLabel("EXIT");
+		buttonLabel.setFont("SansSerif-bold-18");
+		buttonLabel.setColor(Color.WHITE);
 		
-		contents.add(moreButton2);
-		mainScreen.add(moreButton2);
+		GCompound buttonCompound = new GCompound();
+		buttonCompound.add(moreButton2, 0, 0);
+		
+		double labelX = (moreButton2.getWidth() - buttonLabel.getWidth()) / 2;
+		double labelY = (moreButton2.getHeight() + buttonLabel.getAscent()) / 2;
+		buttonCompound.add(buttonLabel, labelX, labelY);
+		
+		double x = (mainScreen.getWidth() - buttonCompound.getWidth()) / 2;
+		double y = 500;
+		buttonCompound.setLocation(x, y);
+		
+		contents.add(buttonCompound);
+		mainScreen.add(buttonCompound);
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (mainScreen.getElementAtLocation(e.getX(), e.getY()) == contents.get(1)) {
-			mainScreen.switchToDescriptionScreen();
+			Level_0_tests level0Test = new Level_0_tests();
+			level0Test.start();
+		}
+		else if (mainScreen.getElementAtLocation(e.getX(), e.getY()) == contents.get(3))  {
+			System.exit(0);
 		}
 	}
 
