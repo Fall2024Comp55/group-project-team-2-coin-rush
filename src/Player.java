@@ -25,8 +25,6 @@ private double yVelocity = 0;// current upwards or falling speed of the player
 private double xVelocity = 0;// not used right now
 private static final double MAX_HORIZONTAL_SPEED = 4.0; // Terminal Horizontal Velocity 
 
-private static final int TEMP_WINDOW_SIZE = 400;
-//changed 'MainApplication.WINDOW_WIDTH' and 'MainApplication.WINDOW_HEIGHT' to TEMP_WINDOW_SIZE for now because it doesnt fit my screen
 
 private ArrayList<GImage> idleAniRight, movingAniRight, jumpingAniRight; //Original right-facing
 private ArrayList<GImage> idleAniLeft, movingAniLeft, jumpingAniLeft;   //Flipped left-facing
@@ -163,12 +161,7 @@ private GImage flipGImageHorizontally(GImage original) {
 }
 
 
-public void canjump() {
-	
-}
-public void setGrounded(boolean Grounded) {
-	this.grounded = Grounded;
-}
+
 
 public int getHP(){
 		return HealthPoints; 
@@ -286,18 +279,18 @@ private void movePlayer() {
     //Update Horizontal position
     x += xVelocity;
     // Ground collision detection
-    if (y >= TEMP_WINDOW_SIZE - PLAYER_SIZE) { // Check if player hits the ground
-        y = TEMP_WINDOW_SIZE - PLAYER_SIZE; // Snap player to ground level
+    if (y >= MainApplication.WINDOW_HEIGHT - PLAYER_SIZE) { // Check if player hits the ground
+        y = MainApplication.WINDOW_HEIGHT - PLAYER_SIZE; // Snap player to ground level
         grounded = true; // Player is now on the ground
         yVelocity = 0; // Stop vertical movement
         }
 
     // Ensure the player stays within horizontal bounds
-    x = Math.max(0, Math.min(TEMP_WINDOW_SIZE - PLAYER_SIZE, x));
+    x = Math.max(0, Math.min(MainApplication.WINDOW_WIDTH - PLAYER_SIZE, x));
 
     
-    if (y >= TEMP_WINDOW_SIZE - player.getHeight()) {
-        y = TEMP_WINDOW_SIZE - player.getHeight();
+    if (y >= MainApplication.WINDOW_HEIGHT - player.getHeight()) {
+        y = MainApplication.WINDOW_HEIGHT - player.getHeight();
         grounded = true;
         yVelocity = 0;
     }

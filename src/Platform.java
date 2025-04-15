@@ -21,6 +21,8 @@ public class Platform extends MainApplication {
     }
 
     // Constructor for individual platforms
+    public Platform() {} //set it like this to initialise in level_0_tests
+    /*
     public Platform(int width, int height, double locX, double locY, PlatformTypes type, int speed, int maxDistance) {
         this.Width = width;
         this.Height = height;
@@ -31,19 +33,28 @@ public class Platform extends MainApplication {
         this.Distance = maxDistance;
         this.startX = locX;
     }
+*/
 
     // Sets the GraphicsProgram context
     public void setProgram(GraphicsProgram program) {
         this.program = program;
     }
     
+    public ArrayList<GRect> getPlatforms() {
+    	return Platforms;
+    }
+    
+    public void addPlatformsToScreen() {
+        for (GRect platform : Platforms) {
+            program.add(platform);
+        }
+    }   
 
     // Adds a platform to the list and spawns it
-    public void addPlatform(double width, double height, int locX , int locY , PlatformTypes type, int speed, int maxDistance) {
+    public void addPlatform(int locX, int locY, int width, int height, PlatformTypes type, int speed, int maxDistance) {
         GRect rect = new GRect(locX, locY, width, height);
-        rect.setColor(Color.RED);
+        rect.setColor(Color.BLACK);
         rect.setFilled(true);
-        program.add(rect);
         Platforms.add(rect); // Adds platform to the ArrayList for tracking
 
         // Apply attributes to MOVING platforms
@@ -74,12 +85,11 @@ public class Platform extends MainApplication {
     // Spawns a platform directly
     public void SpawnPlatform() {
         GRect platform = new GRect(x, y, Width, Height);
-        platform.setColor(Color.RED);
+        platform.setColor(Color.BLACK);
         platform.setFilled(true);
         program.add(platform); // Adds platform to the GraphicsProgram
         Platforms.add(platform); // Keeps track of platforms
     }
-   
 
 	public void collision(GRectangle bounds) {
 		//if(bounds.intersects(platform.getbounds)) {

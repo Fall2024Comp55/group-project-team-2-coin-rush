@@ -10,7 +10,7 @@ public class Level_0_tests extends GraphicsProgram {
 
     private Player player;
     private Platform platform;
-    private Enemies enemy;
+    private Enemy enemy;
     private testCoin coin;
     
     private boolean gridVisible = true; //used for key presse
@@ -67,38 +67,27 @@ public class Level_0_tests extends GraphicsProgram {
     	}
         setSize(1280, 720); // Window size
         addKeyListeners();
-
+        //platform = new Platform(120, 40,40, 120, Platform.PlatformTypes.STATIC, 0, 0);
+        //platform = new Platform(120, 40,240, 240, Platform.PlatformTypes.STATIC, 0, 0);      
+        platform = new Platform();
+        platform.addPlatform(100, 400, 100, 10, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.setProgram(this);
+        platform.addPlatformsToScreen();
+        
         //player
         player = new Player();
         player.setProgram(this);
-        player.spawn(100, 300);
+        player.spawn(100, 300); 
         
-        enemy = new Enemies();
-        enemy.setProgram(this);
-        enemy.addEnemy(100, 200);
         //test coins
-
-        //coin = new testCoin(5);
-        //coin.setProgram(this);
-       // coin.init();
-        
-        platform = new Platform(120, 40,40, 120, Platform.PlatformTypes.STATIC, 0, 0);
-        
-        platform = new Platform(120, 40,240, 240, Platform.PlatformTypes.STATIC, 0, 0);
-        
-
-        coin = new testCoin(3, 3, 5);   
-        coin.setProgram(this);
-        coin.init();
-        
-    
- 
-        platform.setProgram(this);
-        platform.SpawnPlatform();
+       coin = new testCoin(5);
+       coin.setProgram(this);
+       coin.init();
+       coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
         
         while (true) {
             player.update(); //updates the Player animation loop & movement
-            //coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
+            coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
             platform.collision(player.getBounds());
             pause(16.66); // 60 FPS
         }
