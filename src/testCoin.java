@@ -97,7 +97,6 @@ public class testCoin {
             double coinLocationY = platform.getY() - coin.getHeight() - 5; //5px above the platform
 
             coin.setLocation(coinLocationX, coinLocationY); //sets coin to location
-            program.add(coin); //add to screen
             System.out.println("Coin " + i + " spawned at: (" + coinLocationX + ", " + coinLocationY + ")"); //used for testing
         }
     }

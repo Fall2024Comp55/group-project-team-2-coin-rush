@@ -82,9 +82,9 @@ public class Level_0_tests extends GraphicsProgram {
         //test coins
        coin = new testCoin(5);
        coin.setProgram(this);
-       coin.init();
        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
-        
+       coin.init();
+
         while (true) {
             player.update(); //updates the Player animation loop & movement
             coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
