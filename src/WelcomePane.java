@@ -119,8 +119,7 @@ public class WelcomePane extends GraphicsPane{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (mainScreen.getElementAtLocation(e.getX(), e.getY()) == contents.get(1)) {
-			Level_0_tests level0Test = new Level_0_tests();
-			level0Test.start();
+			mainScreen.switchToLevel0Screen();
 		}
 		else if (mainScreen.getElementAtLocation(e.getX(), e.getY()) == contents.get(3))  {
 			System.exit(0);
