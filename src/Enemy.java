@@ -143,70 +143,11 @@ if( leftOfPlatform || rightOfPlatform){
 }
 }
 
-public void collisionCheck(GRectangle Player) {
-	for (int i = enemies.size() - 1; i >= 0; --i) {
-//	boolean enemyTop = 
-	GRectangle bounds = enemyHitbox.getBounds();
-
-	GRectangle top = new GRectangle(bounds.getX(),  bounds.getY(),bounds.getWidth(), bounds.getHeight()/2);
-	GRectangle right = new GRectangle(bounds.getX()+(bounds.getWidth()*3/4), bounds.getY(), bounds.getWidth()/4,enemyHitbox.getHeight());
-	GRectangle left = new GRectangle(bounds.getX(),bounds.getY(),bounds.getWidth()/4,bounds.getHeight());
-	
-	if(Player.getBounds().intersects(right) || Player.getBounds().intersects(left) ) {
-		 healthPoint--; 
-		respawnPlayer();
- 	   updateHealthUI();
-	}
-	if(Player.getBounds().intersects(top)) {
-		System.out.println("removingg!!!!!!!!!!!!!!");
-	       removeEnemy(i); 
-	}
-	}
-	
-   /* for (int i = enemies.size() - 1; i >= 0; --i) {
-    // Check if there is a collision with the hitbox of the current enemy
-    GObject Rightcollision = getElementAt(hitBoxes.get(i).getX() + hitBoxes.get(i).getWidth()+1,
-    	                                     hitBoxes.get(i).getY() + hitBoxes.get(i).getHeight()/2 );
-    GObject leftCollision = getElementAt(hitBoxes.get(i).getX() - 5,
-                                     hitBoxes.get(i).getY() + hitBoxes.get(i).getHeight()/2 );
-    // Check if there is a collision with the player.
-    GObject collision1 = getElementAt(player.getX() + player.getWidth() / 2,
-    	                                      player.getY() + player.getHeight()+1);
-    
-    
-    // If the player collides with the enemy, reduce health and respawn the player
-    if (Rightcollision == player || leftCollision == player) {
-        healthPoint--;  // Reduce health
-    	   System.out.println("Collision detected Health: " + healthPoint);
-    	   respawnPlayer();
-    	   updateHealthUI();
-    	        } 
-    // If the enemy's hitbox collides with the player, remove the enemy
-    if (collision1 == hitBoxes.get(i) || collision1 == enemiesImages.get(i)) {
-
-    	System.out.println("removingg!!!!!!!!!!!!!!");
-       removeEnemy(i);  // Pass the index of the enemy to remove
-    	  }
-    	    }
-    	    */
-    	}
 
 
 
 
-public void removeEnemy(int index) {
-    // Remove the enemy from the screen
-    program.remove(enemiesImages.get(index));
-    // Remove enemy-related data from the lists
-    enemies.remove(index);
-    enemiesImages.remove(index);
-     Xvelocity.remove(index);
-     program.remove(hitBoxes.get(index));
-     hitBoxes.remove(index);
-  }
-
-
-/*//    checks for collision whenever player bottom touches the enemy the enemy will be killed
+//    checks for collision whenever player bottom touches the enemy the enemy will be killed
 
        public void collisionCheck() {
            GRectangle playerBounds = player.getBounds();
@@ -241,14 +182,20 @@ public void removeEnemy(int index) {
        
       // Function to remove an enemy and its associated hitbox and velocity
       public void removeEnemy(int index) {
-      // Remove the enemy from the screen
-      remove(enemies.get(index));
-      // Remove enemy-related data from the lists
-      enemies.remove(index);
-       Xvelocity.remove(index);
-       remove(hitBoxes.get(index));
-       hitBoxes.remove(index);
-       	}
+    	    // Defensive checks
+    	    if (index < 0 || index >= enemiesImages.size()) return;
+
+    	    // Remove enemy sprite from screen
+    	    program.remove(enemiesImages.get(index));
+
+    	    // Remove associated hitbox from screen
+    	    program.remove(hitBoxes.get(index));
+
+    	    // Remove data from lists
+    	    enemiesImages.remove(index);
+    	    hitBoxes.remove(index);
+    	    Xvelocity.remove(index);
+    	}
        	
       
       
@@ -256,7 +203,7 @@ public void removeEnemy(int index) {
       public GRectangle getBounds() {
           return enemyHitbox.getBounds();
       }
-*/
+
 
 public double getWidth() {
 	return WIDTH;
