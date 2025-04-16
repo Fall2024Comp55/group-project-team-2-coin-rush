@@ -10,7 +10,7 @@ public class Level_0_tests extends GraphicsProgram {
 
     private Player player;
     private Platform platform;
-    private Enemies enemy;
+    private Enemy enemy;
     private testCoin coin;
     
     private boolean gridVisible = true; //used for key presse
@@ -79,11 +79,12 @@ public class Level_0_tests extends GraphicsProgram {
         player.setProgram(this);
         player.spawn(100, 300); 
         
+        /*
         //enemy 
-        enemy = new Enemies();
+        enemy = new Enemy();
         enemy.setProgram(this);
         enemy.addEnemy(100, 370);
-        
+        */
        
         
         //test coins
@@ -95,7 +96,7 @@ public class Level_0_tests extends GraphicsProgram {
         while (true) {
             player.update(); //updates the Player animation loop & movement
             coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
-            enemy.moveAllEnemies(platform.getPlatforms());
+            //enemy.moveAllEnemies(platform.getPlatforms());
             platform.collision(player.getBounds());
             pause(16.66); // 60 FPS
         }
