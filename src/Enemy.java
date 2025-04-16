@@ -206,6 +206,58 @@ public void removeEnemy(int index) {
   }
 
 
+/*//    checks for collision whenever player bottom touches the enemy the enemy will be killed
+
+       public void collisionCheck() {
+           GRectangle playerBounds = player.getBounds();
+
+           for (int i = 0; i < enemies.size(); ++i) {
+               GRect enemyBox = hitBoxes.get(i);
+
+               if (enemies.get(i) != null && isCollisionFromAbove(playerBounds, enemyBox)) {
+                   removeEnemy(i);
+               } else if (isSideCollision(playerBounds, enemyBox)) {
+                   healthPoint--;
+                   System.out.println("Collision detected Health: " + healthPoint);
+                   respawnPlayer();
+                   updateHealthUI();
+               }
+           }
+       }
+       
+       //checks for player collision from above
+       private boolean isCollisionFromAbove(GRectangle playerBounds, GRect enemy) {
+           GRectangle enemyBounds = enemy.getBounds();
+           //returns true if player is touching the enemy's head
+           return player.getY() + player.getHeight() <= enemyBounds.getY() + 5 &&
+                  playerBounds.intersects(enemyBounds); 
+       }
+
+       //checks for player collision from both right and left sides 
+       private boolean isSideCollision(GRectangle playerBounds, GRect enemy) {
+    	   //returns true if player is touching either side
+           return playerBounds.intersects(enemy.getBounds());
+       }
+       
+      // Function to remove an enemy and its associated hitbox and velocity
+      public void removeEnemy(int index) {
+      // Remove the enemy from the screen
+      remove(enemies.get(index));
+      // Remove enemy-related data from the lists
+      enemies.remove(index);
+       Xvelocity.remove(index);
+       remove(hitBoxes.get(index));
+       hitBoxes.remove(index);
+       	}
+       	
+      
+      
+    //acts like a "hitbox" in that it just returns the area of the enemy image.
+      public GRectangle getBounds() {
+          return enemyHitbox.getBounds();
+      }
+*/
+
 public double getWidth() {
 	return WIDTH;
 }
