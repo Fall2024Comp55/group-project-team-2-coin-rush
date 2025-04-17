@@ -24,147 +24,56 @@ public static int HEIGHT = 30;
 public static int WIDTH = 30;
 private GOval player; 
 private Timer timer;
-ArrayList<Enemy> enemies;
-ArrayList<Integer> Xvelocity;
-//ArrayList<GRect> platforms;
-ArrayList<GRect> hitBoxes; //for enemy collision box
- ArrayList<GImage> enemiesImages;
 Platform origPlatform ; 
 private Enemy enemy; 
 //private GImage enemy;
+ArrayList<GRect> platforms;
 private GRect enemyHitbox;
 private GRect platform;
 private int healthPoint = 3;
 private int count = 0; 
 private GLabel healthText;
-//private GImage enemyImages;
-private int aniTickSpeed = 5; //Adjust to change speed of animation speed
-private int aniIndex = 0; //Determines which frame of the animation to display
-private int aniTick = 0;
+
 // Player movement variables
 private double playerVelocityX = 0;
 private double playerVelocityY = 0;
 
-private GImage enemyImages; 
 private GraphicsProgram program;
 
-public Enemy() {
-	
-	enemies = new ArrayList<Enemy>();
-	Xvelocity = new ArrayList<>();
-	hitBoxes = new ArrayList<GRect>();
-	enemiesImages = new ArrayList<>();
-	//loadAnimation();
- }
-//loading animations to enemiesimages
-public void loadAnimation() {
-	enemiesImages = loadImagesFromFolder("Media/Enemy_Sprite"); 
-}
 
-
-private void updateAnimation() {
-	 enemyImages = new GImage(enemiesImages.get(0).getImage());
-	program.add(enemyImages);
-aniTick++;
-if (aniTick >= aniTickSpeed) {
-    aniTick = 0;
-    aniIndex++;
-    List<GImage> currentAni = enemiesImages;
-
-    if (aniIndex >= currentAni.size()) {
-        aniIndex = 0; // Loop back to the first frame when reaching the end
-    }
-
-    // Set the image for the enemy
-    enemyImages.setImage(enemiesImages.get(aniIndex).getImage());
-}
-} 
-//loading images from the folder
-public ArrayList<GImage> loadImagesFromFolder(String folderPath) {
-	   ArrayList<GImage> images = new ArrayList<>();
-	   File folder = new File(folderPath);
-	   File[] files = folder.listFiles();
-	   if (files != null) {
-   for (File file : files) {
-	   if (file.isFile() && file.getName().endsWith(".png")) {
-		  images.add(new GImage(file.getPath()));
-		  }
-		}
-	  }
-  return images;
-}
 public void setProgram(GraphicsProgram program) {
     this.program = program;
 }
- 
-public void addEnemy(double x, int y) { 
-	
-GImage enemyImages = new GImage("Media/Enemy_Sprite/Run 01.png");
-enemy  = new Enemy(); 
-enemyHitbox = new GRect(enemy.getWidth(),enemy.getHeight());
-	
-	    enemyImages.setLocation(x, y);
-	    enemyHitbox.setLocation(enemyImages.getX(),enemyImages.getY());
-	    enemyHitbox.setVisible(true);
-	    
 
-	    enemies.add(enemy);
-	    enemiesImages.add(enemyImages);
-	    program.add(enemyImages);
-	    program.add(enemyHitbox);
-	    Xvelocity.add(X_VELOCITY);
-	    hitBoxes.add(enemyHitbox);
+public void spawnEnemy(GRect Platform, int numEnemy) {
+	for(int i=0; i<numEnemy; ++i) {
+	if(Platform != null ) {
+		GImage EnemyImage = new GImage("Media/Enemy_Sprite/Run 01.png");
+		double distance = i*50 ;
+		EnemyImage.setLocation(Platform.getX() + distance, Platform.getY() - EnemyImage.getHeight());
+	add(EnemyImage); 
+	}
+	}
 }
-
-
-public void moveAllEnemies(ArrayList<GRect> platforms) {
-	for(int i=0;i<enemies.size();++i) {
-		GImage enemyImages = enemiesImages.get(i);
-
-int velocity = Xvelocity.get(i);
-enemyImages.move(velocity, 0);
-hitBoxes.get(i).move(velocity, 0);
-//updateAnimation();
-
-//fixed. ensures enemy doesn't go out of platform
-for(GRect platform1 : platforms) {
-boolean ifonTop = (enemyImages.getY()+enemyImages.getHeight() == platform1.getY()) ;
-if(ifonTop) {
-boolean leftOfPlatform = enemyImages.getX()  <= platform1.getX();
-boolean rightOfPlatform = enemyImages.getX() + enemyImages.getWidth() >= platform1.getX() + platform1.getWidth();
-	
-if( leftOfPlatform || rightOfPlatform){
-	 System.out.println("Enemy " + i + " reversed velocity due to platform collision");
- Xvelocity.set(i, -velocity);
- break;
-}
-}
-}
-}
-}
-
-
-
-
 
 //    checks for collision whenever player bottom touches the enemy the enemy will be killed
 
-       public void collisionCheck() {
-           GRectangle playerBounds = player.getBounds();
-
-           for (int i = 0; i < enemies.size(); ++i) {
-               GRect enemyBox = hitBoxes.get(i);
-
-               if (enemies.get(i) != null && isCollisionFromAbove(playerBounds, enemyBox)) {
-                   removeEnemy(i);
-               } else if (isSideCollision(playerBounds, enemyBox)) {
-                   healthPoint--;
-                   System.out.println("Collision detected Health: " + healthPoint);
-                   respawnPlayer();
-                   updateHealthUI();
-               }
-           }
-       }
+//       public void collisionCheck() {
+//           GRectangle playerBounds = player.getBounds();
+//
+//           for (int i = 0; i < enemies.size(); ++i) {
+//               GRect enemyBox = hitBoxes.get(i);
+//
+//               if (enemies.get(i) != null && isCollisionFromAbove(playerBounds, enemyBox)) {
+//                   removeEnemy(i);
+//               } else if (isSideCollision(playerBounds, enemyBox)) {
+//                   healthPoint--;
+//                   System.out.println("Collision detected Health: " + healthPoint);
+//                   respawnPlayer();
+//                   updateHealthUI();
+//               }
+//           }
+//       }
        
        //checks for player collision from above
        private boolean isCollisionFromAbove(GRectangle playerBounds, GRect enemy) {
@@ -181,21 +90,21 @@ if( leftOfPlatform || rightOfPlatform){
        }
        
       // Function to remove an enemy and its associated hitbox and velocity
-      public void removeEnemy(int index) {
-    	    // Defensive checks
-    	    if (index < 0 || index >= enemiesImages.size()) return;
-
-    	    // Remove enemy sprite from screen
-    	    program.remove(enemiesImages.get(index));
-
-    	    // Remove associated hitbox from screen
-    	    program.remove(hitBoxes.get(index));
-
-    	    // Remove data from lists
-    	    enemiesImages.remove(index);
-    	    hitBoxes.remove(index);
-    	    Xvelocity.remove(index);
-    	}
+//      public void removeEnemy(int index) {
+//    	    // Defensive checks
+//    	    if (index < 0 || index >= enemiesImages.size()) return;
+//
+//    	    // Remove enemy sprite from screen
+//    	    program.remove(enemiesImages.get(index));
+//
+//    	    // Remove associated hitbox from screen
+//    	    program.remove(hitBoxes.get(index));
+//
+//    	    // Remove data from lists
+//    	    enemiesImages.remove(index);
+//    	    hitBoxes.remove(index);
+//    	    Xvelocity.remove(index);
+//    	}
        	
       
       
@@ -214,11 +123,7 @@ public double getHeight() {
 	@Override
 	public void run() {
 		
-		  enemy = new Enemy();
-		 setProgram(this);
-		 addEnemy(100,110); 
-		 addEnemy(400,310); 
-
+		
         
     	addKeyListeners();
 		//generates a player
@@ -226,7 +131,7 @@ public double getHeight() {
 		player.setColor(Color.RED);
 		player.setFilled(true);
 		add(player);
-	/*			
+			
 		platforms = new ArrayList<GRect>();
 		for(int i=0;i<NUM_PLATFORMS;++i) {
 	    platform = new GRect(200, 20);
@@ -236,26 +141,26 @@ public double getHeight() {
 		add(platform); 
 		}
 		
-		for(int i=0;i<platforms.size();++i) {
-			add(platforms.get(i));
+
 			platforms.get(0).setLocation(100, 140);
 			platforms.get(1).setLocation(400, 340);
 			platforms.get(2).setLocation(50, 440);
 			platforms.get(3).setLocation(20, 300);
-		}
-		*/
+
+	
         healthText = new GLabel("Health: " + healthPoint, 5, 30);
         add(healthText);
    	 
-   	 timer = new Timer(50, this); //50 = milliseconds
+   	    timer = new Timer(50, this); //50 = milliseconds
         timer.start();
+        
+//        enemy = new Enemy();
+       setProgram(this);
+  spawnEnemy(platforms.get(1), 2);
+  spawnEnemy(platforms.get(2), 2);
 
 	}
-	
-//	public void update() {
-//		moveAllEnemies(); 
-//		//collisionCheck();  
-//	}
+
 	
 	// Checks if player collides with enemies
     
@@ -277,18 +182,13 @@ public double getHeight() {
 	   return count; 
    }
    
-//  returns current list of enemies
-   public ArrayList<Enemy> getEnemies() {
-	return enemies;
-	   
-   }
+
     
     // Took the player code from testCoin and used it here to play around with collision
     @Override
     public void actionPerformed(ActionEvent e)  {
         player.setLocation(player.getX() + playerVelocityX, player.getY() + playerVelocityY); // Moves the player to new location
-    	moveAllEnemies(hitBoxes); 
-		//collisionCheck();    
+
     }
     
     public void init() {
@@ -332,7 +232,6 @@ public double getHeight() {
         }
     
     public static void main(String[] args) {
-        Enemy enemy = new Enemy();
-        enemy.start();
+    	new Enemy().start();
 	}
 }
