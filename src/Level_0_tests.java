@@ -11,6 +11,8 @@ public class Level_0_tests extends GraphicsProgram {
     private Player player;
     private Platform platform;
     private Enemy enemy;
+    private Enemy enemy1;
+
     private testCoin coin;
     
     private boolean gridVisible = true; //used for key presse
@@ -74,17 +76,28 @@ public class Level_0_tests extends GraphicsProgram {
         platform.setProgram(this);
         platform.addPlatformsToScreen();
         
+        platform.addPlatform(200, 500, 100, 10, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatformsToScreen();
+        platform.addPlatform(400, 600, 100, 10, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatformsToScreen();
         //player
         player = new Player();
         player.setProgram(this);
         player.spawn(100, 300); 
         
-        /*
+        
         //enemy 
         enemy = new Enemy();
         enemy.setProgram(this);
-        enemy.addEnemy(100, 370);
-        */
+        
+        enemy.spawnEnemy(platform.getPlatforms().get(0));
+        enemy1 = new Enemy();
+        enemy1.setProgram(this);
+        enemy1.spawnEnemy(platform.getPlatforms().get(1));
+        
+        Enemy enemy2 = new Enemy();
+        enemy2.setProgram(this);
+        enemy2.spawnEnemy(platform.getPlatforms().get(2));
        
         
         //test coins
@@ -96,9 +109,14 @@ public class Level_0_tests extends GraphicsProgram {
         while (true) {
             player.update(); //updates the Player animation loop & movement
             coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
-            //enemy.moveAllEnemies(platform.getPlatforms());
             platform.collision(player.getBounds());
+            
+            enemy.update(platform.getPlatforms().get(0), player.getBounds(),player.playerImage());
+            enemy1.update(platform.getPlatforms().get(1), player.getBounds(),player.playerImage());
+            enemy2.update(platform.getPlatforms().get(2), player.getBounds(),player.playerImage());
+
             pause(16.66); // 60 FPS
+           
         }
     }
     
