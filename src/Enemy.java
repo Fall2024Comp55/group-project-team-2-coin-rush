@@ -15,7 +15,7 @@ import acm.util.*;
 public class Enemy {
 public static int WINDOW_HEIGHT = 600; //height of window
 public static int WINDOW_WIDTH = 600; //width of window
-public static int X_VELOCITY = 2; //Velocity of enemies
+public static int X_VELOCITY = 1; //Velocity of enemies
 public static int PLAYER_SPAWN = 60; 
 public static final int DEFAULT =0, MOVING = 1; //for sprites later use.
 public static int HEIGHT = 30;
@@ -28,25 +28,60 @@ private GImage EnemyImage;
 private GraphicsProgram program;
 public boolean isActive; 
 public boolean movingRight;
-ArrayList<GImage> sprites; 
+ArrayList<GImage> sprites;
+private int aniTick; 
+private int aniIndex = 0;
+private int aniTickSpeed =4;
+
+public Enemy() {
+	loadAnimations();
+}
 public void setProgram(GraphicsProgram program) {
     this.program = program;
 }
 
 private void loadAnimations() {
-	
+	sprites = loadImagesFromFolder("Media/Enemy_Sprite");
 }
+
+private ArrayList<GImage> loadImagesFromFolder(String folderPath) {
+	 ArrayList<GImage> images = new ArrayList<>();
+	 File folder = new File(folderPath);
+	 File[] files = folder.listFiles();
+	 if (files != null) {
+	     for (File file : files) {
+	         if (file.isFile() && file.getName().endsWith(".png")) {
+	             images.add(new GImage(file.getPath()));
+	         }
+	     }
+	 }
+	 return images;
+	}
 public void spawnEnemy(GRect platformIndex) { 
 	if(platformIndex != null ) {
 		enemy = new Enemy();
-		EnemyImage = new GImage("Media/Enemy_Sprite/Run 01.png");
+		EnemyImage = new GImage(sprites.get(0).getImage());
 		EnemyImage.setLocation(platformIndex.getX(), platformIndex.getY() - EnemyImage.getHeight());
 	program.add(EnemyImage); 
 	isActive = true; 
 	}
 }
 
+private void updateAnimation() {
+    aniTick++;
+    if (aniTick >= aniTickSpeed) {
+        aniTick = 0;
+        aniIndex++;
+        List<GImage> currentAni = sprites;
 
+        if (aniIndex >= currentAni.size()) {
+            aniIndex = 0; // Loop back to the first frame when reaching the end
+        }
+
+        // Set the image for the enemy
+        EnemyImage.setImage(currentAni.get(aniIndex).getImage());
+    }
+} 
 public void EnemyMovement(GRect platform) { 
     double enemyX = EnemyImage.getX();
     double velocity = X_VELOCITY;
@@ -154,6 +189,7 @@ public double getHeight() {
     public void update(GRect platform,GRectangle playerBounds, GImage playerImage) {
     	EnemyMovement(platform);
     	collisionCheck(playerBounds, playerImage);
+    	updateAnimation();
     }
  
     
