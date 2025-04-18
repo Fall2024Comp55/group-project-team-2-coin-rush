@@ -16,28 +16,15 @@ public class Enemy {
 public static int WINDOW_HEIGHT = 600; //height of window
 public static int WINDOW_WIDTH = 600; //width of window
 public static int X_VELOCITY = 2; //Velocity of enemies
-public static int NUM_ENEMIES = 4; //number of enemies
-public static int NUM_PLATFORMS = 4; //temporary
 public static int PLAYER_SPAWN = 60; 
 public static final int DEFAULT =0, MOVING = 1; //for sprites later use.
 public static int HEIGHT = 30;
 public static int WIDTH = 30;
-private GOval player; 
-private Timer timer;
-Platform origPlatform ; 
 private Enemy enemy; 
-//private GImage enemy;
-ArrayList<GRect> platforms;
-private GRect enemyHitbox;
-private GRect platform;
 private int healthPoint = 3;
 private int count = 0; 
 private GLabel healthText;
 private GImage EnemyImage;
-// Player movement variables
-private double playerVelocityX = 0;
-private double playerVelocityY = 0;
-private double x,y;
 private GraphicsProgram program;
 public boolean isActive; 
 public boolean movingRight;
@@ -45,6 +32,9 @@ public void setProgram(GraphicsProgram program) {
     this.program = program;
 }
 
+//private void loadAnimations() {
+//	
+//}
 public void spawnEnemy(GRect platformIndex) { 
 	if(platformIndex != null ) {
 		enemy = new Enemy();
@@ -116,16 +106,6 @@ if(!isActive) return false;
     	   //returns true if player is touching either side
            return playerBounds.intersects(EnemyImage.getBounds());
        }
-////       
-////      // Function to remove an enemy and its associated hitbox and velocity
-//      public void removeEnemy(int index) {
-//    	    // Defensive checks
-//    	    if (index < 0 || index >= enemiesImages.size()) return;
-//
-//    	    // Remove enemy sprite from screen
-////    	    program.remove(enemiesImages.get(index));
-//    	    enemy.remove(EnemyImage);;
-//    	}
       
        public void removeEnemy(Enemy enemy) {
     	    if (EnemyImage != null) {
