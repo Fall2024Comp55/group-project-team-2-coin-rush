@@ -1,3 +1,4 @@
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -316,6 +317,11 @@ private void movePlayer() {
 //acts like a "hitbox" in that it just returns the area of the player image.
 public GRectangle getBounds() {
     return player.getBounds();
+}
+
+//used for respawning
+public GImage playerImage() {
+	return player;
 }
 
 public void update() {
