@@ -16,6 +16,7 @@ public class MainApplication extends GraphicsProgram{
 	private GraphicsPane currentScreen;
 	private Level0Pane level0Pane;
 	
+	
 
 
 	public MainApplication() {
@@ -40,6 +41,7 @@ public class MainApplication extends GraphicsProgram{
 		//Initialize all Panes
 		welcomePane = new WelcomePane(this);
 		descriptionPane = new DescriptionPane(this);
+		// level0Pane = new Level0Pane(this);
 
 		//TheDefaultPane
 		switchToScreen(welcomePane);
@@ -58,12 +60,10 @@ public class MainApplication extends GraphicsProgram{
 		switchToScreen(welcomePane);
 	}
 	
+	
 	public void switchToLevel0Screen() {
 		switchToScreen(level0Pane);
 	}
-	
-	
-	
 	
 	protected void switchToScreen(GraphicsPane newScreen) {
 		if(currentScreen != null) {
