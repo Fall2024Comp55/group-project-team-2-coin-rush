@@ -28,13 +28,14 @@ private GImage EnemyImage;
 private GraphicsProgram program;
 public boolean isActive; 
 public boolean movingRight;
+ArrayList<GImage> sprites; 
 public void setProgram(GraphicsProgram program) {
     this.program = program;
 }
 
-//private void loadAnimations() {
-//	
-//}
+private void loadAnimations() {
+	
+}
 public void spawnEnemy(GRect platformIndex) { 
 	if(platformIndex != null ) {
 		enemy = new Enemy();
@@ -130,7 +131,9 @@ public double getHeight() {
 
     // Respawn player to a fixed starting position
     public void respawnPlayer(GImage player) {
-    	player.setLocation(PLAYER_SPAWN, PLAYER_SPAWN);
+    	double x = player.getX();
+    	double y = player.getY();
+    	player.setLocation(x -50,y);
     }
     
     private void updateHealthUI() {
