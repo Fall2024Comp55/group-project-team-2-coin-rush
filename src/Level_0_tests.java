@@ -10,10 +10,13 @@ public class Level_0_tests extends GraphicsProgram {
 
     private Player player;
     private Platform platform;
+    
     private Enemy enemy;
     private Enemy enemy1;
 
     private testCoin coin;
+    
+    private Door door; 
     
     private boolean gridVisible = true; //used for key presse
     private ArrayList<GLine> gridLines = new ArrayList<>(); //stores the grid lines
@@ -80,6 +83,18 @@ public class Level_0_tests extends GraphicsProgram {
         platform.addPlatformsToScreen();
         platform.addPlatform(400, 600, 100, 10, Platform.PlatformTypes.STATIC, 0, 0);
         platform.addPlatformsToScreen();
+        
+        
+        //test coins
+        coin = new testCoin(5);
+        coin.setProgram(this);
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.init();
+  
+        door = new Door(3,1000,620);
+        door.setProgram(this);
+        door.init();
+        
         //player
         player = new Player();
         player.setProgram(this);
@@ -100,20 +115,18 @@ public class Level_0_tests extends GraphicsProgram {
         enemy2.spawnEnemy(platform.getPlatforms().get(2));
        
         
-        //test coins
-       coin = new testCoin(5);
-       coin.setProgram(this);
-       coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
-       coin.init();
+    
 
         while (true) {
             player.update(); //updates the Player animation loop & movement
             coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
             platform.collision(player.getBounds());
             
-            enemy.update(platform.getPlatforms().get(0), player.getBounds(),player.playerImage());
-            enemy1.update(platform.getPlatforms().get(1), player.getBounds(),player.playerImage());
-            enemy2.update(platform.getPlatforms().get(2), player.getBounds(),player.playerImage());
+            door.checkIfplayerCanExit(coin.getCoinsCollected());
+
+            enemy.update(platform.getPlatforms().get(0), player.getBounds(),player.getImage());
+            enemy1.update(platform.getPlatforms().get(1), player.getBounds(),player.getImage());
+            enemy2.update(platform.getPlatforms().get(2), player.getBounds(),player.getImage());
 
             pause(16.66); // 60 FPS
            

@@ -18,11 +18,11 @@ public class Door extends GraphicsProgram {
 	 
 	 private double doorX;
 	 private double doorY;
+	 private GraphicsProgram program;
 	 
 	 // Image file paths
 	 private String closedImage = "Media/Close.jpg";
-	 private String openImage = "Media/Open.jpg";
-	 
+	 private String openImage = "Media/Open.jpg";	 
 	 
 	 
 	 public Door(int requiredCoins, double doorX, double doorY) {
@@ -35,14 +35,20 @@ public class Door extends GraphicsProgram {
 	  
 	 }
 	 
+	// Sets the GraphicsProgram context
+	    public void setProgram(GraphicsProgram program) {
+	        this.program = program;
+	    }
+	 
 	 public void init() {
 		 // Initialize the GraphicsProgram window
-		 setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-		 requestFocus();
+//		 setSize(WINDOW_WIDTH, WINDOW_HEIGHT);   
+		 program.requestFocus();
 		 // changed the size of the door image
 		 doorImage.scale(0.05);
+		 
 		 // added the door image
-		 add(doorImage);
+		program.add(doorImage);
 	 } 
 	 
 	 public void run() {
@@ -102,8 +108,8 @@ public class Door extends GraphicsProgram {
 	 }
 	 
 	 // create a door that requires 3 coins to open the door and positions it at (550,  500)
-	 public static void main(String[] args) {
-		 new Door(3, 550, 500).start();
-	 }
+//	 public static void main(String[] args) {
+//		 new Door(3, 550, 500).start();
+//	 }
 
 }

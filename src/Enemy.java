@@ -31,7 +31,7 @@ public boolean movingRight;
 ArrayList<GImage> sprites;
 private int aniTick; 
 private int aniIndex = 0;
-private int aniTickSpeed =4;
+private int aniTickSpeed =5;
 
 public Enemy() {
 	loadAnimations();
@@ -113,18 +113,17 @@ public void EnemyMovement(GRect platform) {
 
 
 public boolean collisionCheck(GRectangle playerBounds, GImage player) {
-
-if(!isActive) return false; 
-               if ( isCollisionFromAbove(playerBounds, enemy)) {
-                   removeEnemy(enemy);
-               } else if (isSideCollision(playerBounds, enemy)) {
-                   healthPoint--;
-                   System.out.println("Collision detected Health: " + healthPoint);
-                   respawnPlayer(player);
-                   updateHealthUI();
-               }
-			return isActive;
-           }
+	
+   if(!isActive) return false; 
+   if ( isCollisionFromAbove(playerBounds, enemy)) {
+       removeEnemy(enemy);
+    } else if (isSideCollision(playerBounds, enemy)) {
+        healthPoint--;
+        respawnPlayer(player);
+        updateHealthUI();
+       }
+       return isActive;
+      }
       
        //checks for player collision from above
        private boolean isCollisionFromAbove(GRectangle playerBounds, Enemy enemy) {
@@ -172,15 +171,11 @@ public double getHeight() {
     }
     
     private void updateHealthUI() {
-    	GLabel healthText = new GLabel("Health: " +  healthPoint );
-    	program.add(healthText);
-//        healthText.setLabel("Health: " + healthPoint);
+//    	GLabel healthText = new GLabel("Health: " +  healthPoint );
+//    	program.add(healthText);
+     // healthText.setLabel("Health: " + healthPoint);
     }
     
-//    setter and getter for enemy count; 
-    public void setEnemyCount(int enemyCount) {
-    	this.count = enemyCount; 
-    }
    public int getEnemyCount() {
 	   return count; 
    }
