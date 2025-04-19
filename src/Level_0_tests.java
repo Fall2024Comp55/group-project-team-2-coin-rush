@@ -96,10 +96,10 @@ public class Level_0_tests extends GraphicsProgram {
         door.init();
         
         //player
-        player = new Player();
+        player = new Player(100, 300);
         player.setProgram(this);
-        player.spawn(100, 300); 
-        
+        player.init();
+        player.spawn(100,  300);
         
         //enemy 
         enemy = new Enemy();
@@ -122,11 +122,10 @@ public class Level_0_tests extends GraphicsProgram {
             coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
             platform.collision(player.getBounds());
             
+            enemy.update(platform.getPlatforms().get(0), player.getBounds(), player);
+            enemy1.update(platform.getPlatforms().get(1), player.getBounds(), player);
+            enemy2.update(platform.getPlatforms().get(2), player.getBounds(), player);
             door.checkIfplayerCanExit(coin.getCoinsCollected());
-
-            enemy.update(platform.getPlatforms().get(0), player.getBounds(),player.getImage());
-            enemy1.update(platform.getPlatforms().get(1), player.getBounds(),player.getImage());
-            enemy2.update(platform.getPlatforms().get(2), player.getBounds(),player.getImage());
 
             pause(16.66); // 60 FPS
            

@@ -16,14 +16,9 @@ public class Enemy {
 public static int WINDOW_HEIGHT = 600; //height of window
 public static int WINDOW_WIDTH = 600; //width of window
 public static int X_VELOCITY = 1; //Velocity of enemies
-public static int PLAYER_SPAWN = 60; 
 public static final int DEFAULT =0, MOVING = 1; //for sprites later use.
-public static int HEIGHT = 30;
-public static int WIDTH = 30;
 private Enemy enemy; 
-private int healthPoint = 3;
 private int count = 0; 
-private GLabel healthText;
 private GImage EnemyImage;
 private GraphicsProgram program;
 public boolean isActive; 
@@ -112,19 +107,19 @@ public void EnemyMovement(GRect platform) {
 }
 
 
-public boolean collisionCheck(GRectangle playerBounds, GImage player) {
-	
-   if(!isActive) return false; 
-   if ( isCollisionFromAbove(playerBounds, enemy)) {
-       removeEnemy(enemy);
-    } else if (isSideCollision(playerBounds, enemy)) {
-        healthPoint--;
-        respawnPlayer(player);
-        updateHealthUI();
-       }
-       return isActive;
-      }
-      
+public boolean collisionCheck(GRectangle playerBounds, Player player) {
+
+if(!isActive) return false; 
+               if (isCollisionFromAbove(playerBounds, enemy)) {
+                   removeEnemy(enemy);
+               } else if (isSideCollision(playerBounds, enemy)) {
+                   System.out.println("Enemy detected");
+                   player.takeDamage();
+                   player.respawn();
+               }
+			return isActive;
+           }
+
        //checks for player collision from above
        private boolean isCollisionFromAbove(GRectangle playerBounds, Enemy enemy) {
     	   if(enemy == null || EnemyImage ==null ) {
@@ -155,33 +150,12 @@ public boolean collisionCheck(GRectangle playerBounds, GImage player) {
           return EnemyImage.getBounds();
       }
 
-
-public double getWidth() {
-	return WIDTH;
-}
-public double getHeight() {
-	return HEIGHT;
-}
-
-    // Respawn player to a fixed starting position
-    public void respawnPlayer(GImage player) {
-    	double x = player.getX();
-    	double y = player.getY();
-    	player.setLocation(x -50,y);
-    }
-    
-    private void updateHealthUI() {
-//    	GLabel healthText = new GLabel("Health: " +  healthPoint );
-//    	program.add(healthText);
-     // healthText.setLabel("Health: " + healthPoint);
-    }
-    
    public int getEnemyCount() {
 	   return count; 
    }
-   
 
-    public void update(GRect platform,GRectangle playerBounds, GImage playerImage) {
+
+    public void update(GRect platform, GRectangle playerBounds, Player playerImage) {
     	EnemyMovement(platform);
     	collisionCheck(playerBounds, playerImage);
     	updateAnimation();

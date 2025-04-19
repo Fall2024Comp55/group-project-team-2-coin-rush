@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import acm.graphics.GImage;
+import acm.graphics.GLabel;
 import acm.graphics.GRectangle;
 import acm.program.GraphicsProgram;
 
 
 public class Player extends GraphicsPane {
 	
-private int HealthPoints;// is the value for the health points of the player
+private int healthPoints = 3;// is the value for the health points of the player
 private double x, y; // is the location of the player
 public static final int VELOCITY = 5;// player movement speed
 public static final int JUMPFORCE = -10;// how much jump power the player has.
@@ -37,7 +38,12 @@ private int lastPlayerAction = IDLE_RIGHT;
 private int aniIndex = 0; //Determines which frame of the animation to display
 private int playerSizeX = 64;
 private int playerSizeY = 40;
+private int playerRespawnX;
+private int playerRespawnY;
+private GLabel healthText;
 private boolean facingRight = true; //Tracks the direction the player is facing
+private boolean forceRespawn = false;
+
 
 private static final int IDLE_LEFT = -0, MOVING_LEFT = -1, JUMPING_LEFT = -2; //Adjust to add more player actions
 private static final int IDLE_RIGHT = 0, MOVING_RIGHT = 1, JUMPING_RIGHT = 2; //Adjust to add more player actions
@@ -52,13 +58,20 @@ private GraphicsProgram program; //Allows screen access from outside
 
 
 //Load the images automatically in the appropriate GImage lists
-public Player() {
+public Player(int respawnX, int respawnY) {
    loadAnimations();
+   this.playerRespawnX = respawnX;
+   this.playerRespawnY = respawnY;
 }
 
 //Used by Level_0_tests
 public void setProgram(GraphicsProgram program) {
  this.program = program;
+}
+
+public void init() {
+	   healthText = new GLabel("Health: " + healthPoints, 10, 20);
+	   program.add(healthText);
 }
 
 //creates and sets player on screen
@@ -165,12 +178,12 @@ private GImage flipGImageHorizontally(GImage original) {
 
 
 public int getHP(){
-		return HealthPoints; 
+		return healthPoints; 
 		//gets the health points of the player
 }
 
 private void setHP(int HP){
-	this.HealthPoints = HP;
+	this.healthPoints = HP;
 }
 
 public double getX() {
@@ -239,6 +252,18 @@ public void keyReleased(KeyEvent e) {
 
 
 private void movePlayer() {
+	//checks if the player is out of bounds or detects an enemy
+    if (forceRespawn) {
+        x = playerRespawnX;
+        y = playerRespawnY;
+        xVelocity = 0;
+        yVelocity = 0;
+        grounded = true;
+        player.setLocation(x, y);
+        forceRespawn = false;
+        return;
+    }
+    
     // Horizontal movement
 	if (right) {
 	    xVelocity += VELOCITY; // Move right	
@@ -280,6 +305,7 @@ private void movePlayer() {
     //Update Horizontal position
     x += xVelocity;
     // Ground collision detection
+    
     if (y >= MainApplication.WINDOW_HEIGHT - PLAYER_SIZE) { // Check if player hits the ground
         y = MainApplication.WINDOW_HEIGHT - PLAYER_SIZE; // Snap player to ground level
         grounded = true; // Player is now on the ground
@@ -295,6 +321,7 @@ private void movePlayer() {
         grounded = true;
         yVelocity = 0;
     }
+    
     // Update the position of the GImage
     player.setLocation(x, y);
     
@@ -324,8 +351,36 @@ public GImage playerImage() {
 	return player;
 }
 
+private void updateHealthUI() {
+	healthText.setLabel("Health: " +  healthPoints);
+}
+
+private void checkPlayerFall() {
+    if (player.getY() >= MainApplication.WINDOW_HEIGHT - 10) {
+        System.out.println("Out of bounds");
+        takeDamage();
+        respawn();
+        updateHealthUI();
+        }
+}
+
+//adjusts the player's health
+public void takeDamage() {
+    healthPoints--;
+    System.out.println("Health: " + healthPoints); //used for testing
+    updateHealthUI(); //updates the UI
+}
+
+//enables the player's respawn 
+public void respawn() {
+	forceRespawn = true;
+}
+
+
+
 public void update() {
     movePlayer();
+    checkPlayerFall();
 }
 
 }
