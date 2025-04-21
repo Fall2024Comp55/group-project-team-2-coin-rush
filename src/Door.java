@@ -121,6 +121,11 @@ public class Door extends GraphicsProgram {
 	 public String getOpenDoor() {
 		 return openImage; 
 	 }
+	 
+	 public void update(Player player, int coinsCollected) {
+		 doorCollision(player);
+		 checkIfplayerCanExit(coinsCollected);
+	 }
 	 // create a door that requires 3 coins to open the door and positions it at (550,  500)
 //	 public static void main(String[] args) {
 //		 new Door(3, 550, 500).start();

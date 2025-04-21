@@ -356,7 +356,7 @@ private void updateHealthUI() {
 }
 
 private void checkPlayerFall() {
-    if (player.getY() >= MainApplication.WINDOW_HEIGHT - 10) {
+    if (player.getY() >= MainApplication.WINDOW_HEIGHT - 60) {
         System.out.println("Out of bounds");
         takeDamage();
         respawn();
