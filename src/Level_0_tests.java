@@ -18,6 +18,7 @@ public class Level_0_tests extends GraphicsProgram {
     
     private Door door; 
     
+    UI_Elements UI;
     private boolean gridVisible = true; //used for key presse
     private ArrayList<GLine> gridLines = new ArrayList<>(); //stores the grid lines
     private ArrayList<GLabel> gridLabels = new ArrayList<>(); //stores the labels that visually show the size of each cell
@@ -96,10 +97,13 @@ public class Level_0_tests extends GraphicsProgram {
         door.init();
         
         //player
-        player = new Player(100, 300);
+        player = new Player(100,300);
         player.setProgram(this);
         player.init();
         player.spawn(100,  300);
+        
+        UI = new UI_Elements();
+        UI.setProgram(this);
         
         //enemy 
         enemy = new Enemy();
@@ -126,6 +130,7 @@ public class Level_0_tests extends GraphicsProgram {
             enemy1.update(platform.getPlatforms().get(1), player.getBounds(), player);
             enemy2.update(platform.getPlatforms().get(2), player.getBounds(), player);
             door.checkIfplayerCanExit(coin.getCoinsCollected());
+            UI.doorState(door);
 
             pause(16.66); // 60 FPS
            
