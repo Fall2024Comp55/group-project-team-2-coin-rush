@@ -107,6 +107,20 @@ public class Door extends GraphicsProgram {
 	  return this.requiredCoins;
 	 }
 	 
+	 //will complete once level handler is created 
+	 public void doorCollision(Player player) {
+		 if(player.getBounds().intersects(doorImage.getBounds())) {
+			 
+		 }
+	 }
+	 
+	 public String getCloseDoor() {
+		 return closedImage; 
+	 }
+	 
+	 public String getOpenDoor() {
+		 return openImage; 
+	 }
 	 // create a door that requires 3 coins to open the door and positions it at (550,  500)
 //	 public static void main(String[] args) {
 //		 new Door(3, 550, 500).start();
