@@ -4,21 +4,21 @@ import java.util.ArrayList;
 
 import acm.graphics.GLabel;
 import acm.graphics.GLine;
+import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
 public class Level_0_tests extends GraphicsProgram {
 
     private Player player;
     private Platform platform;
-    
     private Enemy enemy;
     private Enemy enemy1;
-
     private testCoin coin;
-    
     private Door door; 
     
     UI_Elements UI;
+    private Level_1 level;
+    
     private boolean gridVisible = true; //used for key presse
     private ArrayList<GLine> gridLines = new ArrayList<>(); //stores the grid lines
     private ArrayList<GLabel> gridLabels = new ArrayList<>(); //stores the labels that visually show the size of each cell
@@ -53,6 +53,27 @@ public class Level_0_tests extends GraphicsProgram {
     	    }
     	}
 
+    	public void handlePlatformInteraction() {
+    	    GRect touchedPlatform = platform.detectPlatformCollision(player.getBounds());
+    	    player.setGrounded(false);
+    	    if (touchedPlatform != null) {
+    	   if(player.getY()+player.getBounds().getHeight()<=  touchedPlatform.getY()+15) {
+    		   player.setGrounded(true);
+    		   System.out.println("on top");
+    		   player.setyVelocity(0);
+    		   player.setY(touchedPlatform.getY()-player.getBounds().getHeight());
+    	   }else if (player.getY() + player.getBounds().getHeight() > touchedPlatform.getY() &&
+    		         player.getY() < touchedPlatform.getY() + touchedPlatform.getHeight()) {
+    		   System.out.println("bottom"+player.getyVelocity());
+    		   player.setY(touchedPlatform.getY()+touchedPlatform.getHeight());
+    		   player.setyVelocity(0);
+    		   player.setGrounded(false);
+    		   player.setY(touchedPlatform.getY()+touchedPlatform.getBounds().getHeight()-5);
+    	   }else { 
+    		   player.setGrounded(false);
+    	   }
+   }
+    	}
 
     	private void clearGrid() {
     	    for (GLine line : gridLines) {
@@ -76,13 +97,13 @@ public class Level_0_tests extends GraphicsProgram {
         //platform = new Platform(120, 40,40, 120, Platform.PlatformTypes.STATIC, 0, 0);
         //platform = new Platform(120, 40,240, 240, Platform.PlatformTypes.STATIC, 0, 0);      
         platform = new Platform();
-        platform.addPlatform(100, 400, 100, 10, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(100, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
         platform.setProgram(this);
-        platform.addPlatformsToScreen();
         
-        platform.addPlatform(200, 500, 100, 10, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatformsToScreen();
-        platform.addPlatform(400, 600, 100, 10, Platform.PlatformTypes.STATIC, 0, 0);
+        
+        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        
+        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
         platform.addPlatformsToScreen();
         
         
@@ -108,30 +129,32 @@ public class Level_0_tests extends GraphicsProgram {
         //enemy 
         enemy = new Enemy();
         enemy.setProgram(this);
-        
         enemy.spawnEnemy(platform.getPlatforms().get(0));
+        
         enemy1 = new Enemy();
         enemy1.setProgram(this);
-        enemy1.spawnEnemy(platform.getPlatforms().get(1));
+        enemy1.spawnEnemy(platform.getPlatforms().get(2));
         
-        Enemy enemy2 = new Enemy();
-        enemy2.setProgram(this);
-        enemy2.spawnEnemy(platform.getPlatforms().get(2));
-       
+
         
-    
+ 	   GRect box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
+ 	   box.setColor(Color.black);
+ 	   add(box);
+
 
         while (true) {
             player.update(); //updates the Player animation loop & movement
             coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
             platform.collision(player.getBounds());
-            
+            handlePlatformInteraction();
             enemy.update(platform.getPlatforms().get(0), player.getBounds(), player);
-            enemy1.update(platform.getPlatforms().get(1), player.getBounds(), player);
-            enemy2.update(platform.getPlatforms().get(2), player.getBounds(), player);
+            enemy1.update(platform.getPlatforms().get(2), player.getBounds(), player);
+            
+            //door.update(player, coin.getCoinsCollected());
             door.checkIfplayerCanExit(coin.getCoinsCollected());
-            UI.doorState(door);
 
+            UI.doorState(door);
+            box.setLocation(+player.getX(), player.getY());
             pause(16.66); // 60 FPS
            
         }

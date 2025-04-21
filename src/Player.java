@@ -198,7 +198,7 @@ public double getY() {
 	return y;
 }
 
-private void setY(double Y) {
+public void setY(double Y) {
 	this.y = Y;
 }
 
@@ -356,7 +356,7 @@ private void updateHealthUI() {
 }
 
 private void checkPlayerFall() {
-    if (player.getY() >= MainApplication.WINDOW_HEIGHT - 10) {
+    if (player.getY() >= MainApplication.WINDOW_HEIGHT - 60) {
         System.out.println("Out of bounds");
         takeDamage();
         respawn();
@@ -381,6 +381,26 @@ public void respawn() {
 public void update() {
     movePlayer();
     checkPlayerFall();
+}
+
+public void setGrounded(boolean b) {
+this.grounded = b;
+	
+}
+
+public void setyVelocity(int i) {
+	this.yVelocity= i;
+	
+}
+
+public double getxVelocity() {
+	
+	return xVelocity;
+}
+
+public double getyVelocity() {
+	// TODO Auto-generated method stub
+	return yVelocity;
 }
 
 }
