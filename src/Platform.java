@@ -81,6 +81,16 @@ public class Platform extends MainApplication {
             }
         }
     }
+    public GRect detectPlatformCollision(GRectangle gRectangle) {
+        for (GRect platform : Platforms) {
+            if (gRectangle.getBounds().intersects(platform.getBounds())) {
+                
+                return platform;
+            }
+        }
+        return null;
+    }
+
 
     // Spawns a platform directly
     public void SpawnPlatform() {
