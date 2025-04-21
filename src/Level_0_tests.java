@@ -104,16 +104,13 @@ public class Level_0_tests extends GraphicsProgram {
         //enemy 
         enemy = new Enemy();
         enemy.setProgram(this);
-        
         enemy.spawnEnemy(platform.getPlatforms().get(0));
+        
         enemy1 = new Enemy();
         enemy1.setProgram(this);
-        enemy1.spawnEnemy(platform.getPlatforms().get(1));
+        enemy1.spawnEnemy(platform.getPlatforms().get(2));
         
-        Enemy enemy2 = new Enemy();
-        enemy2.setProgram(this);
-        enemy2.spawnEnemy(platform.getPlatforms().get(2));
-       
+
         
     
 
@@ -123,8 +120,7 @@ public class Level_0_tests extends GraphicsProgram {
             platform.collision(player.getBounds());
             
             enemy.update(platform.getPlatforms().get(0), player.getBounds(), player);
-            enemy1.update(platform.getPlatforms().get(1), player.getBounds(), player);
-            enemy2.update(platform.getPlatforms().get(2), player.getBounds(), player);
+            enemy1.update(platform.getPlatforms().get(2), player.getBounds(), player);
             door.checkIfplayerCanExit(coin.getCoinsCollected());
 
             pause(16.66); // 60 FPS
