@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -6,6 +7,7 @@ import java.util.List;
 
 import acm.graphics.GImage;
 import acm.graphics.GLabel;
+import acm.graphics.GOval;
 import acm.graphics.GRectangle;
 import acm.program.GraphicsProgram;
 
@@ -70,9 +72,11 @@ public void setProgram(GraphicsProgram program) {
 }
 
 public void init() {
-	   healthText = new GLabel("Health: " + healthPoints, 10, 20);
+	   healthText = new GLabel("Health:    " , 20, 116);
+	   healthText.setFont("SansSerif-bold-14");
 	   program.add(healthText);
-}
+	   
+	  }
 
 //creates and sets player on screen
 public void spawn(int spawnX, int spawnY) {
@@ -350,17 +354,18 @@ public GRectangle getBounds() {
 public GImage playerImage() {
 	return player;
 }
-
-private void updateHealthUI() {
-	healthText.setLabel("Health: " +  healthPoints);
-}
+//
+//public void updateHealthUI() {
+//	healthText.setLabel(" " +  healthPoints);
+//
+//}
 
 private void checkPlayerFall() {
     if (player.getY() >= MainApplication.WINDOW_HEIGHT - 60) {
         System.out.println("Out of bounds");
         takeDamage();
         respawn();
-        updateHealthUI();
+//        updateHealthUI();
         }
 }
 
@@ -368,7 +373,7 @@ private void checkPlayerFall() {
 public void takeDamage() {
     healthPoints--;
     System.out.println("Health: " + healthPoints); //used for testing
-    updateHealthUI(); //updates the UI
+  //  updateHealthUI(); //updates the UI
 }
 
 //enables the player's respawn 
@@ -401,6 +406,10 @@ public double getxVelocity() {
 public double getyVelocity() {
 	// TODO Auto-generated method stub
 	return yVelocity;
+}
+
+public GImage getImage() {
+	return player;
 }
 
 }

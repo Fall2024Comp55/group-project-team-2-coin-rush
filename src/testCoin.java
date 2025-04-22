@@ -23,7 +23,6 @@ public class testCoin {
 	private GLabel coinsRemainingText;    
 	
     private GraphicsProgram program;
-
     
     // Constructor to assign data
     public testCoin(int numCoinsToAdd) {
@@ -35,9 +34,12 @@ public class testCoin {
     
     public void init() {
     	addCoinsToScreen();
-        coinsCollectedText = new GLabel("Coins Collected: " + coinsCollected, 5, 15);
+        coinsCollectedText = new GLabel("Coins Collected:" , 20, 40);
+        coinsCollectedText.setFont("SansSerif-bold-14");
         program.add(coinsCollectedText);
-        coinsRemainingText = new GLabel("Coins Remaining: " + (coinsOnPlatforms.size()), 5, 30);
+        
+        coinsRemainingText = new GLabel("Coins Remaining: " , 20, 80);
+        coinsRemainingText.setFont("SansSerif-bold-14");
         program.add(coinsRemainingText);
     }
 
@@ -135,14 +137,14 @@ public class testCoin {
                 coinsCollected++; //update count
             }
         }
-        updateCoinUI();//updates UI through a method instead
+//        updateCoinUI();//updates UI through a method instead
     }
     
     //updates the UI
-    private void updateCoinUI() {
-        coinsCollectedText.setLabel("Coins Collected: " + coinsCollected);
-        coinsRemainingText.setLabel("Coins Remaining: " + coinsOnPlatforms.size());
-    }
+//    public void updateCoinUI() {
+//        coinsCollectedText.setLabel("Coins Collected:   " + coinsCollected);
+//        coinsRemainingText.setLabel("Coins Remaining: " + coinsOnPlatforms.size());
+//    }
     
     /*
      *     // Generates randomly sized/placed list of platforms of a fixed size within the screen. The amount created is dictated by the given integer.
