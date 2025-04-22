@@ -137,14 +137,8 @@ public class testCoin {
                 coinsCollected++; //update count
             }
         }
-//        updateCoinUI();//updates UI through a method instead
     }
     
-    //updates the UI
-//    public void updateCoinUI() {
-//        coinsCollectedText.setLabel("Coins Collected:   " + coinsCollected);
-//        coinsRemainingText.setLabel("Coins Remaining: " + coinsOnPlatforms.size());
-//    }
     
     /*
      *     // Generates randomly sized/placed list of platforms of a fixed size within the screen. The amount created is dictated by the given integer.

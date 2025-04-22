@@ -15,11 +15,7 @@ public class UI_Elements {
     public void setProgram(GraphicsProgram program) {
         this.program = program;
     }
-    
-	
-	private void healthBar(Player player) {
-		player.getHP();
-	}
+   
 	
 	private int coinsCollected(testCoin coin) {
 		return coin.getCoinsCollected();
@@ -29,42 +25,56 @@ public class UI_Elements {
 	private GLabel coinsRemainingText;    
     private GLabel playerHP; 
     private GLabel doorText; 
+    private GCompound gcompound;
+    private GOval signal;
+    private GLabel label;
     
-    
+    //Responsible for creating UI in levels
     public void createUI(testCoin coin,Player player) {
     	createCoins(coin); 
     	createHP(player);
-    	doorText();
-    	
+    	//doorText();
+    	doorSignal();
     }
+   
+    //responsible for updating health, collected coins, and checking current door state.
     public void init( Door door,testCoin coins, Player player) {
-  
-    	 coinsCollectedText.setLabel(" " + coinsCollected(coins));
+         coinsCollectedText.setLabel(" " + coinsCollected(coins));
     	 coinsRemainingText.setLabel(" " + coins.coinsOnPlatforms.size());
     	 playerHP.setLabel(" " + player.getHP());
     	 
-        GOval signal = new GOval(40,40);
-		signal.setLocation(15, 80);
-		signal.setFilled(true);
-		 signal.setColor(Color.red);
-		 
-		 GLabel label = new GLabel("close");
-		 label.setFont("SansSerif-bold-12");
-		 GCompound gcompound = new GCompound();
-		 gcompound.add(signal,0,0); 
-		 gcompound.add(label,5, 25);
-	     gcompound.setLocation(80,160);
-		 program.add(gcompound); 
-		 
-		if(door.isOpen()) {
-			signal.setColor(Color.GREEN);;
-			 GLabel label2 = new GLabel("open");
-			 label2.setFont("SansSerif-bold-12");
-			 gcompound.remove(label);
-			 gcompound.add(label2,5,25);
-        }
+    	 //door state check
+    		if(door.isOpen()) {
+     			signal.setColor(Color.GREEN);;
+     			 label.setLabel("Open");
+     			 label.setFont("SansSerif-bold-12");
+             }
+    		else {
+    			 label.setLabel("Close");
+    		}
     }
-
+    
+    public void doorSignal() {
+    	signal = new GOval(40,40);
+ 		signal.setLocation(15, 80);
+ 		signal.setFilled(true);
+ 		 signal.setColor(Color.red);
+ 		 
+ 	     label = new GLabel("close");
+ 		 label.setFont("SansSerif-bold-12");
+ 		  gcompound = new GCompound();
+ 		 gcompound.add(signal,0,0); 
+ 		 gcompound.add(label,5, 25);
+ 	     gcompound.setLocation(80,160);
+ 		 program.add(gcompound); 
+ 		 
+ 		doorText = new GLabel("Door: ");
+		doorText.setLocation(20, 185);
+		  doorText.setFont("SansSerif-bold-16");
+		program.add(doorText);
+    }
+    
+    // creates coins and labels used GCompound to group label & coin together
     public void createCoins(testCoin coin) {
     	GOval coins = new GOval(30, 30);
 		  coins.setFilled(true);
@@ -91,7 +101,8 @@ public class UI_Elements {
     program.add(coinText1);
    
     }
-
+ 
+    //Responsible for creating HP label and image
   public void createHP(Player player) {
 	  GImage hpImage = new GImage("Media/hp.png");
 	  hpImage.scale(0.1);
@@ -104,13 +115,7 @@ public class UI_Elements {
 	  program.add(playerHP);
 	  
   }
-		  
-	public void doorText() {
-		doorText = new GLabel("Door: ");
-		doorText.setLocation(20, 185);
-		  doorText.setFont("SansSerif-bold-16");
-		program.add(doorText);
-	}
+	  
 	  
 	
 }

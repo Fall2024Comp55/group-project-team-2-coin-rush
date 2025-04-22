@@ -354,11 +354,7 @@ public GRectangle getBounds() {
 public GImage playerImage() {
 	return player;
 }
-//
-//public void updateHealthUI() {
-//	healthText.setLabel(" " +  healthPoints);
-//
-//}
+
 
 private void checkPlayerFall() {
     if (player.getY() >= MainApplication.WINDOW_HEIGHT - 60) {
