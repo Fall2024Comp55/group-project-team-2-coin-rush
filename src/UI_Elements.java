@@ -32,7 +32,14 @@ public class UI_Elements {
     
     //Responsible for creating UI in levels
     public void createUI(testCoin coin,Player player) {
-    	UIbox();
+    	UILevel1();
+    	createCoins(coin); 
+    	createHP(player);
+    	doorSignal();
+    }
+    
+    public void createUILevel2(testCoin coin,Player player) {
+    	UILevel2();
     	createCoins(coin); 
     	createHP(player);
     	doorSignal();
@@ -137,13 +144,18 @@ public class UI_Elements {
 	  
   }
   
-  public void UIbox() {
+  public void UILevel1() {
 	GImage UIimage = new GImage("Media/UI_Image.png");  
 	UIimage.scale(0.9);
 	UIimage.setLocation(0,0);
 	program.add(UIimage);
   }
 	  
-	  
+  public void UILevel2() {
+		GImage UIimage = new GImage("Media/UI_Level2.png");  
+		UIimage.scale(0.8);
+		UIimage.setLocation(0,16);
+		program.add(UIimage);
+  }
 	
 }

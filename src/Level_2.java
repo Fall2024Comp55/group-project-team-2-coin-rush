@@ -46,9 +46,9 @@ public class Level_2 extends GraphicsProgram {
         platform = new Platform();
         platform.setProgram(this);
         
-        platform.addPlatform(0, 100, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); //player spawn
+        platform.addPlatform(0, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); //player spawn
         
-        platform.addPlatform(250, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(250, 600, 200, 30, Platform.PlatformTypes.STATIC, 0, 0);
         platform.addPlatform(0, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
         platform.addPlatform(600, 310, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
         platform.addPlatform(600, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
@@ -57,7 +57,7 @@ public class Level_2 extends GraphicsProgram {
         platform.addPlatform(800, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
         platform.addPlatform(800, 250, 30, 30, Platform.PlatformTypes.STATIC, 0, 0);
         platform.addPlatform(1000, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); 
-        platform.addPlatform(200, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(200, 300, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
         platform.addPlatform(400, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
         
         platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); //has door
@@ -79,9 +79,9 @@ public class Level_2 extends GraphicsProgram {
         player.setProgram(this);
         player.spawn(0, 50);
         
-       // UI = new UI_Elements();
-        //UI.setProgram(this);
-        //UI.createUI(coin,player);  
+        UI = new UI_Elements();
+        UI.setProgram(this);
+        UI.createUILevel2(coin,player);  
         
         
  	   GRect box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
@@ -99,7 +99,7 @@ public class Level_2 extends GraphicsProgram {
             door.checkIfplayerCanExit(coin.getCoinsCollected());
 
            // UI.doorState(door);
-           // UI.init(door,coin,player);
+            UI.init(door,coin,player);
            
             box.setLocation(+player.getX(), player.getY());
             pause(16.66); // 60 FPS
