@@ -158,6 +158,7 @@ public class Level_4  extends GraphicsProgram {
         enemy2 = new Enemy();
         enemy2.setProgram(this);
         enemy2.spawnEnemy(platform.getPlatforms().get(5));
+        
         //background
         background = new GImage("Media/Background1.png");
         add(background); // Add it before resizing, so getWidth() is correct
@@ -176,7 +177,7 @@ public class Level_4  extends GraphicsProgram {
             handlePlatformInteraction();
             enemy.update(platform.getPlatforms().get(2), player.getBounds(), player);
             enemy1.update(platform.getPlatforms().get(3), player.getBounds(), player);
-            enemy1.update(platform.getPlatforms().get(5), player.getBounds(), player);
+            enemy2.update(platform.getPlatforms().get(5), player.getBounds(), player);
             platform.updatePlatforms();
             //door.update(player, coin.getCoinsCollected());
             door.checkIfplayerCanExit(coin.getCoinsCollected());
