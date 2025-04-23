@@ -75,9 +75,9 @@ public class Level_2 extends GraphicsProgram {
         door.init();
         
         //player
-        player = new Player(0, 50);
+        player = new Player(0, 400);
         player.setProgram(this);
-        player.spawn(0, 50);
+        player.spawn(0, 350);
         
         UI = new UI_Elements();
         UI.setProgram(this);
