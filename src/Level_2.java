@@ -8,7 +8,7 @@ import acm.graphics.GLine;
 import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
-public class Level_1 extends GraphicsProgram {
+public class Level_2 extends GraphicsProgram {
 
     private Player player;
     private Platform platform;
@@ -36,7 +36,7 @@ public class Level_1 extends GraphicsProgram {
         addKeyListeners();
         
         //background
-        background = new GImage("Media/Background1.png");
+        background = new GImage("Media/Background3.jpg");
         add(background); // Add it before resizing, so getWidth() is correct
         background.setSize(getWidth(), getHeight()); // Resizes it to fill the window
         background.sendToBack(); // Ensures it's behind all other elements
@@ -46,36 +46,39 @@ public class Level_1 extends GraphicsProgram {
         platform = new Platform();
         platform.setProgram(this);
         
-        platform.addPlatform(0, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); //player spawn
-        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(400, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(600, 310, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(820, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(820, 250, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(0, 100, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); //player spawn
         
-        platform.addPlatform(1000, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); //has door
+        platform.addPlatform(250, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(0, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(600, 310, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(600, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(470, 570, 50, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(800, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(800, 250, 30, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(1000, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); 
+        platform.addPlatform(200, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(400, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        
+        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); //has door
 
         platform.addPlatformsToScreen();
         
         //test coins
-        coin = new testCoin(7);
+        coin = new testCoin(9);
         coin.setProgram(this);
         coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
         coin.init();
   
-        door = new Door(5, 1025, 115);
+        door = new Door(8, 1125, 415);
         door.setProgram(this);
         door.init();
         
         //player
-        player = new Player(0, 530);
+        player = new Player(0, 50);
         player.setProgram(this);
         player.init();
-        player.spawn(0, 530);
+        player.spawn(0, 50);
         
        // UI = new UI_Elements();
         //UI.setProgram(this);
@@ -197,6 +200,6 @@ public class Level_1 extends GraphicsProgram {
     
 
     public static void main(String[] args) {
-        new Level_1().start();
+        new Level_2().start();
     }
 }
