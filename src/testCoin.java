@@ -89,10 +89,10 @@ public class testCoin {
     
     // Specifically sets the location of a list of coins to the center of platforms of a list of platforms
     public void spawnCoinsToPlatforms(ArrayList<GOval> coinList, ArrayList<GRect> platforms) {
-        if (platforms.isEmpty() || coinList.isEmpty()) return;
+        if (platforms.size() <= 1  || coinList.isEmpty()) return;
 
         for (int i = 0; i < coinList.size(); i++) {
-            GRect platform = platforms.get(i % platforms.size()); //avoid out of bounds
+            GRect platform = platforms.get((i % (platforms.size() - 1)) + 1); //avoid out of bounds and 1st platform
             GOval coin = coinList.get(i);
 
             double coinLocationX = platform.getX() + (platform.getWidth() - coin.getWidth()) / 2; //spawns the coin centered on the top of the platform
@@ -102,6 +102,7 @@ public class testCoin {
             System.out.println("Coin " + i + " spawned at: (" + coinLocationX + ", " + coinLocationY + ")"); //used for testing
         }
     }
+
 
     // These two functions essentially adds to screen
     private void addCoinsToScreen() {
