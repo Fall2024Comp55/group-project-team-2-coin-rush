@@ -70,12 +70,11 @@ public class Level_0_tests extends GraphicsProgram {
         //player
         player = new Player(100,300);
         player.setProgram(this);
-        player.init();
         player.spawn(100,  300);
         
-       // UI = new UI_Elements();
-        //UI.setProgram(this);
-        //UI.createUI(coin,player);  
+        UI = new UI_Elements();
+        UI.setProgram(this);
+        UI.createUI(coin,player);  
         
         //enemy 
         enemy = new Enemy();
@@ -104,8 +103,8 @@ public class Level_0_tests extends GraphicsProgram {
             //door.update(player, coin.getCoinsCollected());
             door.checkIfplayerCanExit(coin.getCoinsCollected());
 
-           // UI.doorState(door);
-           // UI.init(door,coin,player);
+//            UI.doorState(door);
+            UI.init(door,coin,player);
            
             box.setLocation(+player.getX(), player.getY());
             pause(16.66); // 60 FPS

@@ -28,9 +28,11 @@ public class UI_Elements {
     private GCompound gcompound;
     private GOval signal;
     private GLabel label;
+	private GLabel healthText;
     
     //Responsible for creating UI in levels
     public void createUI(testCoin coin,Player player) {
+    	UIbox();
     	createCoins(coin); 
     	createHP(player);
     	doorSignal();
@@ -47,6 +49,7 @@ public class UI_Elements {
        signal.setColor(Color.GREEN);;
        label.setLabel("Open");
        label.setFont("SansSerif-bold-12");
+       label.setColor(Color.white);
        }
        else {
    	   label.setLabel("Close");
@@ -62,6 +65,8 @@ public class UI_Elements {
  		 
  	     label = new GLabel("close");
  		 label.setFont("SansSerif-bold-12");
+ 		 label.setColor(Color.white);
+ 		 
  		  gcompound = new GCompound();
  		 gcompound.add(signal,0,0); 
  		 gcompound.add(label,5, 25);
@@ -71,11 +76,22 @@ public class UI_Elements {
  		doorText = new GLabel("Door: ");
 		doorText.setLocation(20, 185);
 		  doorText.setFont("SansSerif-bold-16");
+		  doorText.setColor(Color.white);
 		program.add(doorText);
     }
     
     // creates coins and labels used GCompound to group label & coin together
     public void createCoins(testCoin coin) {
+    	   coinsCollectedText = new GLabel("Coins Collected:" , 20, 40);
+           coinsCollectedText.setFont("SansSerif-bold-14");
+           coinsCollectedText.setColor(Color.white);
+           program.add(coinsCollectedText);
+           
+           coinsRemainingText = new GLabel("Coins Remaining: " , 20, 80);
+           coinsRemainingText.setFont("SansSerif-bold-14");
+           program.add(coinsRemainingText); 
+           coinsRemainingText.setColor(Color.white);
+           
     	GOval coins = new GOval(30, 30);
 		  coins.setFilled(true);
 		  coins.setFillColor(Color.yellow);
@@ -104,6 +120,11 @@ public class UI_Elements {
  
     //Responsible for creating HP label and image
   public void createHP(Player player) {
+	  healthText = new GLabel("Health:    " , 20, 116);
+	   healthText.setFont("SansSerif-bold-14");
+	   healthText.setColor(Color.white);
+	   program.add(healthText);
+	   
 	  GImage hpImage = new GImage("Media/hp.png");
 	  hpImage.scale(0.1);
 	  hpImage.setLocation(78,89);
@@ -114,6 +135,13 @@ public class UI_Elements {
 	  playerHP.setLocation(90, 117);
 	  program.add(playerHP);
 	  
+  }
+  
+  public void UIbox() {
+	GImage UIimage = new GImage("Media/UI_Image.png");  
+	UIimage.scale(0.9);
+	UIimage.setLocation(0,0);
+	program.add(UIimage);
   }
 	  
 	  

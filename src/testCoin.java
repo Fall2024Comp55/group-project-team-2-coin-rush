@@ -34,13 +34,6 @@ public class testCoin {
     
     public void init() {
     	addCoinsToScreen();
-        coinsCollectedText = new GLabel("Coins Collected:" , 20, 40);
-        coinsCollectedText.setFont("SansSerif-bold-14");
-        program.add(coinsCollectedText);
-        
-        coinsRemainingText = new GLabel("Coins Remaining: " , 20, 80);
-        coinsRemainingText.setFont("SansSerif-bold-14");
-        program.add(coinsRemainingText);
     }
 
     public void setProgram(GraphicsProgram program) {

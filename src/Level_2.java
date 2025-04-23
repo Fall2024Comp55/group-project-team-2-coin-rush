@@ -77,7 +77,6 @@ public class Level_2 extends GraphicsProgram {
         //player
         player = new Player(0, 50);
         player.setProgram(this);
-        player.init();
         player.spawn(0, 50);
         
        // UI = new UI_Elements();

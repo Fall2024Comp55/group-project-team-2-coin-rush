@@ -71,12 +71,9 @@ public void setProgram(GraphicsProgram program) {
  this.program = program;
 }
 
-public void init() {
-	   healthText = new GLabel("Health:    " , 20, 116);
-	   healthText.setFont("SansSerif-bold-14");
-	   program.add(healthText);
-	   
-	  }
+//public void init() {
+//	   
+//	  }
 
 //creates and sets player on screen
 public void spawn(int spawnX, int spawnY) {
