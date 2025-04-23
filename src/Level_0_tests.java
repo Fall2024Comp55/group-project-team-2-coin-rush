@@ -25,69 +25,6 @@ public class Level_0_tests extends GraphicsProgram {
     public static final int GRID_SIZE = 40; //size of grid cell
 
     
-//draws the grid to screen
-    	/*	Each grid cell is 40 pixels wide and 40 pixels tall (GRID_SIZE)
-    	 *	The grid divides the 1280×720 window into a 32×18 grid (Columm'x'Row)
-    	 */
-    	private void drawGrid(int cellSize) {
-    	    for (int x = 0; x <= 1280; x += cellSize) {
-    	        for (int y = 0; y <= 720; y += cellSize) {
-    	            //draws the grid lines
-    	            GLine vertical = new GLine(x, 0, x, 720);
-    	            GLine horizontal = new GLine(0, y, 1280, y);
-    	            vertical.setColor(Color.LIGHT_GRAY);
-    	            horizontal.setColor(Color.LIGHT_GRAY);
-    	            add(vertical);
-    	            add(horizontal);
-    	            gridLines.add(vertical);
-    	            gridLines.add(horizontal);
-
-    	            //adds the coordinate label in top-left of each cell
-    	            String coords = "(" + x + "," + y + ")";
-    	            GLabel label = new GLabel(coords, x + 2, y + 10); //offset a bit inside the cell
-    	            label.setFont("Courier-8");
-    	            label.setColor(Color.GRAY);
-    	            add(label);
-    	            gridLabels.add(label);
-    	        }
-    	    }
-    	}
-
-    	public void handlePlatformInteraction() {
-    	    GRect touchedPlatform = platform.detectPlatformCollision(player.getBounds());
-    	    player.setGrounded(false);
-    	    if (touchedPlatform != null) {
-    	   if(player.getY()+player.getBounds().getHeight()<=  touchedPlatform.getY()+15) {
-    		   player.setGrounded(true);
-    		   System.out.println("on top");
-    		   player.setyVelocity(0);
-    		   player.setY(touchedPlatform.getY()-player.getBounds().getHeight());
-    	   }else if (player.getY() + player.getBounds().getHeight() > touchedPlatform.getY() &&
-    		         player.getY() < touchedPlatform.getY() + touchedPlatform.getHeight()) {
-    		   System.out.println("bottom"+player.getyVelocity());
-    		   player.setY(touchedPlatform.getY()+touchedPlatform.getHeight());
-    		   player.setyVelocity(0);
-    		   player.setGrounded(false);
-    		   player.setY(touchedPlatform.getY()+touchedPlatform.getBounds().getHeight()-5);
-    	   }else { 
-    		   player.setGrounded(false);
-    	   }
-   }
-    	}
-
-    	private void clearGrid() {
-    	    for (GLine line : gridLines) {
-    	        remove(line);
-    	    }
-    	    gridLines.clear();
-
-    	    for (GLabel label : gridLabels) {
-    	        remove(label);
-    	    }
-    	    gridLabels.clear();
-    	}
-
-
     public void run() {
     	if (gridVisible) {
     	    drawGrid(GRID_SIZE);
@@ -163,6 +100,70 @@ public class Level_0_tests extends GraphicsProgram {
         }
     }
     
+
+  //draws the grid to screen
+      	/*	Each grid cell is 40 pixels wide and 40 pixels tall (GRID_SIZE)
+      	 *	The grid divides the 1280×720 window into a 32×18 grid (Columm'x'Row)
+      	 */
+      	private void drawGrid(int cellSize) {
+      	    for (int x = 0; x <= 1280; x += cellSize) {
+      	        for (int y = 0; y <= 720; y += cellSize) {
+      	            //draws the grid lines
+      	            GLine vertical = new GLine(x, 0, x, 720);
+      	            GLine horizontal = new GLine(0, y, 1280, y);
+      	            vertical.setColor(Color.LIGHT_GRAY);
+      	            horizontal.setColor(Color.LIGHT_GRAY);
+      	            add(vertical);
+      	            add(horizontal);
+      	            gridLines.add(vertical);
+      	            gridLines.add(horizontal);
+
+      	            //adds the coordinate label in top-left of each cell
+      	            String coords = "(" + x + "," + y + ")";
+      	            GLabel label = new GLabel(coords, x + 2, y + 10); //offset a bit inside the cell
+      	            label.setFont("Courier-8");
+      	            label.setColor(Color.GRAY);
+      	            add(label);
+      	            gridLabels.add(label);
+      	        }
+      	    }
+      	}
+
+      	public void handlePlatformInteraction() {
+      	    GRect touchedPlatform = platform.detectPlatformCollision(player.getBounds());
+      	    player.setGrounded(false);
+      	    if (touchedPlatform != null) {
+      	   if(player.getY()+player.getBounds().getHeight()<=  touchedPlatform.getY()+15) {
+      		   player.setGrounded(true);
+      		   System.out.println("on top");
+      		   player.setyVelocity(0);
+      		   player.setY(touchedPlatform.getY()-player.getBounds().getHeight());
+      	   }else if (player.getY() + player.getBounds().getHeight() > touchedPlatform.getY() &&
+      		         player.getY() < touchedPlatform.getY() + touchedPlatform.getHeight()) {
+      		   System.out.println("bottom"+player.getyVelocity());
+      		   player.setY(touchedPlatform.getY()+touchedPlatform.getHeight());
+      		   player.setyVelocity(0);
+      		   player.setGrounded(false);
+      		   player.setY(touchedPlatform.getY()+touchedPlatform.getBounds().getHeight()-5);
+      	   }else { 
+      		   player.setGrounded(false);
+      	   }
+     }
+      	}
+
+      	private void clearGrid() {
+      	    for (GLine line : gridLines) {
+      	        remove(line);
+      	    }
+      	    gridLines.clear();
+
+      	    for (GLabel label : gridLabels) {
+      	        remove(label);
+      	    }
+      	    gridLabels.clear();
+      	}
+
+
     @Override
     public void keyPressed(KeyEvent e) {
         player.keyPressed(e);
