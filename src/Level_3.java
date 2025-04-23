@@ -65,7 +65,7 @@ public class Level_3 extends GraphicsProgram {
         platform.addPlatformsToScreen();
         
         //test coins
-        coin = new testCoin(9);
+        coin = new testCoin(10);
         coin.setProgram(this);
         coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
         coin.init();
