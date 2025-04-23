@@ -33,27 +33,27 @@ public class UI_Elements {
     public void createUI(testCoin coin,Player player) {
     	createCoins(coin); 
     	createHP(player);
-    	//doorText();
     	doorSignal();
     }
    
     //responsible for updating health, collected coins, and checking current door state.
     public void init( Door door,testCoin coins, Player player) {
-         coinsCollectedText.setLabel(" " + coinsCollected(coins));
-    	 coinsRemainingText.setLabel(" " + coins.coinsOnPlatforms.size());
-    	 playerHP.setLabel(" " + player.getHP());
+    coinsCollectedText.setLabel(" " + coinsCollected(coins));
+    coinsRemainingText.setLabel(" " + coins.coinsOnPlatforms.size());
+    playerHP.setLabel(" " + player.getHP());
     	 
     	 //door state check
-    		if(door.isOpen()) {
-     			signal.setColor(Color.GREEN);;
-     			 label.setLabel("Open");
-     			 label.setFont("SansSerif-bold-12");
-             }
-    		else {
-    			 label.setLabel("Close");
-    		}
-    }
+    if(door.isOpen()) {
+       signal.setColor(Color.GREEN);;
+       label.setLabel("Open");
+       label.setFont("SansSerif-bold-12");
+       }
+       else {
+   	   label.setLabel("Close");
+       }
+      }
     
+    //door signal and door text
     public void doorSignal() {
     	signal = new GOval(40,40);
  		signal.setLocation(15, 80);
