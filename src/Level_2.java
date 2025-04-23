@@ -114,7 +114,7 @@ public class Level_2 extends GraphicsProgram {
       	private void drawGrid(int cellSize) {
       	    for (int x = 0; x <= 1280; x += cellSize) {
       	        for (int y = 0; y <= 720; y += cellSize) {
-      	            //draws the grid lines
+      	            //draws the grid lines 
       	            GLine vertical = new GLine(x, 0, x, 720);
       	            GLine horizontal = new GLine(0, y, 1280, y);
       	            vertical.setColor(Color.LIGHT_GRAY);

@@ -123,7 +123,7 @@ public class UI_Elements {
     coinText1.setLocation(160,60); 
     program.add(coinText1);
    
-    }
+    }  
  
     //Responsible for creating HP label and image 
   public void createHP(Player player) {

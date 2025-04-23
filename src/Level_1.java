@@ -71,7 +71,7 @@ public class Level_1 extends GraphicsProgram {
         door.setProgram(this);
         door.init();
         
-        //player
+        //player   
         player = new Player(0, 530);
         player.setProgram(this);
         player.spawn(0, 530);
