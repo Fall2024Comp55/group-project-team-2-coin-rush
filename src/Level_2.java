@@ -98,7 +98,7 @@ public class Level_2 extends GraphicsProgram {
             //door.update(player, coin.getCoinsCollected());
             door.checkIfplayerCanExit(coin.getCoinsCollected());
 
-            UI.init(door,coin,player);
+             UI.init(door,coin,player);
            
             box.setLocation(+player.getX(), player.getY());
             pause(16.66); // 60 FPS

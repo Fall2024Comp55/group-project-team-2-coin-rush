@@ -77,7 +77,7 @@ public class Level_1 extends GraphicsProgram {
         player.spawn(0, 530);
         
         UI = new UI_Elements();
-        UI.setProgram(this);
+        UI.setProgram(this); 
         UI.createUI(coin,player);  
         
         

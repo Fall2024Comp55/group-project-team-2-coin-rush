@@ -125,7 +125,7 @@ public class UI_Elements {
    
     }
  
-    //Responsible for creating HP label and image
+    //Responsible for creating HP label and image 
   public void createHP(Player player) {
 	  healthText = new GLabel("Health:    " , 20, 116);
 	   healthText.setFont("SansSerif-bold-14");
