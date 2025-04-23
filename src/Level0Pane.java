@@ -1,4 +1,176 @@
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.Timer;
 
-public class Level0Pane {
+import acm.graphics.GImage;
+import acm.graphics.GLabel;
+import acm.graphics.GLine;
+import acm.graphics.GRect;
+import acm.graphics.GObject;
+
+public class Level0Pane extends GraphicsPane{
+	private MainApplication mainScreen;
+    private Player player;
+    private Platform platform;
+    private Enemy enemy, enemy1;
+    private testCoin coin;
+    private Door door;
+    private UI_Elements UI;
+    
+    private boolean gridVisible = true;
+    private ArrayList<GLine> gridLines = new ArrayList<>();
+    private ArrayList<GLabel> gridLabels = new ArrayList<>();
+    public static final int GRID_SIZE = 40;
+
+    private GImage background;
+    private GRect box;
+    private Timer timer;
+    
+    public Level0Pane(MainApplication mainScreen) {
+        this.mainScreen = mainScreen;
+    }
+    
+    public void showContent() {
+    	if (gridVisible) drawGrid(GRID_SIZE);
+    	
+    	background = new GImage("Media/Background1.png");
+        mainScreen.add(background);
+        background.setSize(mainScreen.getWidth(), mainScreen.getHeight());
+        background.sendToBack();
+        contents.add(background);
+        
+        platform = new Platform();
+        platform.setProgram(mainScreen);
+        platform.addPlatform(100, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(1000, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatformsToScreen();
+        
+        coin = new testCoin(5);
+        coin.setProgram(mainScreen);
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.init();
+        
+        door = new Door(3, 1025, 415);
+        door.setProgram(mainScreen);
+        door.init();
+        
+        player = new Player(100, 300);
+        player.setProgram(mainScreen);
+        player.spawn(100, 300);
+        
+        UI = new UI_Elements();
+        UI.setProgram(mainScreen);
+        UI.createUI(coin, player);
+        
+        enemy = new Enemy();
+        enemy.setProgram(mainScreen);
+        enemy.spawnEnemy(platform.getPlatforms().get(0));
+        enemy1 = new Enemy();
+        enemy1.setProgram(mainScreen);
+        enemy1.spawnEnemy(platform.getPlatforms().get(2));
+        
+        box = new GRect(1, 1, player.getBounds().getWidth(), player.getBounds().getHeight());
+        box.setColor(Color.BLACK);
+        mainScreen.add(box);
+        contents.add(box);
+        
+        timer = new Timer(16, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Update game elements
+                player.update();
+                coin.update(player.getBounds());
+                platform.collision(player.getBounds());
+                handlePlatformInteraction();
+                enemy.update(platform.getPlatforms().get(0), player.getBounds(), player);
+                enemy1.update(platform.getPlatforms().get(2), player.getBounds(), player);
+                door.checkIfplayerCanExit(coin.getCoinsCollected());
+                UI.init(door, coin, player);
+                // Move debug box
+                box.setLocation(player.getX(), player.getY());
+            }
+        });
+        timer.start();
+        
+        mainScreen.addKeyListeners();
+    }
+    
+    public void hideContent() {
+    	if (timer != null) timer.stop();
+    	clearGrid();
+    	
+    	for (GObject obj : contents) {
+    		mainScreen.remove(obj);
+    	}
+    	contents.clear();
+    }
+    
+    public void keyPressed(KeyEvent e)  {
+    	player.keyPressed(e);
+    	
+    	if (e.getKeyCode() == KeyEvent.VK_G) {
+            gridVisible = !gridVisible;
+            if (gridVisible) drawGrid(GRID_SIZE);
+            else clearGrid();
+        }
+    }
+    
+    public void keyReleased(KeyEvent e) {
+        player.keyReleased(e);
+    }
+    
+    public void keyTyped(KeyEvent e) {
+        player.keyTyped(e);
+    }
+    
+    private void drawGrid(int cellSize) {
+        for (int x = 0; x <= MainApplication.WINDOW_WIDTH; x += cellSize) {
+            for (int y = 0; y <= MainApplication.WINDOW_HEIGHT; y += cellSize) {
+                GLine v = new GLine(x, 0, x, MainApplication.WINDOW_HEIGHT);
+                GLine h = new GLine(0, y, MainApplication.WINDOW_WIDTH, y);
+                v.setColor(Color.LIGHT_GRAY);
+                h.setColor(Color.LIGHT_GRAY);
+                mainScreen.add(v);
+                mainScreen.add(h);
+                gridLines.add(v);
+                gridLines.add(h);
+                GLabel lbl = new GLabel("(" + x + "," + y + ")", x + 2, y + 10);
+                lbl.setFont("Courier-8");
+                lbl.setColor(Color.GRAY);
+                mainScreen.add(lbl);
+                gridLabels.add(lbl);
+            }
+        }
+    }
+    
+    private void clearGrid() {
+        for (GLine line : gridLines) mainScreen.remove(line);
+        gridLines.clear();
+        for (GLabel lbl : gridLabels) mainScreen.remove(lbl);
+        gridLabels.clear();
+    }
+    
+    private void handlePlatformInteraction() {
+        GRect touched = platform.detectPlatformCollision(player.getBounds());
+        player.setGrounded(false);
+        if (touched != null) {
+            if (player.getY() + player.getBounds().getHeight() <= touched.getY() + 15) {
+                player.setGrounded(true);
+                player.setyVelocity(0);
+                player.setY(touched.getY() - player.getBounds().getHeight());
+            } else if (player.getY() + player.getBounds().getHeight() > touched.getY()
+                    && player.getY() < touched.getY() + touched.getHeight()) {
+                player.setY(touched.getY() + touched.getBounds().getHeight() - 5);
+                player.setyVelocity(0);
+                player.setGrounded(false);
+            }
+        }
+    }
 
 }
