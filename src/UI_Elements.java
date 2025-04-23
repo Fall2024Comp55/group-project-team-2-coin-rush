@@ -146,15 +146,15 @@ public class UI_Elements {
   
   public void UILevel1() {
 	GImage UIimage = new GImage("Media/UI_Image.png");  
-	UIimage.scale(0.9);
-	UIimage.setLocation(0,0);
+	UIimage.setLocation(2,0);
+	UIimage.scale(0.6, 0.9);
 	program.add(UIimage);
   }
 	  
   public void UILevel2() {
 		GImage UIimage = new GImage("Media/UI_Level2.png");  
-		UIimage.scale(0.8);
-		UIimage.setLocation(0,16);
+		UIimage.scale(0.6, 0.9);
+		UIimage.setLocation(2,7);
 		program.add(UIimage);
   }
 	

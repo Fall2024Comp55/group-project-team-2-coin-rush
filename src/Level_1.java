@@ -76,9 +76,9 @@ public class Level_1 extends GraphicsProgram {
         player.setProgram(this);
         player.spawn(0, 530);
         
-       // UI = new UI_Elements();
-        //UI.setProgram(this);
-        //UI.createUI(coin,player);  
+        UI = new UI_Elements();
+        UI.setProgram(this);
+        UI.createUI(coin,player);  
         
         
  	   GRect box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
@@ -95,8 +95,7 @@ public class Level_1 extends GraphicsProgram {
             //door.update(player, coin.getCoinsCollected());
             door.checkIfplayerCanExit(coin.getCoinsCollected());
 
-           // UI.doorState(door);
-           // UI.init(door,coin,player);
+            UI.init(door,coin,player);
            
             box.setLocation(+player.getX(), player.getY());
             pause(16.66); // 60 FPS
