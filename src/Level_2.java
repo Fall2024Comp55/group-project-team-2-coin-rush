@@ -46,21 +46,21 @@ public class Level_2 extends GraphicsProgram {
         platform = new Platform();
         platform.setProgram(this);
         
-        platform.addPlatform(0, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); //player spawn
+        platform.addPlatform(0, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false); //player spawn
         
-        platform.addPlatform(250, 600, 200, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(0, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(600, 310, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(600, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(470, 570, 50, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(800, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(800, 250, 30, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(1000, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); 
-        platform.addPlatform(200, 300, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(400, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(250, 600, 200, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(0, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(600, 310, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(600, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(470, 570, 50, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(800, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(800, 250, 30, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(1000, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(200, 300, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(400, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
         
-        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0); //has door
+        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false); //has door
 
         platform.addPlatformsToScreen();
         
