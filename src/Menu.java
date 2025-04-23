@@ -12,26 +12,33 @@ public class Menu extends GraphicsProgram{
 	//display content
 	public void showContent() {
 		createDeathMenu();
+		deathLabel();
 		createButton1();
 		createButton2();
 	}
-	//Creates death Menu
-	public void createDeathMenu() {
-		GRect deathMenue = new GRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-		deathMenue.setFilled(true);
-
-       //it is transparent in color
-		deathMenue.setColor(new Color(0,0,0,80));
-		add(deathMenue); 
-		deathLabel();
+private void createDeathMenu() {
+		GImage menueImage = new GImage("Media/death_Menu.png");
+		menueImage.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
+		add(menueImage);
 	}
+//	//Creates death Menu
+//	public void createDeathMenu() {
+//		GRect deathMenue = new GRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+//		deathMenue.setFilled(true);
+//
+//       //it is transparent in color
+//		deathMenue.setColor(new Color(0,0,0,80));
+//		add(deathMenue); 
+//		deathLabel();
+//	}
+	
 	
 	// label
     public void deathLabel() {
     	GLabel label = new GLabel("You Died"); 
     	label.setFont("SansSerif-bold-30");
 
-    	label.setColor(Color.black);
+    	label.setColor(Color.white);
     	add(label,130,150);
     }
     
