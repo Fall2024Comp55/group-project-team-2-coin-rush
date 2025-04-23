@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.graphics.GLine;
 import acm.graphics.GRect;
@@ -23,14 +24,23 @@ public class Level_0_tests extends GraphicsProgram {
     private ArrayList<GLine> gridLines = new ArrayList<>(); //stores the grid lines
     private ArrayList<GLabel> gridLabels = new ArrayList<>(); //stores the labels that visually show the size of each cell
     public static final int GRID_SIZE = 40; //size of grid cell
-
+    private GImage background; 
     
     public void run() {
+        setSize(1280, 720); // Window size
+        
     	if (gridVisible) {
     	    drawGrid(GRID_SIZE);
     	}
-        setSize(1280, 720); // Window size
+    	
         addKeyListeners();
+        
+        //background
+        background = new GImage("Media/Background1.png");
+        add(background); // Add it before resizing, so getWidth() is correct
+        background.setSize(getWidth(), getHeight()); // Resizes it to fill the window
+        background.sendToBack(); // Ensures it's behind all other elements
+        
         //platform = new Platform(120, 40,40, 120, Platform.PlatformTypes.STATIC, 0, 0);
         //platform = new Platform(120, 40,240, 240, Platform.PlatformTypes.STATIC, 0, 0);      
         platform = new Platform();
@@ -60,9 +70,9 @@ public class Level_0_tests extends GraphicsProgram {
         player.init();
         player.spawn(100,  300);
         
-        UI = new UI_Elements();
-        UI.setProgram(this);
-        UI.createUI(coin,player);  
+       // UI = new UI_Elements();
+        //UI.setProgram(this);
+        //UI.createUI(coin,player);  
         
         //enemy 
         enemy = new Enemy();
@@ -92,7 +102,7 @@ public class Level_0_tests extends GraphicsProgram {
             door.checkIfplayerCanExit(coin.getCoinsCollected());
 
            // UI.doorState(door);
-            UI.init(door,coin,player);
+           // UI.init(door,coin,player);
            
             box.setLocation(+player.getX(), player.getY());
             pause(16.66); // 60 FPS
