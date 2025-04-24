@@ -8,10 +8,14 @@ import acm.graphics.GObject;
 import acm.graphics.GRect;
 
 public class PausePane extends GraphicsPane {
+	
+	
 	public PausePane(MainApplication mainScreen) {
 		this.mainScreen = mainScreen;
 	} 
 	
+	private GCompound continueButtonCompound;
+	private GCompound returnButtonCompound;
 	
 	public void showContent() {
 		GRect overlay = new GRect(0, 0, MainApplication.WINDOW_WIDTH, MainApplication.WINDOW_HEIGHT);
@@ -32,60 +36,61 @@ public class PausePane extends GraphicsPane {
 	}
 	
 	private void createButton() {
-		GImage continueButton = new GImage("CGB02-yellow_M_btn.png",200,500);
+		GImage continueButton = new GImage("CGB02-yellow_M_btn.png",200,400);
 		continueButton.scale(0.3, 0.3);
 		
 		GLabel continueLabel =  new GLabel("CONTINUE");
-		continueLabel.setFont("SansSerif-bold-18");
+		continueLabel.setFont("SansSerif-bold-13");
 		continueLabel.setColor(Color.WHITE);
 		
-		GCompound buttonCompound = new GCompound();
-		buttonCompound.add(continueButton, 0, 0);
+		continueButtonCompound = new GCompound();
+		continueButtonCompound.add(continueButton, 0, 0);
 		
 		double labelX = (continueButton.getWidth() - continueLabel.getWidth()) / 2;
 		double labelY = (continueButton.getHeight() - continueLabel.getAscent()) / 2;
-		buttonCompound.add(continueLabel, labelX, labelY);
+		continueButtonCompound.add(continueLabel, labelX, labelY);
 		
-		double x = (mainScreen.getWidth() - buttonCompound.getWidth()) / 2;
-		double y = (mainScreen.getHeight() -buttonCompound.getHeight()) / 2;
+		double x = (mainScreen.getWidth() - continueButtonCompound.getWidth()) / 2;
+		double y = (mainScreen.getHeight() -continueButtonCompound.getHeight()) / 2;
 		
-		buttonCompound.setLocation(x, y);
+		continueButtonCompound.setLocation(x, y);
 		
-		contents.add(buttonCompound);
-		mainScreen.add(buttonCompound);
+		contents.add(continueButtonCompound);
+		mainScreen.add(continueButtonCompound);
 	}
 	
 	private void createButton1() {
-		GImage returnButton = new GImage("CGB02-yellow_M_btn.png",200,500);
+		GImage returnButton = new GImage("CGB02-yellow_M_btn.png",200,400);
 		returnButton.scale(0.3, 0.3);
 		
 		GLabel returnLabel =  new GLabel("QUIT");
-		returnLabel.setFont("SansSerif-bold-18");
+		returnLabel.setFont("SansSerif-bold-13");
 		returnLabel.setColor(Color.WHITE);
 		
-		GCompound buttonCompound = new GCompound();
-		buttonCompound.add(returnButton, 0, 0);
+		returnButtonCompound = new GCompound();
+		returnButtonCompound.add(returnButton, 0, 0);
 		
 		double labelX = (returnButton.getWidth() - returnLabel.getWidth()) / 2;
 		double labelY = (returnButton.getHeight() - returnLabel.getAscent()) / 2;
-		buttonCompound.add(returnLabel, labelX, labelY);
+		returnButtonCompound.add(returnLabel, labelX, labelY);
 		
-		double x = (mainScreen.getWidth() - buttonCompound.getWidth()) / 2;
-		double y = (mainScreen.getHeight() -buttonCompound.getHeight()) / 2 + 50;
+		double x = (mainScreen.getWidth() - returnButtonCompound.getWidth()) / 2;
+		double y = (mainScreen.getHeight() -returnButtonCompound.getHeight()) / 2 + 50;
 		
-		buttonCompound.setLocation(x, y);
+		returnButtonCompound.setLocation(x, y);
 		
-		contents.add(buttonCompound);
-		mainScreen.add(buttonCompound);
+		contents.add(returnButtonCompound);
+		mainScreen.add(returnButtonCompound);
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		if (mainScreen.getElementAtLocation(e.getX(), e.getY()) == contents.get(1)) {
-			mainScreen.switchToLevel0Screen();
-		}
-		else {
-			mainScreen.switchToWelcomeScreen();
-		}
+		GObject clicked = mainScreen.getElementAtLocation(e.getX(), e.getY());
+        if (clicked == continueButtonCompound) {
+            mainScreen.switchToLevel0Screen();
+        }
+        else if(clicked == returnButtonCompound) {
+        	mainScreen.switchToWelcomeScreen();
+        }
 	}
 	
 
