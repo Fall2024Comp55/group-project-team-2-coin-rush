@@ -1,10 +1,12 @@
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.Timer;
 
+import acm.graphics.GCompound;
 import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.graphics.GLine;
@@ -28,12 +30,17 @@ public class Level0Pane extends GraphicsPane{
     private GImage background;
     private GRect box;
     private Timer timer;
+    private GCompound pauseButtonCompound;
+    
     
     public Level0Pane(MainApplication mainScreen) {
         this.mainScreen = mainScreen;
     }
     
     public void showContent() {
+    	
+    	 
+    	
     	if (gridVisible) drawGrid(GRID_SIZE);
     	
     	background = new GImage("Media/Background1.png");
@@ -44,13 +51,15 @@ public class Level0Pane extends GraphicsPane{
         
         platform = new Platform();
         platform.setProgram(mainScreen);
-        platform.addPlatform(100, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(1000, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(100, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(1000, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
         platform.addPlatformsToScreen();
+        
+       
         
         coin = new testCoin(5);
         coin.setProgram(mainScreen);
@@ -76,10 +85,14 @@ public class Level0Pane extends GraphicsPane{
         enemy1.setProgram(mainScreen);
         enemy1.spawnEnemy(platform.getPlatforms().get(2));
         
+        
+        
         box = new GRect(1, 1, player.getBounds().getWidth(), player.getBounds().getHeight());
         box.setColor(Color.BLACK);
         mainScreen.add(box);
         contents.add(box);
+        
+        
         
         timer = new Timer(16, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +111,9 @@ public class Level0Pane extends GraphicsPane{
         });
         timer.start();
         
+        addPauseButton();
         mainScreen.addKeyListeners();
+        mainScreen.addMouseListeners();
     }
     
     public void hideContent() {
@@ -109,6 +124,36 @@ public class Level0Pane extends GraphicsPane{
     		mainScreen.remove(obj);
     	}
     	contents.clear();
+    	mainScreen.clear();
+    }
+    
+    private void addPauseButton() {
+    	GImage pauseButton = new GImage("CGB02-yellow_M_btn.png");
+    	pauseButton.scale(0.3, 0.3);
+    	
+    	GLabel buttonLabel = new GLabel("PAUSE");
+        buttonLabel.setFont("SansSerif-bold-18");
+        buttonLabel.setColor(Color.WHITE);
+        
+        pauseButtonCompound = new GCompound();
+        pauseButtonCompound.add(pauseButton, 0, 0);
+        
+        double labelX = (pauseButton.getWidth() - buttonLabel.getWidth()) / 2;
+        double labelY = (pauseButton.getHeight() + buttonLabel.getAscent()) / 2;
+        pauseButtonCompound.add(buttonLabel, labelX, labelY);
+        
+        pauseButtonCompound.setLocation(1120, 0);
+        
+        contents.add(pauseButtonCompound);
+        mainScreen.add(pauseButtonCompound);
+    }
+    
+    public void mouseClicked(MouseEvent e) {
+    	GObject clicked = mainScreen.getElementAtLocation(e.getX(), e.getY());
+        if (clicked == pauseButtonCompound) {
+            timer.stop();
+            mainScreen.switchToPauseScreen();
+        }
     }
     
     public void keyPressed(KeyEvent e)  {
