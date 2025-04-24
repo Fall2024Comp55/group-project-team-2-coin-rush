@@ -60,7 +60,7 @@ public class Level_0_tests extends GraphicsProgram {
         //test coins
         coin = new testCoin(5);
         coin.setProgram(this);
-        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
         coin.init();
   
         door = new Door(3,1025, 415);

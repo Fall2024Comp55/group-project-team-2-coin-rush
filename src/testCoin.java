@@ -80,14 +80,35 @@ public class testCoin {
         return coins;
     }
     
-    // Specifically sets the location of a list of coins to the center of platforms of a list of platforms
-    public void spawnCoinsToPlatforms(ArrayList<GOval> coinList, ArrayList<GRect> platforms) {
-        if (platforms.size() <= 1  || coinList.isEmpty()) return;
+    //Spawns list of coins either automatically to platforms (true) or randomly to platforms (false)
+    public void spawnCoinsToPlatforms(ArrayList<GOval> coinList, ArrayList<GRect> platforms, boolean autoPlacement) {
+        if (platforms.size() <= 2 || coinList.isEmpty()) return;
 
+        Random rand = new Random();
+        ArrayList<Integer> usedPlatforms = new ArrayList<>(); //used to keep track of platforms with coins already on it so they dont overlap
+
+        
         for (int i = 0; i < coinList.size(); i++) {
-            GRect platform = platforms.get((i % (platforms.size() - 1)) + 1); //avoid out of bounds and 1st platform
+            GRect platform;
             GOval coin = coinList.get(i);
 
+            if (autoPlacement) {
+                platform = platforms.get(i % (platforms.size() - 2) + 1); //avoid out of bounds and first/last platform
+            } else {
+            	
+            	if (usedPlatforms.size() >= platforms.size() - 2 + 1) {
+                    break;
+                }
+
+                int randomIndex = rand.nextInt(platforms.size() - 2) + 1;
+                while (usedPlatforms.contains(randomIndex)) {
+                    randomIndex = rand.nextInt(platforms.size() - 2) + 1;
+                }
+
+                usedPlatforms.add(randomIndex);
+                platform = platforms.get(randomIndex);
+            }
+            
             double coinLocationX = platform.getX() + (platform.getWidth() - coin.getWidth()) / 2; //spawns the coin centered on the top of the platform
             double coinLocationY = platform.getY() - coin.getHeight() - 5; //5px above the platform
 
@@ -95,6 +116,20 @@ public class testCoin {
             System.out.println("Coin " + i + " spawned at: (" + coinLocationX + ", " + coinLocationY + ")"); //used for testing
         }
     }
+    
+ //Creates a coin, adds to list, and spawns manually
+    public void spawnCoinManually(int x, int y) {
+        GOval coin = new GOval(COIN_SIZE, COIN_SIZE);
+        coin.setFilled(true);
+        coin.setFillColor(Color.YELLOW);
+        coin.setLocation(x, y);
+
+        coinsOnPlatforms.add(coin);
+
+        System.out.println("Manual Coin at: (" + x + ", " + y + ")");
+    }
+
+
 
 
     // These two functions essentially adds to screen

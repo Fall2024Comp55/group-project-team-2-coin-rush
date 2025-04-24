@@ -63,7 +63,7 @@ public class Level0Pane extends GraphicsPane{
         
         coin = new testCoin(5);
         coin.setProgram(mainScreen);
-        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
         coin.init();
         
         door = new Door(3, 1025, 415);

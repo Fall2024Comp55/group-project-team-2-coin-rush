@@ -64,7 +64,8 @@ public class Level_1 extends GraphicsProgram {
         //test coins
         coin = new testCoin(7);
         coin.setProgram(this);
-        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), false);
+        //coin.spawnCoinManually(500, 500);
         coin.init();
   
         door = new Door(5, 1025, 115);
@@ -166,6 +167,11 @@ public class Level_1 extends GraphicsProgram {
       	    gridLabels.clear();
       	}
 
+      	private void restart(Player player) {
+      		if(player.getHP() == 0) {
+      			
+      		}
+      	}
 
     @Override
     public void keyPressed(KeyEvent e) {
