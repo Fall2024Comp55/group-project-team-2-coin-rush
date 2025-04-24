@@ -66,7 +66,6 @@ public class UI_Elements {
     //door signal and door text
     public void doorSignal() {
     	signal = new GOval(40,40);
- 		signal.setLocation(15, 80);
  		signal.setFilled(true);
  		 signal.setColor(Color.red);
  		 
@@ -77,11 +76,11 @@ public class UI_Elements {
  		  gcompound = new GCompound();
  		 gcompound.add(signal,0,0); 
  		 gcompound.add(label,5, 25);
- 	     gcompound.setLocation(80,160);
+ 	     gcompound.setLocation(540,5);
  		 program.add(gcompound); 
  		 
  		doorText = new GLabel("Door: ");
-		doorText.setLocation(20, 185);
+		doorText.setLocation(480, 30);
 		  doorText.setFont("SansSerif-bold-16");
 		  doorText.setColor(Color.white);
 		program.add(doorText);
@@ -89,12 +88,12 @@ public class UI_Elements {
     
     // creates coins and labels used GCompound to group label & coin together
     public void createCoins(testCoin coin) {
-    	   coinsCollectedText = new GLabel("Coins Collected:" , 20, 40);
+    	   coinsCollectedText = new GLabel("Coins Collected:" , 120, 30);
            coinsCollectedText.setFont("SansSerif-bold-14");
            coinsCollectedText.setColor(Color.white);
            program.add(coinsCollectedText);
            
-           coinsRemainingText = new GLabel("Coins Remaining: " , 20, 80);
+           coinsRemainingText = new GLabel("Coins Remaining: " , 300, 30);
            coinsRemainingText.setFont("SansSerif-bold-14");
            program.add(coinsRemainingText); 
            coinsRemainingText.setColor(Color.white);
@@ -108,7 +107,7 @@ public class UI_Elements {
     GCompound coinText = new GCompound(); 
     coinText.add(coins,0,0);
     coinText.add(coinsCollectedText, 5,20);
-    coinText.setLocation(160,20); 
+    coinText.setLocation(250,10); 
     program.add(coinText);
     
     GOval coins1 = new GOval(30, 30);
@@ -119,42 +118,43 @@ public class UI_Elements {
     coinsRemainingText.setFont("SansSerif-bold-16");
     GCompound coinText1 = new GCompound(); 
     coinText1.add(coins1,0,0);
-    coinText1.add(coinsRemainingText, 5,20);
-    coinText1.setLocation(160,60); 
+    coinText1.add(coinsRemainingText, 3,20);
+    coinText1.setLocation(440,10); 
     program.add(coinText1);
    
     }  
  
     //Responsible for creating HP label and image 
   public void createHP(Player player) {
-	  healthText = new GLabel("Health:    " , 20, 116);
+	  healthText = new GLabel("Health:    " , 10, 30);
 	   healthText.setFont("SansSerif-bold-14");
 	   healthText.setColor(Color.white);
 	   program.add(healthText);
 	   
 	  GImage hpImage = new GImage("Media/hp.png");
 	  hpImage.scale(0.1);
-	  hpImage.setLocation(78,89);
-	  program.add(hpImage);
 	  
 	  playerHP = new GLabel(" " + player.getHP());
 	  playerHP.setFont("SansSerif-bold-16");
-	  playerHP.setLocation(90, 117);
-	  program.add(playerHP);
 	  
+	  GCompound hp = new GCompound(); 
+	    hp.add(hpImage,0,0);
+	    hp.add(playerHP, 12,30);
+	    hp.setLocation(65,2); 
+	    program.add(hp);
   }
   
   public void UILevel1() {
 	GImage UIimage = new GImage("Media/UI_Image.png");  
 	UIimage.setLocation(2,0);
-	UIimage.scale(0.6, 0.9);
+	UIimage.scale(5.0, 0.2);
 	program.add(UIimage);
   }
 	  
   public void UILevel2() {
 		GImage UIimage = new GImage("Media/UI_Level2.png");  
-		UIimage.scale(0.6, 0.9);
-		UIimage.setLocation(2,7);
+		UIimage.scale(5.0, 0.2);
+		UIimage.setLocation(0,0);
 		program.add(UIimage);
   }
 	

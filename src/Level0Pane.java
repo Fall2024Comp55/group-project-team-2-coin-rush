@@ -44,12 +44,12 @@ public class Level0Pane extends GraphicsPane{
         
         platform = new Platform();
         platform.setProgram(mainScreen);
-        platform.addPlatform(100, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
-        platform.addPlatform(1000, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0);
+        platform.addPlatform(100, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(1000, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
         platform.addPlatformsToScreen();
         
         coin = new testCoin(5);
