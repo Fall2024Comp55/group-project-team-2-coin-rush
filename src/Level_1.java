@@ -26,6 +26,12 @@ public class Level_1 extends GraphicsProgram {
     public static final int GRID_SIZE = 40; //size of grid cell
     private GImage background; 
     
+    private boolean isGameOver = false;
+    private GLabel gameOverLabel;
+    private GLabel restartLabel;
+    private GRect restartBox;
+
+    
     public void run() {
         setSize(1280, 720); // Window size
         
