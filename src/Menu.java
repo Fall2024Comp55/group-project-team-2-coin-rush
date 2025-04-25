@@ -5,9 +5,17 @@ import acm.graphics.*;
 import acm.program.GraphicsProgram;
 
 public class Menu extends GraphicsPane{
-	public Menu(MainApplication mainScreen) {
-		this.mainScreen = mainScreen;
-	} 
+//	public Menu(MainApplication mainScreen) {
+//		this.mainScreen = mainScreen;
+//	} 
+
+private GraphicsProgram program;
+
+public void setProgram(GraphicsProgram program) {
+    this.program = program;
+   
+}
+
 	public static final int WINDOW_WIDTH = 300;
 	public static final int WINDOW_HEIGHT = 400;	
 	
@@ -26,14 +34,11 @@ public class Menu extends GraphicsPane{
 
     
 	//display content
-	public void showContent(Player player) {
-		if(player.getHP() < 0 && !deathMenu) {
+	public void showContents() {
+		
 		createDeathMenu();
-		deathLabel();
-		createButton1();
-		createButton2();
 		deathMenu = true; 
-		}
+		
 	}
 	private void createDeathMenu() {
 	    // Create background image for death menu
@@ -60,11 +65,11 @@ public class Menu extends GraphicsPane{
 	    createButton2();  // This will initialize button2Compound properly
 	    deathMenuCompound.add(button2Compound, WINDOW_WIDTH/2 - button2Compound.getWidth()/2, 250); // Position of button 2
  
-	    double x = (mainScreen.getWidth() - menuImage.getWidth()) / 2;
-	    double y = (mainScreen.getHeight() - menuImage.getHeight()) / 2;
+	    double x = (program.getWidth() - menuImage.getWidth()) / 2;
+	    double y = (program.getHeight() - menuImage.getHeight()) / 2;
 	    deathMenuCompound.setLocation(x,y);
 	    // Finally, add the compound to the program's canvas
-	    mainScreen.add(deathMenuCompound);
+	    program.add(deathMenuCompound);
 	}
 
 //	//Creates Transparent death Menu OPTIONAL
@@ -105,7 +110,7 @@ public class Menu extends GraphicsPane{
 		double x = (button.getWidth() - label1.getWidth())/2;
 		double y =(button.getHeight() - 9); //9 pixels up
 
-	    contents.add(button1Compound);
+	   // contents.add(button1Compound);
 		button1Compound.add(label1,x, y); 
 		
 	}
@@ -127,7 +132,7 @@ public class Menu extends GraphicsPane{
 		double y =(button2.getHeight() - 9);
 	
 		
-		contents.add(button2Compound);
+		//contents.add(button2Compound);
 		button2Compound.add(button2label,x, y);
 		
 	}
@@ -146,5 +151,4 @@ public class Menu extends GraphicsPane{
 	}
 
 	
-}
-
+	}

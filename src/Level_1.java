@@ -20,6 +20,7 @@ public class Level_1 extends GraphicsProgram {
     private hitBox playerHitbox;
     UI_Elements UI;
     private Level_1 level;
+    private Menu deathMenu; 
     
     private boolean gridVisible = true; //used for key presse
     private ArrayList<GLine> gridLines = new ArrayList<>(); //stores the grid lines
@@ -47,6 +48,7 @@ public class Level_1 extends GraphicsProgram {
 
         while (true) {
         		updateLevel(); //updates the level
+                pause(16.66); // 60 FPS
         	}
         }
     
@@ -102,16 +104,16 @@ public class Level_1 extends GraphicsProgram {
         UI.setProgram(this); 
         UI.createUI(coin,player);  
         
-       
+        
  	   box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
  	   box.setColor(Color.black);
  	   add(box);
 
+ 	  deathMenu = new Menu();
+ 	 deathMenu.setProgram(this);
     }
-    
+     
     private void updateLevel() {
- 	    pause(16.66); // 60 FPS
-
     	if(!isGameOver) {
             player.update(); //updates the Player animation loop & movement
             coin.update(playerHitbox); //updates the collision to check if player is touching a coin
@@ -216,32 +218,34 @@ public class Level_1 extends GraphicsProgram {
       	    	 isGameOver = true;
            	    
            	    //creates the game over label
-           	  gameOverLabel = new GLabel("YOU DIED");
-               gameOverLabel.setFont("SansSerif-BOLD-48");
-               gameOverLabel.setColor(Color.BLACK);
-               double labelX = (getWidth() - gameOverLabel.getWidth()) / 2;
-               double labelY = getHeight() / 2 - 60; // a bit above center
-               gameOverLabel.setLocation(labelX, labelY);
-               add(gameOverLabel);
-
+//           	  gameOverLabel = new GLabel("YOU DIED");
+//               gameOverLabel.setFont("SansSerif-BOLD-48");
+//               gameOverLabel.setColor(Color.BLACK);
+//               double labelX = (getWidth() - gameOverLabel.getWidth()) / 2;
+//               double labelY = getHeight() / 2 - 60; // a bit above center
+//               gameOverLabel.setLocation(labelX, labelY);
+//               add(gameOverLabel);
+            
+      	    	 deathMenu.showContents();
+      	    	 
            	    //both create the restart label and button box
-               int boxWidth = 160;
-               int boxHeight = 50;
-               int boxX = (int) ((getWidth() - boxWidth) / 2);
-               int boxY = (int) (getHeight() / 2);
-               restartBox = new GRect(boxX, boxY, boxWidth, boxHeight);
-               restartBox.setFilled(true);
-               restartBox.setFillColor(Color.LIGHT_GRAY);
-               restartBox.setColor(Color.BLACK);
-               add(restartBox);
-
-               restartLabel = new GLabel("'R' to restart");
-               restartLabel.setFont("SansSerif-BOLD-24");
-               double restartX = boxX + (boxWidth - restartLabel.getWidth()) / 2;
-               double restartY = boxY + (boxHeight + restartLabel.getAscent()) / 2;
-               restartLabel.setColor(Color.BLUE);
-               restartLabel.setLocation(restartX, restartY);
-               add(restartLabel);	
+//               int boxWidth = 160;
+//               int boxHeight = 50;
+//               int boxX = (int) ((getWidth() - boxWidth) / 2);
+//               int boxY = (int) (getHeight() / 2);
+//               restartBox = new GRect(boxX, boxY, boxWidth, boxHeight);
+//               restartBox.setFilled(true);
+//               restartBox.setFillColor(Color.LIGHT_GRAY);
+//               restartBox.setColor(Color.BLACK);
+//               add(restartBox);
+//
+//               restartLabel = new GLabel("'R' to restart");
+//               restartLabel.setFont("SansSerif-BOLD-24");
+//               double restartX = boxX + (boxWidth - restartLabel.getWidth()) / 2;
+//               double restartY = boxY + (boxHeight + restartLabel.getAscent()) / 2;
+//               restartLabel.setColor(Color.BLUE);
+//               restartLabel.setLocation(restartX, restartY);
+//               add(restartLabel);	
       	    }
       	}
 
