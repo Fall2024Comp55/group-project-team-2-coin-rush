@@ -103,7 +103,7 @@ public class Level_1 extends GraphicsProgram {
         UI.setProgram(this); 
         UI.createUI(coin,player);  
         
-        
+       
  	   box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
  	   box.setColor(Color.black);
  	   add(box);
