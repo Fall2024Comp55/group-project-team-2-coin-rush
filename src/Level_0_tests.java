@@ -46,13 +46,13 @@ public class Level_0_tests extends GraphicsProgram {
         platform = new Platform();
         platform.setProgram(this);
         
-        platform.addPlatform(100, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);        
-        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(1000, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
 
+        platform.addPlatform(100, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);        
+        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(1000, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
 
         platform.addPlatformsToScreen();
         
@@ -60,7 +60,7 @@ public class Level_0_tests extends GraphicsProgram {
         //test coins
         coin = new testCoin(5);
         coin.setProgram(this);
-        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
         coin.init();
   
         door = new Door(3,1025, 415);

@@ -46,25 +46,27 @@ public class Level_1 extends GraphicsProgram {
         platform = new Platform();
         platform.setProgram(this);
         
-        platform.addPlatform(0, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false); //player spawn
-        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(400, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(600, 310, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(820, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(820, 250, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        
-        platform.addPlatform(1000, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false); //has door
+
+        platform.addPlatform(0, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false); //player spawn
+        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(400, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(600, 310, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(820, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(820, 250, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
+
+        platform.addPlatform(1000, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false); //has door
 
         platform.addPlatformsToScreen();
         
         //test coins
         coin = new testCoin(7);
         coin.setProgram(this);
-        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), false);
+        //coin.spawnCoinManually(500, 500);
         coin.init();
   
         door = new Door(5, 1025, 115);
@@ -166,6 +168,11 @@ public class Level_1 extends GraphicsProgram {
       	    gridLabels.clear();
       	}
 
+      	private void restart(Player player) {
+      		if(player.getHP() == 0) {
+      			
+      		}
+      	}
 
     @Override
     public void keyPressed(KeyEvent e) {
