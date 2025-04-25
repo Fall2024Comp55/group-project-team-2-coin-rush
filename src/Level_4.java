@@ -105,6 +105,12 @@ public class Level_4  extends GraphicsProgram {
     	}
         setSize(1280, 720); // Window size
         addKeyListeners();
+        
+        //background
+        background = new GImage("Media/Background1.png");
+        add(background); // Add it before resizing, so getWidth() is correct
+        background.setSize(getWidth(), getHeight()); // Resizes it to fill the window
+        background.sendToBack(); // Ensures it's behind all other elements
          
         platform = new Platform();
         
@@ -131,7 +137,7 @@ public class Level_4  extends GraphicsProgram {
         //test coins
         coin = new testCoin(8);
         coin.setProgram(this);
-        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
         coin.init();
   
         door = new Door(1,1200,600);
@@ -145,6 +151,7 @@ public class Level_4  extends GraphicsProgram {
         
         UI = new UI_Elements();
         UI.setProgram(this);
+        UI.createUI(coin,player); 
         
         //enemy 
         enemy = new Enemy();
@@ -158,11 +165,8 @@ public class Level_4  extends GraphicsProgram {
         enemy2 = new Enemy();
         enemy2.setProgram(this);
         enemy2.spawnEnemy(platform.getPlatforms().get(5));
-        //background
-        background = new GImage("Media/Background1.png");
-        add(background); // Add it before resizing, so getWidth() is correct
-        background.setSize(getWidth(), getHeight()); // Resizes it to fill the window
-        background.sendToBack(); // Ensures it's behind all other elements
+        
+        
         
         
  	   GRect box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
@@ -176,12 +180,12 @@ public class Level_4  extends GraphicsProgram {
             handlePlatformInteraction();
             enemy.update(platform.getPlatforms().get(2), player.getBounds(), player);
             enemy1.update(platform.getPlatforms().get(3), player.getBounds(), player);
-            enemy1.update(platform.getPlatforms().get(5), player.getBounds(), player);
+            enemy2.update(platform.getPlatforms().get(5), player.getBounds(), player);
             platform.updatePlatforms();
             //door.update(player, coin.getCoinsCollected());
             door.checkIfplayerCanExit(coin.getCoinsCollected());
 
-           // UI.doorState(door);
+            UI.init(door,coin,player);
             box.setLocation(+player.getX(), player.getY());
             pause(16.66); // 60 FPS
            

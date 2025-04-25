@@ -7,7 +7,7 @@ import acm.graphics.GOval;
 import acm.graphics.GRectangle;
 import acm.program.GraphicsProgram;
 
-public class UI_Elements {
+public class UI_Elements { 
 	
 	private GraphicsProgram program;
 

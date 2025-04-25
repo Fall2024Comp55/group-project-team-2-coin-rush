@@ -63,6 +63,8 @@ public class Level_3 extends GraphicsProgram {
         platform.addPlatform(400, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
 
         platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false); //has door
+
+
         platform.addPlatformsToScreen();
         
         //test coins

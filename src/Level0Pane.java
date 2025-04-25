@@ -32,10 +32,16 @@ public class Level0Pane extends GraphicsPane{
     private Timer timer;
     private GCompound pauseButtonCompound;
     
-     public Level0Pane(MainApplication mainScreen) {
+    
+    public Level0Pane(MainApplication mainScreen) {
         this.mainScreen = mainScreen;
     }
-        public void showContent() {    	if (gridVisible) drawGrid(GRID_SIZE);
+    
+    public void showContent() {
+    	
+    	 
+    	
+    	if (gridVisible) drawGrid(GRID_SIZE);
     	
     	background = new GImage("Media/Background1.png");
         mainScreen.add(background);
@@ -54,7 +60,9 @@ public class Level0Pane extends GraphicsPane{
         platform.addPlatform(1000, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
 
         platform.addPlatformsToScreen();
+        
        
+        
         coin = new testCoin(5);
         coin.setProgram(mainScreen);
         coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
@@ -85,7 +93,8 @@ public class Level0Pane extends GraphicsPane{
         box.setColor(Color.BLACK);
         mainScreen.add(box);
         contents.add(box);
-       
+        
+        
         
         timer = new Timer(16, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
