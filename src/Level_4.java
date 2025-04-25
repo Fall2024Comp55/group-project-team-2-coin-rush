@@ -168,7 +168,7 @@ public class Level_4  extends GraphicsProgram {
         
         playerHitbox = new hitBox();
      	playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
-    	    add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
+    	add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
         
         UI = new UI_Elements();
         UI.setProgram(this);
@@ -200,13 +200,14 @@ public class Level_4  extends GraphicsProgram {
  	    player.update(); // Updates the Player animation loop & movement
  	    coin.update(playerHitbox); // Updated to use the new player hitbox
  	    handlePlatformInteraction();
- 	    enemy.update(platform.getPlatforms().get(2), playerHitbox, player); // Updated
- 	    enemy1.update(platform.getPlatforms().get(3), playerHitbox, player); // Updated
- 	    enemy2.update(platform.getPlatforms().get(5), playerHitbox, player); // Updated
- 	    enemy3.update(platform.getPlatforms().get(7), playerHitbox, player); // Updated
+ 	    enemy.update(platform.getPlatforms().get(2), playerHitbox, player); 
+ 	    enemy1.update(platform.getPlatforms().get(3), playerHitbox, player); 
+ 	    enemy2.update(platform.getPlatforms().get(5), playerHitbox, player); 
+ 	    enemy3.update(platform.getPlatforms().get(7), playerHitbox, player); 
  	    platform.updatePlatforms();
  	    door.checkIfplayerCanExit(coin.getCoinsCollected());
- 	   playerHitbox.updateHitbox(player.getX(),player.getY() , 20, 3);
+ 	    //hitbox movement
+        playerHitbox.updateHitbox(player.getX(),player.getY() , 20, 3);
  	    UI.init(door, coin, player);
  	   
  	    pause(16.66); // 60 FPS

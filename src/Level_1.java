@@ -16,7 +16,7 @@ public class Level_1 extends GraphicsProgram {
     private Enemy enemy1;
     private testCoin coin;
     private Door door; 
-    
+    private hitBox playerHitbox;
     UI_Elements UI;
     private Level_1 level;
     
@@ -78,6 +78,9 @@ public class Level_1 extends GraphicsProgram {
         player.setProgram(this);
         player.spawn(0, 530);
         
+        playerHitbox = new hitBox();
+     	playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
+    	add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
         UI = new UI_Elements();
         UI.setProgram(this); 
         UI.createUI(coin,player);  
@@ -90,7 +93,7 @@ public class Level_1 extends GraphicsProgram {
 
         while (true) {
             player.update(); //updates the Player animation loop & movement
-            coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
+            coin.update(playerHitbox); //updates the collision to check if player is touching a coin
             platform.collision(player.getBounds());
             handlePlatformInteraction();
             
@@ -98,7 +101,8 @@ public class Level_1 extends GraphicsProgram {
             door.checkIfplayerCanExit(coin.getCoinsCollected());
 
             UI.init(door,coin,player);
-           
+          //hitbox movement
+            playerHitbox.updateHitbox(player.getX(),player.getY() , 20, 3);
             box.setLocation(+player.getX(), player.getY());
             pause(16.66); // 60 FPS
            
@@ -135,27 +139,39 @@ public class Level_1 extends GraphicsProgram {
       	}
 
       	public void handlePlatformInteraction() {
-      	    GRect touchedPlatform = platform.detectPlatformCollision(player.getBounds());
-      	    player.setGrounded(false);
-      	    if (touchedPlatform != null) {
-      	   if(player.getY()+player.getBounds().getHeight()<=  touchedPlatform.getY()+15) {
-      		   player.setGrounded(true);
-      		   System.out.println("on top");
-      		   player.setyVelocity(0);
-      		   player.setY(touchedPlatform.getY()-player.getBounds().getHeight());
-      	   }else if (player.getY() + player.getBounds().getHeight() > touchedPlatform.getY() &&
-      		         player.getY() < touchedPlatform.getY() + touchedPlatform.getHeight()) {
-      		   System.out.println("bottom"+player.getyVelocity());
-      		   player.setY(touchedPlatform.getY()+touchedPlatform.getHeight());
-      		   player.setyVelocity(0);
-      		   player.setGrounded(false);
-      		   player.setY(touchedPlatform.getY()+touchedPlatform.getBounds().getHeight()-5);
-      	   }else { 
-      		   player.setGrounded(false);
-      	   }
-     }
-      	}
+    	    // Detect collision with a platform
+    	    GRect touchedPlatform = platform.detectPlatformCollision(playerHitbox);
 
+    	    // Assume the player is not grounded by default
+    	    player.setGrounded(false);
+
+    	    if (touchedPlatform != null) {
+    	        double playerBottom = player.getY() + playerHitbox.getHeight();
+    	        double playerTop = player.getY();
+    	        double platformTop = touchedPlatform.getY();
+    	        double platformBottom = touchedPlatform.getY() + touchedPlatform.getHeight();
+
+    	        // Case 1: Player lands on the platform
+    	        if (playerBottom >= platformTop && playerBottom <= platformTop + 15 && player.getyVelocity() >= 0) {
+    	            player.setGrounded(true);
+    	            player.setyVelocity(0); // Stop downward motion
+    	            player.setY(platformTop - playerHitbox.getHeight()); // Place on top
+    	            System.out.println("on top");
+    	        }
+    	        // Case 2: Player hits the bottom of a platform
+    	        else if (playerTop <= platformBottom && playerTop >= platformBottom - 15 && player.getyVelocity() < 0) {
+    	            player.setyVelocity(0); // Reset upward velocity
+    	            System.out.println("bottom collision");
+    	        }
+    	        // Case 3: Catch the player when falling through platforms
+    	        else if (playerBottom > platformTop && playerBottom <= platformBottom && player.getyVelocity() > 0) {
+    	            player.setyVelocity(0); // Stop falling
+    	            player.setY(platformTop - playerHitbox.getHeight()); // Adjust position to the top
+    	            player.setGrounded(true); // Ground the player
+    	            System.out.println("caught mid-fall");
+    	        }
+    	    }
+    	}
       	private void clearGrid() {
       	    for (GLine line : gridLines) {
       	        remove(line);
