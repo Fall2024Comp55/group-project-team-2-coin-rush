@@ -47,7 +47,6 @@ public class Level_1 extends GraphicsProgram {
 
         while (true) {
         		updateLevel(); //updates the level
-                pause(16.66); // 60 FPS
         	}
         }
     
@@ -111,6 +110,8 @@ public class Level_1 extends GraphicsProgram {
     }
     
     private void updateLevel() {
+ 	    pause(16.66); // 60 FPS
+
     	if(!isGameOver) {
             player.update(); //updates the Player animation loop & movement
             coin.update(playerHitbox); //updates the collision to check if player is touching a coin

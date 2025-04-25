@@ -46,7 +46,6 @@ public class Level_4  extends GraphicsProgram {
 
  	 while (true) { 	   
  		 updateLevel();
- 	    pause(16.66); // 60 FPS
  	}   
 }
 	
@@ -123,18 +122,22 @@ public class Level_4  extends GraphicsProgram {
 	    }
 	    
 	    private void updateLevel() {
+	 	    pause(16.66); // 60 FPS
+
 	    	if(!isGameOver) {
 	     	    player.update(); // Updates the Player animation loop & movement
 	     	    coin.update(playerHitbox); // Updated to use the new player hitbox
 	     	    handlePlatformInteraction();
-	     	    enemy.update(platform.getPlatforms().get(2), playerHitbox, player); 
-	     	    enemy1.update(platform.getPlatforms().get(3), playerHitbox, player); 
-	     	    enemy2.update(platform.getPlatforms().get(5), playerHitbox, player); 
-	     	    enemy3.update(platform.getPlatforms().get(7), playerHitbox, player); 
 	     	    platform.updatePlatforms();
 	     	    door.checkIfplayerCanExit(coin.getCoinsCollected());
 	     	    //hitbox movement
-	            playerHitbox.updateHitbox(player.getX(),player.getY() , 20, 3);
+	            playerHitbox.updateHitbox(player.getX(),player.getY() , 20, 3);	     	    
+	            
+	            enemy.update(platform.getPlatforms().get(2), playerHitbox, player); 
+	     	    enemy1.update(platform.getPlatforms().get(3), playerHitbox, player); 
+	     	    enemy2.update(platform.getPlatforms().get(5), playerHitbox, player); 
+	     	    enemy3.update(platform.getPlatforms().get(7), playerHitbox, player); 
+	     	    
 	     	    UI.init(door, coin, player);
 	      
 	          //restart the level once hp reaches 0
