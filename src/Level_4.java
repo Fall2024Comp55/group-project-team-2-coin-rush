@@ -14,11 +14,14 @@ public class Level_4  extends GraphicsProgram {
     private Enemy enemy;
     private Enemy enemy1;
     private Enemy enemy2;
+    private Enemy enemy3;
     private testCoin coin;
     private Door door; 
     private GImage background; 
+    private hitBox playerHitbox;
     UI_Elements UI;
     private Level_4 level;
+    public boolean Grapple;
     
     private boolean gridVisible = true; //used for key presse
     private ArrayList<GLine> gridLines = new ArrayList<>(); //stores the grid lines
@@ -58,29 +61,42 @@ public class Level_4  extends GraphicsProgram {
 			// TODO Auto-generated method stub
 			
 		}
+    	
+    	
+    	public void handlePlatformInteraction() {
+    	    // Detect collision with a platform
+    	    GRect touchedPlatform = platform.detectPlatformCollision(playerHitbox);
 
-		public void handlePlatformInteraction() {
-    	    GRect touchedPlatform = platform.detectPlatformCollision(player.getBounds());
+    	    // Assume the player is not grounded by default
     	    player.setGrounded(false);
-    	    if (touchedPlatform != null) {
-    	   if(player.getY()+player.getBounds().getHeight()<=  touchedPlatform.getY()+15) {
-    		   player.setGrounded(true);
-    		   System.out.println("on top");
-    		   player.setyVelocity(0);
-    		   player.setY(touchedPlatform.getY()-player.getBounds().getHeight());
-    	   }else if (player.getY() + player.getBounds().getHeight() > touchedPlatform.getY() &&
-    		         player.getY() < touchedPlatform.getY() + touchedPlatform.getHeight()) {
-    		   System.out.println("bottom"+player.getyVelocity());
-    		   player.setY(touchedPlatform.getY()+touchedPlatform.getHeight());
-    		   player.setyVelocity(0);
-    		   player.setGrounded(false);
-    		   player.setY(touchedPlatform.getY()+touchedPlatform.getBounds().getHeight()-5);
-    	   }else { 
-    		   player.setGrounded(false);
-    	   }
-   }
-    	}
 
+    	    if (touchedPlatform != null) {
+    	        double playerBottom = player.getY() + playerHitbox.getHeight();
+    	        double playerTop = player.getY();
+    	        double platformTop = touchedPlatform.getY();
+    	        double platformBottom = touchedPlatform.getY() + touchedPlatform.getHeight();
+
+    	        // Case 1: Player lands on the platform
+    	        if (playerBottom >= platformTop && playerBottom <= platformTop + 15 && player.getyVelocity() >= 0) {
+    	            player.setGrounded(true);
+    	            player.setyVelocity(0); // Stop downward motion
+    	            player.setY(platformTop - playerHitbox.getHeight()); // Place on top
+    	            System.out.println("on top");
+    	        }
+    	        // Case 2: Player hits the bottom of a platform
+    	        else if (playerTop <= platformBottom && playerTop >= platformBottom - 15 && player.getyVelocity() < 0) {
+    	            player.setyVelocity(0); // Reset upward velocity
+    	            System.out.println("bottom collision");
+    	        }
+    	        // Case 3: Catch the player when falling through platforms
+    	        else if (playerBottom > platformTop && playerBottom <= platformBottom && player.getyVelocity() > 0) {
+    	            player.setyVelocity(0); // Stop falling
+    	            player.setY(platformTop - playerHitbox.getHeight()); // Adjust position to the top
+    	            player.setGrounded(true); // Ground the player
+    	            System.out.println("caught mid-fall");
+    	        }
+    	    }
+    	}
     	private void clearGrid() {
     	    for (GLine line : gridLines) {
     	        remove(line);
@@ -116,19 +132,20 @@ public class Level_4  extends GraphicsProgram {
         
         platform.addPlatform(40,  680, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);//spawn platform
         platform.addPlatform(40, 280, 80, 40, Platform.PlatformTypes.MOVING, 2, -120, true);
-        platform.addPlatform(100, 400, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(120, 400, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
         platform.addPlatform(200, 500, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
         platform.addPlatform(200, 660, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
         platform.addPlatform(400, 600, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
         platform.addPlatform(480, 600, 80, 40, Platform.PlatformTypes.MOVING, .5, 120, false);
         platform.addPlatform(840, 600, 80, 40, Platform.PlatformTypes.MOVING, .5, -120, false);
-        platform.addPlatform(1160, 680, 120, 40, Platform.PlatformTypes.MOVING, 0, 0, false);//door platform
+        
         platform.addPlatform(1040, 680, 120, 40, Platform.PlatformTypes.MOVING, 0, 0, false);
         platform.addPlatform(160, 160, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
         
         platform.addPlatform(320, 160, 80, 40, Platform.PlatformTypes.MOVING, 1, -80, false);
         platform.addPlatform(300,80, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
-        
+        platform.addPlatform(40, 360, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(1160, 680, 120, 40, Platform.PlatformTypes.MOVING, 0, 0, false);//door platform
         
         platform.setProgram(this);
         platform.addPlatformsToScreen();
@@ -149,6 +166,10 @@ public class Level_4  extends GraphicsProgram {
         player.setProgram(this);
         player.spawn(40,  640);
         
+        playerHitbox = new hitBox();
+     	playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
+    	    add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
+        
         UI = new UI_Elements();
         UI.setProgram(this);
         UI.createUI(coin,player); 
@@ -166,31 +187,31 @@ public class Level_4  extends GraphicsProgram {
         enemy2.setProgram(this);
         enemy2.spawnEnemy(platform.getPlatforms().get(5));
         
+        enemy3 = new Enemy();
+        enemy3.setProgram(this);
+        enemy3.spawnEnemy(platform.getPlatforms().get(7));
         
         
-        
- 	   GRect box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
- 	   box.setColor(Color.black);
- 	   add(box);
+ 	 
+ 	  
+ 	
 
-
-        while (true) {
-            player.update(); //updates the Player animation loop & movement
-            coin.update(player.getBounds()); //updates the collision to check if player is touching a coin
-            handlePlatformInteraction();
-            enemy.update(platform.getPlatforms().get(2), player.getBounds(), player);
-            enemy1.update(platform.getPlatforms().get(3), player.getBounds(), player);
-            enemy2.update(platform.getPlatforms().get(5), player.getBounds(), player);
-            platform.updatePlatforms();
-            //door.update(player, coin.getCoinsCollected());
-            door.checkIfplayerCanExit(coin.getCoinsCollected());
-
-            UI.init(door,coin,player);
-            box.setLocation(+player.getX(), player.getY());
-            pause(16.66); // 60 FPS
-           
-        }
-    }
+ 	 while (true) {
+ 	    player.update(); // Updates the Player animation loop & movement
+ 	    coin.update(playerHitbox); // Updated to use the new player hitbox
+ 	    handlePlatformInteraction();
+ 	    enemy.update(platform.getPlatforms().get(2), playerHitbox, player); // Updated
+ 	    enemy1.update(platform.getPlatforms().get(3), playerHitbox, player); // Updated
+ 	    enemy2.update(platform.getPlatforms().get(5), playerHitbox, player); // Updated
+ 	    enemy3.update(platform.getPlatforms().get(7), playerHitbox, player); // Updated
+ 	    platform.updatePlatforms();
+ 	    door.checkIfplayerCanExit(coin.getCoinsCollected());
+ 	   playerHitbox.updateHitbox(player.getX(),player.getY() , 20, 3);
+ 	    UI.init(door, coin, player);
+ 	   
+ 	    pause(16.66); // 60 FPS
+ 	}   
+}
     
     @Override
     public void keyPressed(KeyEvent e) {
@@ -205,12 +226,17 @@ public class Level_4  extends GraphicsProgram {
                 clearGrid();
             }
         }
-
+       if(e.getKeyCode() == KeyEvent.VK_W) {
+    	   Grapple= true;
+       }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         player.keyReleased(e);
+        if(e.getKeyCode() == KeyEvent.VK_W) {
+     	   Grapple= false;
+        } 
     }
 
     @Override

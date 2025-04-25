@@ -107,12 +107,12 @@ public void EnemyMovement(GRect platform) {
 }
 
 
-public boolean collisionCheck(GRectangle playerBounds, Player player) {
+public boolean collisionCheck(hitBox playerHitbox, Player player) {
 
 if(!isActive) return false; 
-               if (isCollisionFromAbove(playerBounds, enemy)) {
+               if (isCollisionFromAbove(playerHitbox, enemy)) {
                    removeEnemy(enemy);
-               } else if (isSideCollision(playerBounds, enemy)) {
+               } else if (isSideCollision(playerHitbox, enemy)) {
                    System.out.println("Enemy detected");
                    player.takeDamage();
                    player.respawn();
@@ -121,20 +121,20 @@ if(!isActive) return false;
            }
 
        //checks for player collision from above
-       private boolean isCollisionFromAbove(GRectangle playerBounds, Enemy enemy) {
+       private boolean isCollisionFromAbove(hitBox playerHitbox, Enemy enemy) {
     	   if(enemy == null || EnemyImage ==null ) {
       		 return false;
       	 }
            GRectangle enemyBounds = EnemyImage.getBounds();
            //returns true if player is touching the enemy's head
-           return playerBounds.getY() + playerBounds.getHeight() <= enemyBounds.getY() + 5 &&
-                  playerBounds.intersects(enemyBounds); 
+           return playerHitbox.getY() + playerHitbox.getHeight() <= enemyBounds.getY() + 5 &&
+                  playerHitbox.intersects(enemyBounds); 
        }
 ////
 ////       //checks for player collision from both right and left sides 
-       private boolean isSideCollision(GRectangle playerBounds, Enemy enemy2) {
+       private boolean isSideCollision(hitBox playerHitbox, Enemy enemy2) {
     	   //returns true if player is touching either side
-           return playerBounds.intersects(EnemyImage.getBounds());
+           return playerHitbox.intersects(EnemyImage.getBounds());
        }
       
        public void removeEnemy(Enemy enemy) {
@@ -155,9 +155,9 @@ if(!isActive) return false;
    }
 
 
-    public void update(GRect platform, GRectangle playerBounds, Player playerImage) {
+    public void update(GRect platform, hitBox playerHitbox, Player playerImage) {
     	EnemyMovement(platform);
-    	collisionCheck(playerBounds, playerImage);
+    	collisionCheck(playerHitbox, playerImage);
     	updateAnimation();
     }
  

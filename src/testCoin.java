@@ -104,12 +104,12 @@ public class testCoin {
         }
     }    
 
-    public void update(GRectangle playerBounds) {
-        checkCoinCollision(playerBounds);
+    public void update(hitBox playerHitbox) {
+        checkCoinCollision(playerHitbox);
     }
     
     // Checks for player and coin collision
-    private void checkCoinCollision(GRectangle playerBounds) {
+    private void checkCoinCollision(hitBox playerHitbox) {
     	/*
         // Check floating coins (iterate backward to avoid index errors)
         for (int i = coinsOnFloat.size() - 1; i >= 0; i--) {
@@ -125,7 +125,7 @@ public class testCoin {
         // Check platform coins (iterate backward to avoid index errors)
         for (int i = coinsOnPlatforms.size() - 1; i >= 0; i--) {
             GOval coin = coinsOnPlatforms.get(i);
-            if (playerBounds.intersects(coin.getBounds())) {
+            if (playerHitbox.intersects(coin.getBounds())) {
                 program.remove(coin); //remove from screen
                 coinsOnPlatforms.remove(i); //remove from list
                 coinsCollected++; //update count

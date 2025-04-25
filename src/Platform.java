@@ -125,9 +125,9 @@ public class Platform extends MainApplication {
             }
         }
     }
-    public GRect detectPlatformCollision(GRectangle gRectangle) {
+    public GRect detectPlatformCollision(hitBox playerHitbox) {
         for (GRect platform : Platforms) {
-            if (gRectangle.getBounds().intersects(platform.getBounds())) {
+            if (playerHitbox.getBounds().intersects(platform.getBounds())) {
                 return platform;
             }
         }

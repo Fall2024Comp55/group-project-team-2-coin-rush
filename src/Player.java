@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.graphics.GOval;
+import acm.graphics.GRect;
 import acm.graphics.GRectangle;
 import acm.program.GraphicsProgram;
 
@@ -191,7 +193,7 @@ public double getX() {
 	return x;
 }
 
-private void setX(double X) {
+public void setX(double X) {
 	this.x= X;
 }
 
@@ -341,10 +343,20 @@ private void movePlayer() {
         lastPlayerAction = playerAction;
     }
 }
+public GRectangle getHitbox() {
+    double x = player.getX() + 10; // Offset for more precise hitbox placement
+    double y = player.getY() + 10;
+    double width = player.getWidth();  // Adjusted width
+    double height = player.getHeight(); // Adjusted height
+
+    return new GRectangle(x, y, width, height);
+}
+
 
 //acts like a "hitbox" in that it just returns the area of the player image.
 public GRectangle getBounds() {
-    return player.getBounds();
+	
+	return player.getBounds();
 }
 
 //used for respawning
@@ -377,6 +389,7 @@ public void respawn() {
 
 
 public void update() {
+	
     movePlayer();
     checkPlayerFall();
 }
@@ -386,8 +399,8 @@ this.grounded = b;
 	
 }
 
-public void setyVelocity(int i) {
-	this.yVelocity= i;
+public void setyVelocity(double d) {
+	this.yVelocity= d;
 	
 }
 
@@ -404,5 +417,6 @@ public double getyVelocity() {
 public GImage getImage() {
 	return player;
 }
+
 
 }
