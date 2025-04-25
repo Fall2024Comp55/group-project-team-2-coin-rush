@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import acm.graphics.GImage;
@@ -30,6 +31,8 @@ public class Level_1 extends GraphicsProgram {
     private GLabel gameOverLabel;
     private GLabel restartLabel;
     private GRect restartBox;
+    
+    private GRect box; //temp player hitbox
 
     
     public void run() {
@@ -40,7 +43,16 @@ public class Level_1 extends GraphicsProgram {
     	}
     	
         addKeyListeners();
-        
+        setUpLevel(); //creates the level
+
+        while (true) {
+        		updateLevel(); //updates the level
+                pause(16.66); // 60 FPS
+        	}
+        }
+    
+    
+    private void setUpLevel() {
         //background
         background = new GImage("Media/Background1.png");
         add(background); // Add it before resizing, so getWidth() is correct
@@ -92,12 +104,14 @@ public class Level_1 extends GraphicsProgram {
         UI.createUI(coin,player);  
         
         
- 	   GRect box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
+ 	   box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
  	   box.setColor(Color.black);
  	   add(box);
 
-
-        while (true) {
+    }
+    
+    private void updateLevel() {
+    	if(!isGameOver) {
             player.update(); //updates the Player animation loop & movement
             coin.update(playerHitbox); //updates the collision to check if player is touching a coin
             platform.collision(player.getBounds());
@@ -109,12 +123,16 @@ public class Level_1 extends GraphicsProgram {
             UI.init(door,coin,player);
           //hitbox movement
             playerHitbox.updateHitbox(player.getX(),player.getY() , 20, 3);
-            box.setLocation(+player.getX(), player.getY());
-            pause(16.66); // 60 FPS
-           
-        }
+            //prevents crash
+            if (box != null) {
+                box.setLocation(player.getX(), player.getY());
+            }            
+          //restart the level once hp reaches 0
+            if (player.getHP() <= 0) {
+                GameOverScreen();
+            }
+    	}
     }
-    
 
   //draws the grid to screen
       	/*	Each grid cell is 40 pixels wide and 40 pixels tall (GRID_SIZE)
@@ -190,11 +208,54 @@ public class Level_1 extends GraphicsProgram {
       	    gridLabels.clear();
       	}
 
-      	private void restart(Player player) {
-      		if(player.getHP() == 0) {
-      			
-      		}
+      	private void GameOverScreen() {
+      	    if (isGameOver) {
+      	    	return; //prevent duplicate triggers
+      	    } else {
+      	    	 isGameOver = true;
+           	    
+           	    //creates the game over label
+           	  gameOverLabel = new GLabel("YOU DIED");
+               gameOverLabel.setFont("SansSerif-BOLD-48");
+               gameOverLabel.setColor(Color.BLACK);
+               double labelX = (getWidth() - gameOverLabel.getWidth()) / 2;
+               double labelY = getHeight() / 2 - 60; // a bit above center
+               gameOverLabel.setLocation(labelX, labelY);
+               add(gameOverLabel);
+
+           	    //both create the restart label and button box
+               int boxWidth = 160;
+               int boxHeight = 50;
+               int boxX = (int) ((getWidth() - boxWidth) / 2);
+               int boxY = (int) (getHeight() / 2);
+               restartBox = new GRect(boxX, boxY, boxWidth, boxHeight);
+               restartBox.setFilled(true);
+               restartBox.setFillColor(Color.LIGHT_GRAY);
+               restartBox.setColor(Color.BLACK);
+               add(restartBox);
+
+               restartLabel = new GLabel("'R' to restart");
+               restartLabel.setFont("SansSerif-BOLD-24");
+               double restartX = boxX + (boxWidth - restartLabel.getWidth()) / 2;
+               double restartY = boxY + (boxHeight + restartLabel.getAscent()) / 2;
+               restartLabel.setColor(Color.BLUE);
+               restartLabel.setLocation(restartX, restartY);
+               add(restartLabel);	
+      	    }
       	}
+
+
+      	private void restartLevel() {
+      	    removeAll(); //clear the screen
+      	    //resets the labels
+      	    isGameOver = false;
+      	    restartBox = null;
+      	    restartLabel = null;
+      	    gameOverLabel = null;
+      	    setUpLevel(); //re-setup everything
+      	}
+
+
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -208,6 +269,10 @@ public class Level_1 extends GraphicsProgram {
             } else {
                 clearGrid();
             }
+        }
+        
+        if (isGameOver && e.getKeyCode() == KeyEvent.VK_R) {
+            restartLevel();
         }
 
     }
