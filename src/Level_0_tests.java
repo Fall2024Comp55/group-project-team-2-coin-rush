@@ -45,6 +45,7 @@ public class Level_0_tests extends GraphicsProgram {
         //platform = new Platform(120, 40,240, 240, Platform.PlatformTypes.STATIC, 0, 0);      
         platform = new Platform();
         platform.setProgram(this);
+       
         
         platform.addPlatform(100, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);        
         platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
@@ -53,14 +54,13 @@ public class Level_0_tests extends GraphicsProgram {
         platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
         platform.addPlatform(1000, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
 
-
         platform.addPlatformsToScreen();
         
         
         //test coins
         coin = new testCoin(5);
         coin.setProgram(this);
-        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
         coin.init();
   
         door = new Door(3,1025, 415);

@@ -47,9 +47,9 @@ public class Level_3 extends GraphicsProgram {
         //platform = new Platform(120, 40,240, 240, Platform.PlatformTypes.STATIC, 0, 0);      
         platform = new Platform();
         platform.setProgram(this);
-        
+
         platform.addPlatform(0, 300, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false); //player spawn
-        
+
         platform.addPlatform(250, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
         platform.addPlatform(0, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
         platform.addPlatform(600, 310, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
@@ -61,15 +61,14 @@ public class Level_3 extends GraphicsProgram {
         platform.addPlatform(1000, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false); 
         platform.addPlatform(200, 200, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
         platform.addPlatform(400, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
-        
-        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false); //has door
 
+        platform.addPlatform(1100, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false); //has door
         platform.addPlatformsToScreen();
         
         //test coins
         coin = new testCoin(10);
         coin.setProgram(this);
-        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
         coin.init();
   
         door = new Door(8, 1125, 415);
