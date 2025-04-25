@@ -95,6 +95,7 @@ public class Level_0_tests extends GraphicsProgram {
  	   add(box);
 
 
+ 	   
         while (true) {
             player.update(); //updates the Player animation loop & movement
             coin.update(playerHitbox); // Updated to use the new player hitbox //updates the collision to check if player is touching a coin
