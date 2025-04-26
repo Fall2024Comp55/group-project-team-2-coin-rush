@@ -154,12 +154,11 @@ if(!isActive) return false;
 	   return count; 
    }
 
-
-    public void update(GRect platform, hitBox playerHitbox, Player playerImage) {
+	public void update(GRect platform, hitBox playerHitbox, Player player) {
     	EnemyMovement(platform);
-    	collisionCheck(playerHitbox, playerImage);
-    	updateAnimation();
-    }
+    	collisionCheck(playerHitbox, player);
+    	updateAnimation();		
+	}
  
     
    }
