@@ -1,4 +1,5 @@
-import java.awt.Color;
+import 
+java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
@@ -31,6 +32,7 @@ public class Level0Pane extends GraphicsPane{
     private GRect box;
     private Timer timer;
     private GCompound pauseButtonCompound;
+	private hitBox playerHitbox;
     
     
     public Level0Pane(MainApplication mainScreen) {
@@ -65,7 +67,7 @@ public class Level0Pane extends GraphicsPane{
         
         coin = new testCoin(5);
         coin.setProgram(mainScreen);
-        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
         coin.init();
         
         door = new Door(3, 1025, 415);
@@ -76,6 +78,10 @@ public class Level0Pane extends GraphicsPane{
         player.setProgram(mainScreen);
         player.spawn(100, 300);
         
+//        playerHitbox = new hitBox();
+//     	playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
+//    	add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
+//    	   
         UI = new UI_Elements();
         UI.setProgram(mainScreen);
         UI.createUI(coin, player);
@@ -100,11 +106,11 @@ public class Level0Pane extends GraphicsPane{
             public void actionPerformed(ActionEvent e) {
                 // Update game elements
                 player.update();
-                coin.update(player.getBounds());
+                coin.update(playerHitbox);
                 platform.collision(player.getBounds());
-                handlePlatformInteraction();
-                enemy.update(platform.getPlatforms().get(0), player.getBounds(), player);
-                enemy1.update(platform.getPlatforms().get(2), player.getBounds(), player);
+                //handlePlatformInteraction();
+                enemy.update(platform.getPlatforms().get(0), playerHitbox, player);
+                enemy1.update(platform.getPlatforms().get(2), playerHitbox, player);
                 door.checkIfplayerCanExit(coin.getCoinsCollected());
                 UI.init(door, coin, player);
                 // Move debug box
@@ -129,7 +135,6 @@ public class Level0Pane extends GraphicsPane{
     	mainScreen.clear();
     }
     
-    
     private void addPauseButton() {
     	GImage pauseButton = new GImage("CGB02-yellow_M_btn.png");
     	pauseButton.scale(0.3, 0.3);
@@ -151,15 +156,11 @@ public class Level0Pane extends GraphicsPane{
         mainScreen.add(pauseButtonCompound);
     }
     
-    public void startTimer() {
-    	timer.start();
-    }
-    
     public void mouseClicked(MouseEvent e) {
     	GObject clicked = mainScreen.getElementAtLocation(e.getX(), e.getY());
         if (clicked == pauseButtonCompound) {
             timer.stop();
-           mainScreen.switchToPauseScreen();
+            mainScreen.switchToPauseScreen();
         }
     }
     
@@ -207,9 +208,9 @@ public class Level0Pane extends GraphicsPane{
         for (GLabel lbl : gridLabels) mainScreen.remove(lbl);
         gridLabels.clear();
     }
-    
+//    
     private void handlePlatformInteraction() {
-        GRect touched = platform.detectPlatformCollision(player.getBounds());
+        GRect touched = platform.detectPlatformCollision(playerHitbox);
         player.setGrounded(false);
         if (touched != null) {
             if (player.getY() + player.getBounds().getHeight() <= touched.getY() + 15) {

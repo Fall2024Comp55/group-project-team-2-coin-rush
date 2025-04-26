@@ -29,10 +29,10 @@ public class Level_0_tests extends GraphicsProgram {
     public void run() {
         setSize(1280, 720); // Window size
         
-    	if (gridVisible) {
-    	    drawGrid(GRID_SIZE);
-    	}
-    	
+    if (gridVisible) {
+        drawGrid(GRID_SIZE);
+    }
+   
         addKeyListeners();
         
         //background
@@ -71,9 +71,10 @@ public class Level_0_tests extends GraphicsProgram {
         player = new Player(100,300);
         player.setProgram(this);
         player.spawn(100,  300);
+        
         playerHitbox = new hitBox();
-     	playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
-    	add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
+      playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
+    add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
         
         UI = new UI_Elements();
         UI.setProgram(this);
@@ -90,12 +91,12 @@ public class Level_0_tests extends GraphicsProgram {
         
 
         
- 	   GRect box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
- 	   box.setColor(Color.black);
- 	   add(box);
+     GRect box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
+     box.setColor(Color.black);
+     add(box);
 
 
- 	   
+     
         while (true) {
             player.update(); //updates the Player animation loop & movement
             coin.update(playerHitbox); // Updated to use the new player hitbox //updates the collision to check if player is touching a coin
@@ -119,79 +120,79 @@ public class Level_0_tests extends GraphicsProgram {
     
 
   //draws the grid to screen
-      	/*	Each grid cell is 40 pixels wide and 40 pixels tall (GRID_SIZE)
-      	 *	The grid divides the 1280×720 window into a 32×18 grid (Columm'x'Row)
-      	 */
-      	private void drawGrid(int cellSize) {
-      	    for (int x = 0; x <= 1280; x += cellSize) {
-      	        for (int y = 0; y <= 720; y += cellSize) {
-      	            //draws the grid lines
-      	            GLine vertical = new GLine(x, 0, x, 720);
-      	            GLine horizontal = new GLine(0, y, 1280, y);
-      	            vertical.setColor(Color.LIGHT_GRAY);
-      	            horizontal.setColor(Color.LIGHT_GRAY);
-      	            add(vertical);
-      	            add(horizontal);
-      	            gridLines.add(vertical);
-      	            gridLines.add(horizontal);
+      /* Each grid cell is 40 pixels wide and 40 pixels tall (GRID_SIZE)
+      * The grid divides the 1280×720 window into a 32×18 grid (Columm'x'Row)
+      */
+      private void drawGrid(int cellSize) {
+          for (int x = 0; x <= 1280; x += cellSize) {
+              for (int y = 0; y <= 720; y += cellSize) {
+                  //draws the grid lines
+                  GLine vertical = new GLine(x, 0, x, 720);
+                  GLine horizontal = new GLine(0, y, 1280, y);
+                  vertical.setColor(Color.LIGHT_GRAY);
+                  horizontal.setColor(Color.LIGHT_GRAY);
+                  add(vertical);
+                  add(horizontal);
+                  gridLines.add(vertical);
+                  gridLines.add(horizontal);
 
-      	            //adds the coordinate label in top-left of each cell
-      	            String coords = "(" + x + "," + y + ")";
-      	            GLabel label = new GLabel(coords, x + 2, y + 10); //offset a bit inside the cell
-      	            label.setFont("Courier-8");
-      	            label.setColor(Color.GRAY);
-      	            add(label);
-      	            gridLabels.add(label);
-      	        }
-      	    }
-      	}
+                  //adds the coordinate label in top-left of each cell
+                  String coords = "(" + x + "," + y + ")";
+                  GLabel label = new GLabel(coords, x + 2, y + 10); //offset a bit inside the cell
+                  label.setFont("Courier-8");
+                  label.setColor(Color.GRAY);
+                  add(label);
+                  gridLabels.add(label);
+              }
+          }
+      }
 
-      	public void handlePlatformInteraction() {
-    	    // Detect collision with a platform
-    	    GRect touchedPlatform = platform.detectPlatformCollision(playerHitbox);
+      public void handlePlatformInteraction() {
+        // Detect collision with a platform
+        GRect touchedPlatform = platform.detectPlatformCollision(playerHitbox);
 
-    	    // Assume the player is not grounded by default
-    	    player.setGrounded(false);
+        // Assume the player is not grounded by default
+        player.setGrounded(false);
 
-    	    if (touchedPlatform != null) {
-    	        double playerBottom = player.getY() + playerHitbox.getHeight();
-    	        double playerTop = player.getY();
-    	        double platformTop = touchedPlatform.getY();
-    	        double platformBottom = touchedPlatform.getY() + touchedPlatform.getHeight();
+        if (touchedPlatform != null) {
+            double playerBottom = player.getY() + playerHitbox.getHeight();
+            double playerTop = player.getY();
+            double platformTop = touchedPlatform.getY();
+            double platformBottom = touchedPlatform.getY() + touchedPlatform.getHeight();
 
-    	        // Case 1: Player lands on the platform
-    	        if (playerBottom >= platformTop && playerBottom <= platformTop + 15 && player.getyVelocity() >= 0) {
-    	            player.setGrounded(true);
-    	            player.setyVelocity(0); // Stop downward motion
-    	            player.setY(platformTop - playerHitbox.getHeight()); // Place on top
-    	            System.out.println("on top");
-    	        }
-    	        // Case 2: Player hits the bottom of a platform
-    	        else if (playerTop <= platformBottom && playerTop >= platformBottom - 15 && player.getyVelocity() < 0) {
-    	            player.setyVelocity(0); // Reset upward velocity
-    	            System.out.println("bottom collision");
-    	        }
-    	        // Case 3: Catch the player when falling through platforms
-    	        else if (playerBottom > platformTop && playerBottom <= platformBottom && player.getyVelocity() > 0) {
-    	            player.setyVelocity(0); // Stop falling
-    	            player.setY(platformTop - playerHitbox.getHeight()); // Adjust position to the top
-    	            player.setGrounded(true); // Ground the player
-    	            System.out.println("caught mid-fall");
-    	        }
-    	    }
-    	}
+            // Case 1: Player lands on the platform
+            if (playerBottom >= platformTop && playerBottom <= platformTop + 15 && player.getyVelocity() >= 0) {
+                player.setGrounded(true);
+                player.setyVelocity(0); // Stop downward motion
+                player.setY(platformTop - playerHitbox.getHeight()); // Place on top
+                System.out.println("on top");
+            }
+            // Case 2: Player hits the bottom of a platform
+            else if (playerTop <= platformBottom && playerTop >= platformBottom - 15 && player.getyVelocity() < 0) {
+                player.setyVelocity(0); // Reset upward velocity
+                System.out.println("bottom collision");
+            }
+            // Case 3: Catch the player when falling through platforms
+            else if (playerBottom > platformTop && playerBottom <= platformBottom && player.getyVelocity() > 0) {
+                player.setyVelocity(0); // Stop falling
+                player.setY(platformTop - playerHitbox.getHeight()); // Adjust position to the top
+                player.setGrounded(true); // Ground the player
+                System.out.println("caught mid-fall");
+            }
+        }
+    }
 
-      	private void clearGrid() {
-      	    for (GLine line : gridLines) {
-      	        remove(line);
-      	    }
-      	    gridLines.clear();
+      private void clearGrid() {
+          for (GLine line : gridLines) {
+              remove(line);
+          }
+          gridLines.clear();
 
-      	    for (GLabel label : gridLabels) {
-      	        remove(label);
-      	    }
-      	    gridLabels.clear();
-      	}
+          for (GLabel label : gridLabels) {
+              remove(label);
+          }
+          gridLabels.clear();
+      }
 
 
     @Override

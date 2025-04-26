@@ -100,6 +100,7 @@ public class Level_3 extends GraphicsProgram {
         playerHitbox = new hitBox();
      	playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
     	add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
+    	
         //enemy(s)
         enemy1 = new Enemy();
         enemy1.setProgram(this);

@@ -98,8 +98,8 @@ public void setProgram(GraphicsProgram program) {
 	   button = new GImage("Media/CGB02-yellow_L_btn.png"); 
 		button.scale(0.2);
 
-		 label1 = new GLabel("Restart");
-		label1.setFont("SansSerif-bold-18");
+		 label1 = new GLabel("R for Restart");
+		label1.setFont("SansSerif-bold-15");
 		label1.setColor(Color.black); 
 		
         // used GCompound to group picture and image together. 
