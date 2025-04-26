@@ -65,7 +65,7 @@ public class Level0Pane extends GraphicsPane{
         
         coin = new testCoin(5);
         coin.setProgram(mainScreen);
-        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
+        coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms());
         coin.init();
         
         door = new Door(3, 1025, 415);
@@ -129,6 +129,7 @@ public class Level0Pane extends GraphicsPane{
     	mainScreen.clear();
     }
     
+    
     private void addPauseButton() {
     	GImage pauseButton = new GImage("CGB02-yellow_M_btn.png");
     	pauseButton.scale(0.3, 0.3);
@@ -150,11 +151,15 @@ public class Level0Pane extends GraphicsPane{
         mainScreen.add(pauseButtonCompound);
     }
     
+    public void startTimer() {
+    	timer.start();
+    }
+    
     public void mouseClicked(MouseEvent e) {
     	GObject clicked = mainScreen.getElementAtLocation(e.getX(), e.getY());
         if (clicked == pauseButtonCompound) {
             timer.stop();
-            mainScreen.switchToPauseScreen();
+           mainScreen.switchToPauseScreen();
         }
     }
     
