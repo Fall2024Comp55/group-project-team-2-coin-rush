@@ -121,6 +121,7 @@ public class WelcomePane extends GraphicsPane{
 		if (mainScreen.getElementAtLocation(e.getX(), e.getY()) == contents.get(1)) {
 			mainScreen.switchToLevel0Screen();
 		}
+		
 		else if (mainScreen.getElementAtLocation(e.getX(), e.getY()) == contents.get(3))  {
 			System.exit(0);
 		}

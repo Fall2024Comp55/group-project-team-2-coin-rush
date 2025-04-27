@@ -32,6 +32,7 @@ public class Level_3 extends GraphicsProgram {
     private GLabel gameOverLabel;
     private GLabel restartLabel;
     private GRect restartBox;
+    private Menu deathMenu; 
     
     private GRect box; //temp player hitbox
     
@@ -123,6 +124,8 @@ public class Level_3 extends GraphicsProgram {
         UI.setProgram(this);
         UI.createUI(coin,player);  
         
+        deathMenu = new Menu();
+   	 deathMenu.setProgram(this);
     }
     
     private void updateLevel() {
@@ -234,33 +237,7 @@ public class Level_3 extends GraphicsProgram {
       	    } else {
       	    	 isGameOver = true;
            	    
-           	    //creates the game over label
-           	  gameOverLabel = new GLabel("YOU DIED");
-               gameOverLabel.setFont("SansSerif-BOLD-48");
-               gameOverLabel.setColor(Color.BLACK);
-               double labelX = (getWidth() - gameOverLabel.getWidth()) / 2;
-               double labelY = getHeight() / 2 - 60; // a bit above center
-               gameOverLabel.setLocation(labelX, labelY);
-               add(gameOverLabel);
-
-           	    //both create the restart label and button box
-               int boxWidth = 160;
-               int boxHeight = 50;
-               int boxX = (int) ((getWidth() - boxWidth) / 2);
-               int boxY = (int) (getHeight() / 2);
-               restartBox = new GRect(boxX, boxY, boxWidth, boxHeight);
-               restartBox.setFilled(true);
-               restartBox.setFillColor(Color.LIGHT_GRAY);
-               restartBox.setColor(Color.BLACK);
-               add(restartBox);
-
-               restartLabel = new GLabel("'R' to restart");
-               restartLabel.setFont("SansSerif-BOLD-24");
-               double restartX = boxX + (boxWidth - restartLabel.getWidth()) / 2;
-               double restartY = boxY + (boxHeight + restartLabel.getAscent()) / 2;
-               restartLabel.setColor(Color.BLUE);
-               restartLabel.setLocation(restartX, restartY);
-               add(restartLabel);	
+      	    	 deathMenu.showContents();
       	    }
       	}
 
@@ -294,7 +271,9 @@ public class Level_3 extends GraphicsProgram {
         if (isGameOver && e.getKeyCode() == KeyEvent.VK_R) {
             restartLevel();
         }
-
+        if(isGameOver && e.getKeyCode() == KeyEvent.VK_E) {
+            System.exit(0);
+            }
     }
 
     @Override

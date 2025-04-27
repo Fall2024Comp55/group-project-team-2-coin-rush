@@ -44,8 +44,8 @@ public class Level_1 extends GraphicsProgram {
     	}
     	
         addKeyListeners();
-        setUpLevel(); //creates the level
-
+        //setUpLevel(); //creates the level
+        showContent();
         while (true) {
         		updateLevel(); //updates the level
                 pause(16.66); // 60 FPS
@@ -53,7 +53,7 @@ public class Level_1 extends GraphicsProgram {
         }
     
     
-    private void setUpLevel() {
+    public void showContent() {
         //background
         background = new GImage("Media/Background1.png");
         add(background); // Add it before resizing, so getWidth() is correct
@@ -257,7 +257,8 @@ public class Level_1 extends GraphicsProgram {
       	    restartBox = null;
       	    restartLabel = null;
       	    gameOverLabel = null;
-      	    setUpLevel(); //re-setup everything
+      	    //setUpLevel(); //re-setup everything
+      	  showContent();
       	}
 
 
