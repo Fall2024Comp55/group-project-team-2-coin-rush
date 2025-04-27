@@ -279,6 +279,10 @@ public class Level_1 extends GraphicsProgram {
         if (isGameOver && e.getKeyCode() == KeyEvent.VK_R) {
             restartLevel();
         }
+        
+        if(isGameOver && e.getKeyCode() == KeyEvent.VK_E) {
+        System.exit(0);
+        }
 
     }
 

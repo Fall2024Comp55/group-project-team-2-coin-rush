@@ -71,18 +71,6 @@ public void setProgram(GraphicsProgram program) {
 	    // Finally, add the compound to the program's canvas
 	    program.add(deathMenuCompound);
 	}
-
-//	//Creates Transparent death Menu OPTIONAL
-//	public void createDeathMenu() {
-//		GRect deathMenue = new GRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-//		deathMenue.setFilled(true);
-//
-//       //it is transparent in color
-//		deathMenue.setColor(new Color(0,0,0,80));
-//		add(deathMenue); 
-//		deathLabel();
-//	}
-	
 	
 	// label
     public void deathLabel() {  	
@@ -120,8 +108,8 @@ public void setProgram(GraphicsProgram program) {
 		 button2 = new GImage("Media/CGB02-yellow_L_btn.png"); 
 		button2.scale(0.2);
 
-		 button2label = new GLabel("Exit");
-		 button2label.setFont("SansSerif-bold-18");
+		 button2label = new GLabel("E for Exit");
+		 button2label.setFont("SansSerif-bold-15");
 		 button2label.setColor(Color.black); 
 		
 		button2Compound = new GCompound(); 
