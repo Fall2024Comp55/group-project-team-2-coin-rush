@@ -22,14 +22,24 @@ public void setProgram(GraphicsProgram program) {
 	private GLabel label;
 	private GImage button;
 	private GLabel label1;
-	private GImage button2;
-	private GLabel button2label ;
-	private boolean deathMenu = false; 
+    private GImage button2;
+	private GLabel button2label ; 
 	
 	    private GImage menuImage;
 	    private GCompound button1Compound;
-	    private GCompound button2Compound;
+	   private GCompound button2Compound;
 	    private GCompound deathMenuCompound;
+
+	    private GLabel winLabel;
+		private GImage nextLevelButton;
+	    private GImage winImage;
+	    private GLabel levelLabel; 
+	    
+	    private GCompound winMenuCompound;
+	    private GCompound winButtonCompound;
+	    
+		private boolean deathMenu;
+
 
 
     
@@ -40,6 +50,12 @@ public void setProgram(GraphicsProgram program) {
 		deathMenu = true; 
 		
 	}
+	
+public void showWinMenu() {	
+	createWinMenu();
+		
+	}
+
 	private void createDeathMenu() {
 	    // Create background image for death menu
 	    menuImage = new GImage("Media/death menu.png");
@@ -72,6 +88,35 @@ public void setProgram(GraphicsProgram program) {
 	    program.add(deathMenuCompound);
 	}
 	
+	private void createWinMenu() {
+	    // Create background image for death menu
+		winImage = new GImage("Media/death menu.png");
+		winImage.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	    
+
+	    // Create a GCompound to hold everything in the menu
+		winMenuCompound = new GCompound();
+
+	    // Add background image to the compound
+		winMenuCompound.add(winImage, 0, 0); 
+
+	    // Create and add the label (ensure this is initialized)
+		winLabel = new GLabel("You Won");
+		winLabel.setFont("SansSerif-bold-30");
+		winLabel.setColor(Color.black);
+		winMenuCompound.add(winLabel, WINDOW_WIDTH/2 - winLabel.getWidth()/2, 150); // Position of label
+
+	    // Create and add the restart button (ensure this is initialized)
+	    createWinButton();  // This will initialize button1Compound properly
+	    winMenuCompound.add(winButtonCompound, WINDOW_WIDTH/2 - winButtonCompound.getWidth()/2, 200); // Position of button 1
+
+	    
+	    double x = (program.getWidth() - winImage.getWidth()) / 2;
+	    double y = (program.getHeight() - winImage.getHeight()) / 2;
+	    winMenuCompound.setLocation(x,y);
+	    // Finally, add the compound to the program's canvas
+	    program.add(winMenuCompound);
+	}
 	// label
     public void deathLabel() {  	
     	 label = new GLabel("You Died"); 
@@ -125,7 +170,25 @@ public void setProgram(GraphicsProgram program) {
 		
 	}
 	
+	public void createWinButton() {
+		nextLevelButton = new GImage("Media/CGB02-yellow_L_btn.png"); 
+		 nextLevelButton.scale(0.2);
 
+		 levelLabel = new GLabel("N for Level 1");
+		 levelLabel.setFont("SansSerif-bold-15");
+		 levelLabel.setColor(Color.black); 
+		
+		 winButtonCompound = new GCompound(); 
+		 winButtonCompound.add(nextLevelButton,0,0); 
+	    
+		 
+		double x = (nextLevelButton.getWidth() - levelLabel.getWidth())/2;
+		double y =(nextLevelButton.getHeight() - 9);
+	
+		
+		//contents.add(button2Compound);
+		winButtonCompound.add(levelLabel,x, y);
+	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
