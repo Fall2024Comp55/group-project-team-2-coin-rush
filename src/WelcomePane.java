@@ -28,9 +28,9 @@ public class WelcomePane extends GraphicsPane{
 	}
 	
 	private void addPicture(){
-		GImage startImage = new GImage("start.png", 200, 100);
-		startImage.scale(0.5, 0.5);
-		startImage.setLocation((mainScreen.getWidth() - startImage.getWidth())/ 2, 70);
+		GImage startImage = new GImage("Media/welcomepane.jpg", 200, 100);
+		startImage.setSize(mainScreen.getWidth(),mainScreen.getHeight());
+		startImage.setLocation((mainScreen.getWidth() - startImage.getWidth())/ 2, 0);
 		
 		contents.add(startImage);
 		mainScreen.add(startImage);

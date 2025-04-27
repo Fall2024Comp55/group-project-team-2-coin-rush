@@ -78,10 +78,10 @@ public class Level0Pane extends GraphicsPane{
         player.setProgram(mainScreen);
         player.spawn(100, 300);
         
-//        playerHitbox = new hitBox();
-//     	playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
-//    	add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
-//    	   
+        playerHitbox = new hitBox();
+     	playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
+    	//add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
+    	   
         UI = new UI_Elements();
         UI.setProgram(mainScreen);
         UI.createUI(coin, player);
@@ -155,6 +155,10 @@ public class Level0Pane extends GraphicsPane{
         contents.add(pauseButtonCompound);
         mainScreen.add(pauseButtonCompound);
     }
+    
+    public void startTimer() {
+     	timer.start();
+     }
     
     public void mouseClicked(MouseEvent e) {
     	GObject clicked = mainScreen.getElementAtLocation(e.getX(), e.getY());
