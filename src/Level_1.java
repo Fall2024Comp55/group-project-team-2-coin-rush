@@ -9,7 +9,7 @@ import acm.graphics.GLine;
 import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
-public class Level_1 extends GraphicsProgram {
+public class Level_1 extends GraphicsPane {
 
     private Player player;
     private Platform platform;
@@ -19,8 +19,8 @@ public class Level_1 extends GraphicsProgram {
     private Door door; 
     private hitBox playerHitbox;
     UI_Elements UI;
-    private Level_1 level;
     private Menu deathMenu; 
+    private LevelManager program;
     
     private boolean gridVisible = true; //used for key presse
     private ArrayList<GLine> gridLines = new ArrayList<>(); //stores the grid lines
@@ -35,38 +35,31 @@ public class Level_1 extends GraphicsProgram {
     
     private GRect box; //temp player hitbox
 
+    public Level_1(LevelManager program) {
+        this.program = program;
+    }
     
-    public void run() {
-        setSize(1280, 720); // Window size
-        
+    
+    public void setUpLevel() {
+        program.setSize(1280, 720);
     	if (gridVisible) {
     	    drawGrid(GRID_SIZE);
     	}
     	
-        addKeyListeners();
-        //setUpLevel(); //creates the level
-        showContent();
-        while (true) {
-        		updateLevel(); //updates the level
-                pause(16.66); // 60 FPS
-        	}
-        }
-    
-    
-    public void showContent() {
-        //background
-        background = new GImage("Media/Background1.png");
-        add(background); // Add it before resizing, so getWidth() is correct
-        background.setSize(getWidth(), getHeight()); // Resizes it to fill the window
-        background.sendToBack(); // Ensures it's behind all other elements
+    	//Background
+    	GImage background = new GImage("Media/Background1.png");
+        program.add(background); //Add it before resizing, so getWidth() is correct
+        background.setSize(program.getWidth(), program.getHeight()); //Resizes it to fill the window
+        background.sendToBack(); //Ensures it's behind all other elements
+
         
+        //Platforms
+        platform = new Platform();
+        platform.setProgram(program);
         //platform = new Platform(120, 40,40, 120, Platform.PlatformTypes.STATIC, 0, 0);
         //platform = new Platform(120, 40,240, 240, Platform.PlatformTypes.STATIC, 0, 0);      
-        platform = new Platform();
-        platform.setProgram(this);
-        
-
         platform.addPlatform(0, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false); //player spawn
+        
         platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
         platform.addPlatform(400, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
         platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0,false);
@@ -81,47 +74,51 @@ public class Level_1 extends GraphicsProgram {
 
         platform.addPlatformsToScreen();
         
-        //test coins
+        
+        //Coins
         coin = new testCoin(7);
-        coin.setProgram(this);
+        coin.setProgram(program);
         coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), false);
-        //coin.spawnCoinManually(500, 500);
         coin.init();
-  
+        //coin.spawnCoinManually(500, 500);
+
+        
+        //Door
         door = new Door(5, 1025, 115);
-        door.setProgram(this);
-        door.init();
+        door.setProgram(program);
+        program.add(door.getDoorImage());
         
         //player   
         player = new Player(0, 530);
-        player.setProgram(this);
+        player.setProgram(program);
         player.spawn(0, 530);
-        
-        playerHitbox = new hitBox();
-     	playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
-    	add(playerHitbox.getHitbox()); // Add hitbox to canvas for debugging purposes
-        UI = new UI_Elements();
-        UI.setProgram(this); 
-        UI.createUI(coin,player);  
-        
-        
- 	   box = new GRect(1,1,player.getBounds().getWidth(),player.getBounds().getHeight());
- 	   box.setColor(Color.black);
- 	   add(box);
 
+        //playerHitbox
+        playerHitbox = new hitBox();
+        playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
+        program.add(playerHitbox.getHitbox());
+        
+        
+        //UI
+        UI = new UI_Elements();
+        UI.setProgram(program);
+        UI.createUI(coin, player); 
+        
+
+        //death menu
  	  deathMenu = new Menu();
- 	 deathMenu.setProgram(this);
+ 	  deathMenu.setProgram(program);
     }
      
-    private void updateLevel() {
+    public void updateLevel() {
     	if(!isGameOver) {
             player.update(); //updates the Player animation loop & movement
             coin.update(playerHitbox); //updates the collision to check if player is touching a coin
             platform.collision(player.getBounds());
             handlePlatformInteraction();
             
-            //door.update(player, coin.getCoinsCollected());
-            door.checkIfplayerCanExit(coin.getCoinsCollected());
+            door.update(player, coin.getCoinsCollected());
+
 
             UI.init(door,coin,player);
           //hitbox movement
@@ -149,8 +146,8 @@ public class Level_1 extends GraphicsProgram {
       	            GLine horizontal = new GLine(0, y, 1280, y);
       	            vertical.setColor(Color.LIGHT_GRAY);
       	            horizontal.setColor(Color.LIGHT_GRAY);
-      	            add(vertical);
-      	            add(horizontal);
+      	            program.add(vertical);
+      	            program.add(horizontal);
       	            gridLines.add(vertical);
       	            gridLines.add(horizontal);
 
@@ -159,7 +156,7 @@ public class Level_1 extends GraphicsProgram {
       	            GLabel label = new GLabel(coords, x + 2, y + 10); //offset a bit inside the cell
       	            label.setFont("Courier-8");
       	            label.setColor(Color.GRAY);
-      	            add(label);
+      	            program.add(label);
       	            gridLabels.add(label);
       	        }
       	    }
@@ -201,12 +198,12 @@ public class Level_1 extends GraphicsProgram {
     	}
       	private void clearGrid() {
       	    for (GLine line : gridLines) {
-      	        remove(line);
+      	        program.remove(line);
       	    }
       	    gridLines.clear();
 
       	    for (GLabel label : gridLabels) {
-      	        remove(label);
+      	        program.remove(label);
       	    }
       	    gridLabels.clear();
       	}
@@ -216,50 +213,44 @@ public class Level_1 extends GraphicsProgram {
       	    	return; //prevent duplicate triggers
       	    } else {
       	    	 isGameOver = true;
-           	    
-           	    //creates the game over label
-//           	  gameOverLabel = new GLabel("YOU DIED");
-//               gameOverLabel.setFont("SansSerif-BOLD-48");
-//               gameOverLabel.setColor(Color.BLACK);
-//               double labelX = (getWidth() - gameOverLabel.getWidth()) / 2;
-//               double labelY = getHeight() / 2 - 60; // a bit above center
-//               gameOverLabel.setLocation(labelX, labelY);
-//               add(gameOverLabel);
-            
+      	    	 
       	    	 deathMenu.showContents();
+
+           	    //creates the game over label
+      	    	 /*
+      	    	gameOverLabel = new GLabel("YOU DIED");
+      	        gameOverLabel.setFont("SansSerif-BOLD-48");
+      	        gameOverLabel.setColor(Color.BLACK);
+      	        gameOverLabel.setLocation((program.getWidth() - gameOverLabel.getWidth()) / 2, program.getHeight() / 2 - 60);
+      	        program.add(gameOverLabel);
+      	    	 
       	    	 
            	    //both create the restart label and button box
-//               int boxWidth = 160;
-//               int boxHeight = 50;
-//               int boxX = (int) ((getWidth() - boxWidth) / 2);
-//               int boxY = (int) (getHeight() / 2);
-//               restartBox = new GRect(boxX, boxY, boxWidth, boxHeight);
-//               restartBox.setFilled(true);
-//               restartBox.setFillColor(Color.LIGHT_GRAY);
-//               restartBox.setColor(Color.BLACK);
-//               add(restartBox);
-//
-//               restartLabel = new GLabel("'R' to restart");
-//               restartLabel.setFont("SansSerif-BOLD-24");
-//               double restartX = boxX + (boxWidth - restartLabel.getWidth()) / 2;
-//               double restartY = boxY + (boxHeight + restartLabel.getAscent()) / 2;
-//               restartLabel.setColor(Color.BLUE);
-//               restartLabel.setLocation(restartX, restartY);
-//               add(restartLabel);	
+      	    	 restartBox = new GRect((program.getWidth() - 160) / 2, program.getHeight() / 2, 160, 50);
+      	        restartBox.setFilled(true);
+      	        restartBox.setFillColor(Color.LIGHT_GRAY);
+      	        program.add(restartBox);
+
+      	        restartLabel = new GLabel("RESTART");
+      	        restartLabel.setFont("SansSerif-BOLD-24");
+      	        restartLabel.setColor(Color.BLUE);
+      	        restartLabel.setLocation(restartBox.getX() + (restartBox.getWidth() - restartLabel.getWidth()) / 2,
+      	                                 restartBox.getY() + (restartBox.getHeight() + restartLabel.getAscent()) / 2);
+      	        program.add(restartLabel);
+      	        
+      	        */
       	    }
       	}
 
 
-      	private void restartLevel() {
-      	    removeAll(); //clear the screen
-      	    //resets the labels
-      	    isGameOver = false;
-      	    restartBox = null;
-      	    restartLabel = null;
-      	    gameOverLabel = null;
-      	    //setUpLevel(); //re-setup everything
-      	  showContent();
-      	}
+        public void restartLevel() {
+            program.removeAll();
+            isGameOver = false;
+            restartBox = null;
+            restartLabel = null;
+            gameOverLabel = null;
+            setUpLevel();
+        }
 
 
 
@@ -297,8 +288,4 @@ public class Level_1 extends GraphicsProgram {
         player.keyTyped(e);
     }
     
-
-    public static void main(String[] args) {
-        new Level_1().start();
-    }
 }

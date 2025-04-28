@@ -48,11 +48,15 @@ public class MainApplication extends GraphicsProgram{
 		//TheDefaultPane
 		switchToScreen(welcomePane);
 	}
-	
+	/*
 	public static void main(String[] args) {
 		new MainApplication().start();
 
 	}
+	*/
+    public static void main(String[] args) {
+        new LevelManager().start();
+    }
 	
 	public void switchToDescriptionScreen() {
 		switchToScreen(descriptionPane);

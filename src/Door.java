@@ -13,12 +13,14 @@ public class Door extends GraphicsProgram {
 	 // GImage representing the door
 	 private GImage doorImage;
 	 
+	 private LevelManager manager; //used to check for next level
+
+	 
 	 public static final int WINDOW_WIDTH = 600;
 	 public static final int WINDOW_HEIGHT = 600;
 	 
 	 private double doorX;
 	 private double doorY;
-	 private GraphicsProgram program;
 	 
 	 // Image file paths
 	 private String closedImage = "Media/Close.jpg";
@@ -31,25 +33,14 @@ public class Door extends GraphicsProgram {
 	  this.doorY = doorY;
 	  this.status = false;
 	  // Initialize the door image with the closed door image
-	  doorImage = new GImage(closedImage, doorX, doorY);
-	  
+      doorImage = new GImage(closedImage, doorX, doorY);
+      doorImage.scale(0.05);	  
 	 }
 	 
 	// Sets the GraphicsProgram context
-	    public void setProgram(GraphicsProgram program) {
-	        this.program = program;
+	    public void setProgram(LevelManager manager) {
+	        this.manager = manager;
 	    }
-	 
-	 public void init() {
-		 // Initialize the GraphicsProgram window
-//		 setSize(WINDOW_WIDTH, WINDOW_HEIGHT);   
-		 program.requestFocus();
-		 // changed the size of the door image
-		 doorImage.scale(0.05);
-		 
-		 // added the door image
-		program.add(doorImage);
-	 } 
 	 
 	 public void run() {
 		 
@@ -109,8 +100,8 @@ public class Door extends GraphicsProgram {
 	 
 	 //will complete once level handler is created 
 	 public void doorCollision(Player player) {
-		 if(player.getBounds().intersects(doorImage.getBounds())) {
-			 
+		 if(isOpen() && player.getBounds().intersects(doorImage.getBounds())) {
+		        manager.nextLevel();
 		 }
 	 }
 	 
@@ -122,10 +113,14 @@ public class Door extends GraphicsProgram {
 		 return openImage; 
 	 }
 	 
+	    public GImage getDoorImage() {
+	        return doorImage;
+	    }
+	 
 	 public void update(Player player, int coinsCollected) {
-		 doorCollision(player);
-		 checkIfplayerCanExit(coinsCollected);
-	 }
+		    checkIfplayerCanExit(coinsCollected);
+		    doorCollision(player);
+		}
 	 // create a door that requires 3 coins to open the door and positions it at (550,  500)
 //	 public static void main(String[] args) {
 //		 new Door(3, 550, 500).start();
