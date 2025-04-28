@@ -28,7 +28,7 @@ public class ScoreboardPane extends GraphicsPane {
     public void showContent() {
         overlay = new GRect(0, 0, MainApplication.WINDOW_WIDTH, MainApplication.WINDOW_HEIGHT);
         overlay.setFilled(true);
-        overlay.setFillColor(new Color(0, 0, 0, 50));
+        overlay.setFillColor(new Color(0, 0, 0, 150));
         overlay.setColor(new Color(0, 0, 0, 0));
         program.add(overlay);
         contents.add(overlay);
