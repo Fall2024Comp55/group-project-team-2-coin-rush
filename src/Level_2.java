@@ -47,7 +47,7 @@ public class Level_2 extends GraphicsPane {
     	
         //Background
         GImage background = new GImage("Media/Background3.jpg");
-        program.add(background); // Add it before resizing, so getWidth() is correct
+        program.add(background);
         background.setSize(program.getWidth(), program.getHeight()); //Resizes it to fill the window
         background.sendToBack(); //Ensures it's behind all other elements
         
@@ -182,19 +182,19 @@ public class Level_2 extends GraphicsPane {
     	            player.setGrounded(true);
     	            player.setyVelocity(0); // Stop downward motion
     	            player.setY(platformTop - playerHitbox.getHeight()); // Place on top
-    	            System.out.println("on top");
+    	            //System.out.println("on top");
     	        }
     	        // Case 2: Player hits the bottom of a platform
     	        else if (playerTop <= platformBottom && playerTop >= platformBottom - 15 && player.getyVelocity() < 0) {
     	            player.setyVelocity(0); // Reset upward velocity
-    	            System.out.println("bottom collision");
+    	            //System.out.println("bottom collision");
     	        }
     	        // Case 3: Catch the player when falling through platforms
     	        else if (playerBottom > platformTop && playerBottom <= platformBottom && player.getyVelocity() > 0) {
     	            player.setyVelocity(0); // Stop falling
     	            player.setY(platformTop - playerHitbox.getHeight()); // Adjust position to the top
     	            player.setGrounded(true); // Ground the player
-    	            System.out.println("caught mid-fall");
+    	            //System.out.println("caught mid-fall");
     	        }
     	    }
     	}

@@ -20,7 +20,7 @@ public static final int DEFAULT =0, MOVING = 1; //for sprites later use.
 private Enemy enemy; 
 private int count = 0; 
 private GImage EnemyImage;
-private GraphicsProgram program;
+private LevelManager manager;
 public boolean isActive; 
 public boolean movingRight;
 ArrayList<GImage> sprites;
@@ -31,8 +31,8 @@ private int aniTickSpeed =5;
 public Enemy() {
 	loadAnimations();
 }
-public void setProgram(GraphicsProgram program) {
-    this.program = program;
+public void setProgram(LevelManager program) {
+    this.manager = program;
 }
 
 private void loadAnimations() {
@@ -57,7 +57,7 @@ public void spawnEnemy(GRect platformIndex) {
 		enemy = new Enemy();
 		EnemyImage = new GImage(sprites.get(0).getImage());
 		EnemyImage.setLocation(platformIndex.getX(), platformIndex.getY() - EnemyImage.getHeight());
-	program.add(EnemyImage); 
+	manager.add(EnemyImage); 
 	isActive = true; 
 	}
 }
@@ -139,7 +139,7 @@ if(!isActive) return false;
       
        public void removeEnemy(Enemy enemy) {
     	    if (EnemyImage != null) {
-    	        program.remove(EnemyImage);
+    	        manager.remove(EnemyImage);
     	        isActive = false; 
     	     
     	    }
@@ -153,8 +153,14 @@ if(!isActive) return false;
    public int getEnemyCount() {
 	   return count; 
    }
+   
+   public GImage getEnemyImage() {
+	   return EnemyImage;
+   }
 
 	public void update(GRect platform, hitBox playerHitbox, Player player) {
+		    if (getEnemyImage() == null) return; // prevent crashing
+
     	EnemyMovement(platform);
     	collisionCheck(playerHitbox, player);
     	updateAnimation();		
