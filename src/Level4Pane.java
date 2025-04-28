@@ -137,22 +137,13 @@ public class Level4Pane extends GraphicsPane {
     private void spawnEnemies() {
         Enemy enemy1 = new Enemy();
         enemy1.setProgram(program);
-        enemy1.spawnEnemy(platform.getPlatforms().get(3));
+        enemy1.spawnEnemy(platform.getPlatforms().get(1));
         enemies.add(enemy1);
 
         Enemy enemy2 = new Enemy();
         enemy2.setProgram(program);
         enemy2.spawnEnemy(platform.getPlatforms().get(2));
         enemies.add(enemy2);
-        Enemy enemy3 = new Enemy();
-        enemy3.setProgram(program);
-        enemy3.spawnEnemy(platform.getPlatforms().get(7));
-        enemies.add(enemy3);
-
-        Enemy enemy4 = new Enemy();
-        enemy4.setProgram(program);
-        enemy4.spawnEnemy(platform.getPlatforms().get(6));
-        enemies.add(enemy4);
     }
 
     private void setupCountdownTimer(int startTime) {
