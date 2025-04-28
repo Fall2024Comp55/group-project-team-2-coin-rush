@@ -2,7 +2,7 @@ import acm.graphics.GRect;
 import acm.graphics.GRectangle;
 import acm.program.GraphicsProgram;
 
-public class hitBox {
+public class hitBox extends MainApplication {
 	 private GraphicsProgram program;
     private GRect hitbox;
     public void setProgram(GraphicsProgram program) {

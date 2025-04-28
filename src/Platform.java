@@ -5,23 +5,16 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public class Platform extends MainApplication {
-    private int Width; // Platform width
-    private int Height; // Platform height
-    private double x; // Current x position
-    private double y; // Current y position
-    private double speed; // Movement speed for MOVING platforms
-    private int Distance; // Maximum distance the platform can move
-    private PlatformTypes Type; // Type of the platform (STATIC or MOVING)
-    private ArrayList<GRect> Platforms = new ArrayList<>(); // List of platform objects
-    public ArrayList<PlatformTypes> PlatformTypesList = new ArrayList<>(); // List to track each platform's type
-    private ArrayList<Double> PlatformSpeeds = new ArrayList<>(); // List to track each platform's speed
-    private ArrayList<Integer> PlatformDistances = new ArrayList<>(); // List to track movement boundaries
-    private ArrayList<Double> PlatformStartX = new ArrayList<>(); // Starting x position for each platform
-    private ArrayList<Double> PlatformX = new ArrayList<>(); // Current x position for each platform
-    private ArrayList<Double> PlatformStartY = new ArrayList<>(); // Starting y position for each platform
-    private ArrayList<Double> PlatformY = new ArrayList<>(); // Current y position for each platform
-    private ArrayList<Boolean> PlatformVerticality = new ArrayList<>(); // Tracks if platform moves vertically
-    private GraphicsProgram program; // Reference to GraphicsProgram
+    private ArrayList<GRect> Platforms = new ArrayList<>();
+    private ArrayList<PlatformTypes> PlatformTypesList = new ArrayList<>();
+    private ArrayList<Double> PlatformSpeeds = new ArrayList<>();
+    private ArrayList<Integer> PlatformDistances = new ArrayList<>();
+    private ArrayList<Double> PlatformStartX = new ArrayList<>();
+    private ArrayList<Double> PlatformX = new ArrayList<>();
+    private ArrayList<Double> PlatformStartY = new ArrayList<>();
+    private ArrayList<Double> PlatformY = new ArrayList<>();
+    private ArrayList<Boolean> PlatformVerticality = new ArrayList<>();
+    private GraphicsProgram program;
 
     public enum PlatformTypes {
         STATIC, MOVING;
@@ -41,7 +34,6 @@ public class Platform extends MainApplication {
         }
     }
 
-    // Adds a platform to the list and spawns it
     public void addPlatform(int locX, int locY, int width, int height, PlatformTypes type, double speed, int maxDistance, boolean isVert) {
         GRect rect = new GRect(locX, locY, width, height);
         rect.setColor(Color.red);
@@ -50,9 +42,7 @@ public class Platform extends MainApplication {
         PlatformTypesList.add(type);
         PlatformSpeeds.add(speed);
         PlatformDistances.add(maxDistance);
-        PlatformVerticality.add(isVert); // Add vertical movement setting
-
-        // Track individual X and Y positions for MOVING platforms
+        PlatformVerticality.add(isVert);
         PlatformX.add((double) locX);
         PlatformStartX.add((double) locX);
         PlatformY.add((double) locY);
@@ -61,70 +51,63 @@ public class Platform extends MainApplication {
 
     public void updatePlatforms() {
         for (int i = 0; i < Platforms.size(); i++) {
-            GRect rect = Platforms.get(i); // Get the current platform
-            PlatformTypes type = PlatformTypesList.get(i); // STATIC or MOVING
-            double platformSpeed = PlatformSpeeds.get(i); // Speed for the platform
-            int maxDistance = PlatformDistances.get(i); // Maximum movement distance (positive or negative)
-            boolean isVert = PlatformVerticality.get(i); // True = vertical movement
-            double currentX = PlatformX.get(i); // Current X position
-            double startX = PlatformStartX.get(i); // Starting X position
-            double currentY = PlatformY.get(i); // Current Y position
-            double startY = PlatformStartY.get(i); // Starting Y position
+            GRect rect = Platforms.get(i);
+            PlatformTypes type = PlatformTypesList.get(i);
+            double platformSpeed = PlatformSpeeds.get(i);
+            int maxDistance = PlatformDistances.get(i);
+            boolean isVert = PlatformVerticality.get(i);
+            double currentX = PlatformX.get(i);
+            double startX = PlatformStartX.get(i);
+            double currentY = PlatformY.get(i);
+            double startY = PlatformStartY.get(i);
 
             if (type == PlatformTypes.MOVING && platformSpeed != 0 && maxDistance != 0) {
                 if (isVert) {
-                    // Vertical movement (up and down)
-                    currentY += platformSpeed; // Adjust Y position
+                    currentY += platformSpeed;
                     if (maxDistance > 0) {
-                        // Positive maxDistance: Move downward first
                         if (currentY > startY + maxDistance) {
-                            currentY = startY + maxDistance; 
-                            PlatformSpeeds.set(i, -Math.abs(platformSpeed)); // Reverse upward
+                            currentY = startY + maxDistance;
+                            PlatformSpeeds.set(i, -Math.abs(platformSpeed));
                         } else if (currentY < startY) {
-                            currentY = startY; 
-                            PlatformSpeeds.set(i, Math.abs(platformSpeed)); // Reverse downward
+                            currentY = startY;
+                            PlatformSpeeds.set(i, Math.abs(platformSpeed));
                         }
                     } else {
-                        // Negative maxDistance: Start by moving upward
                         if (currentY < startY + maxDistance) {
-                            currentY = startY + maxDistance; 
-                            PlatformSpeeds.set(i, Math.abs(platformSpeed)); // Reverse downward
+                            currentY = startY + maxDistance;
+                            PlatformSpeeds.set(i, Math.abs(platformSpeed));
                         } else if (currentY > startY) {
-                            currentY = startY; 
-                            PlatformSpeeds.set(i, -Math.abs(platformSpeed)); // Reverse upward
+                            currentY = startY;
+                            PlatformSpeeds.set(i, -Math.abs(platformSpeed));
                         }
                     }
                 } else {
-                    // Horizontal movement (left and right)
-                    currentX += platformSpeed; // Adjust X position
+                    currentX += platformSpeed;
                     if (maxDistance > 0) {
-                        // Positive maxDistance: Move right first
                         if (currentX > startX + maxDistance) {
-                            currentX = startX + maxDistance; // Clamp to max distance
-                            PlatformSpeeds.set(i, -Math.abs(platformSpeed)); // Reverse leftward
+                            currentX = startX + maxDistance;
+                            PlatformSpeeds.set(i, -Math.abs(platformSpeed));
                         } else if (currentX < startX) {
-                            currentX = startX; // Clamp to starting position
-                            PlatformSpeeds.set(i, Math.abs(platformSpeed)); // Reverse rightward
+                            currentX = startX;
+                            PlatformSpeeds.set(i, Math.abs(platformSpeed));
                         }
                     } else {
-                        // Negative maxDistance: Start by moving left
                         if (currentX < startX + maxDistance) {
-                            currentX = startX + maxDistance; // Clamp to max distance (negative)
-                            PlatformSpeeds.set(i, Math.abs(platformSpeed)); // Reverse rightward
+                            currentX = startX + maxDistance;
+                            PlatformSpeeds.set(i, Math.abs(platformSpeed));
                         } else if (currentX > startX) {
-                            currentX = startX; // Clamp to starting position
-                            PlatformSpeeds.set(i, -Math.abs(platformSpeed)); // Reverse leftward
+                            currentX = startX;
+                            PlatformSpeeds.set(i, -Math.abs(platformSpeed));
                         }
                     }
                 }
-
-                // Update position in lists
                 PlatformX.set(i, currentX);
                 PlatformY.set(i, currentY);
-                rect.setLocation(currentX, currentY); // Move the graphical object
+                rect.setLocation(currentX, currentY);
             }
         }
     }
+
     public GRect detectPlatformCollision(hitBox playerHitbox) {
         for (GRect platform : Platforms) {
             if (playerHitbox.getBounds().intersects(platform.getBounds())) {
@@ -134,15 +117,26 @@ public class Platform extends MainApplication {
         return null;
     }
 
-    public void SpawnPlatform() {
-        GRect platform = new GRect(x, y, Width, Height);
-        platform.setColor(Color.BLACK);
-        platform.setFilled(true);
-        program.add(platform); // Adds platform to the GraphicsProgram
-        Platforms.add(platform); // Keeps track of platforms
-    }
+    public void handlePlatformInteraction(Player player, hitBox playerHitbox) {
+        GRect touched = detectPlatformCollision(playerHitbox);
+        player.setGrounded(false);
+        if (touched != null) {
+            double playerBottom = player.getY() + playerHitbox.getHeight();
+            double playerTop = player.getY();
+            double platformTop = touched.getY();
+            double platformBottom = touched.getY() + touched.getHeight();
 
-    public void collision(GRectangle gRectangle) {
-
+            if (playerBottom >= platformTop && playerBottom <= platformTop + 15 && player.getyVelocity() >= 0) {
+                player.setGrounded(true);
+                player.setyVelocity(0);
+                player.setY(platformTop - playerHitbox.getHeight());
+            } else if (playerTop <= platformBottom && playerTop >= platformBottom - 15 && player.getyVelocity() < 0) {
+                player.setyVelocity(0);
+            } else if (playerBottom > platformTop && playerBottom <= platformBottom && player.getyVelocity() > 0) {
+                player.setyVelocity(0);
+                player.setY(platformTop - playerHitbox.getHeight());
+                player.setGrounded(true);
+            }
+        }
     }
 }

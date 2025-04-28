@@ -1,11 +1,12 @@
 import acm.program.GraphicsProgram;
 import acm.graphics.GImage;
 
-/**
- * The Door class represents a door that opens when the player collects
- * a required number of coins.
- */
 public class Door extends GraphicsProgram {
+<<<<<<< HEAD
+    private boolean status;
+    private int requiredCoins;
+    private GImage doorImage;
+=======
 	// door status: true means open, false means close
 	 private boolean status;
 	 // number of coins required to open the door
@@ -125,5 +126,102 @@ public class Door extends GraphicsProgram {
 //	 public static void main(String[] args) {
 //		 new Door(3, 550, 500).start();
 //	 }
+>>>>>>> refs/remotes/origin/main
 
+    public static final int WINDOW_WIDTH = 600;
+    public static final int WINDOW_HEIGHT = 600;
+
+    private double doorX;
+    private double doorY;
+    private GraphicsProgram program;
+
+    private String closedImage = "Media/Close.jpg";
+    private String openImage = "Media/Open.jpg";
+
+    public Door(int requiredCoins, double doorX, double doorY) {
+        this.requiredCoins = requiredCoins;
+        this.doorX = doorX;
+        this.doorY = doorY;
+        this.status = false;
+        doorImage = new GImage(closedImage, doorX, doorY);
+    }
+
+    public void setProgram(GraphicsProgram program) {
+        this.program = program;
+    }
+
+    public void init() {
+        program.requestFocus();
+        doorImage.scale(0.05);
+        program.add(doorImage);
+    }
+
+    public void run() {
+    }
+
+    public boolean checkIfplayerCanExit(int coinsCollected) {
+        if (coinsCollected >= requiredCoins) {
+            if (!status) {
+                openDoor();
+            }
+            return true;
+        } else {
+            if (status) {
+                status = false;
+                doorImage.setImage(closedImage);
+            }
+            return false;
+        }
+    }
+
+    public void openDoor() {
+        this.status = true;
+        doorImage.setImage(openImage);
+    }
+
+    public boolean isOpen() {
+        return status;
+    }
+
+    public void setDoorPosition(double x, double y) {
+        this.doorX = x;
+        this.doorY = y;
+        doorImage.setLocation(x, y);
+    }
+
+    public double[] getDoorPosition() {
+        return new double[]{doorX, doorY};
+    }
+
+    public void setRequiredCoins(int coinCount) {
+        this.requiredCoins = coinCount;
+    }
+
+    public int serRequiredCoins() {
+        return this.requiredCoins;
+    }
+
+    public void doorCollision(hitBox playerHitbox) {
+        if (playerHitbox.intersects(doorImage.getBounds())) {
+            // You can add something here later if needed
+        }
+    }
+
+    public String getCloseDoor() {
+        return closedImage;
+    }
+
+    public String getOpenDoor() {
+        return openImage;
+    }
+
+    public void update(hitBox playerHitbox, int coinsCollected) {
+        doorCollision(playerHitbox);
+        checkIfplayerCanExit(coinsCollected);
+    }
+
+    // NEW METHOD: detect if player is touching the open door
+    public boolean playerTouchingDoor(hitBox playerHitbox) {
+        return playerHitbox.getBounds().intersects(doorImage.getBounds()) && status;
+    }
 }

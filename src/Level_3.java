@@ -12,13 +12,10 @@ public class Level_3 extends GraphicsPane {
 
     private Player player;
     private Platform platform;
-    private Enemy enemy1;
-    private Enemy enemy2;
-    private Enemy enemy3;
-    private Enemy enemy4;
     private testCoin coin;
     private Door door; 
     private hitBox playerHitbox;
+    private ArrayList<Enemy> enemies = new ArrayList<>();
     UI_Elements UI;
     private LevelManager program;
     
@@ -27,7 +24,7 @@ public class Level_3 extends GraphicsPane {
     private ArrayList<GLabel> gridLabels = new ArrayList<>(); //stores the labels that visually show the size of each cell
     public static final int GRID_SIZE = 40; //size of grid cell
     private GImage background; 
-    
+    private LevelHandler levelHandler;
     private boolean isGameOver = false;
     private GLabel gameOverLabel;
     private GLabel restartLabel;
@@ -101,15 +98,43 @@ public class Level_3 extends GraphicsPane {
         program.add(playerHitbox.getHitbox());
         
     	
+<<<<<<< HEAD
+        
+
+        Enemy enemy1 = new Enemy();
+        enemy1.setProgram(this);
+=======
         //Enemy(s)
         enemy1 = new Enemy();
         enemy1.setProgram(program);
+>>>>>>> refs/remotes/origin/main
         enemy1.spawnEnemy(platform.getPlatforms().get(7));
+<<<<<<< HEAD
+        enemies.add(enemy1);
+
+        Enemy enemy2 = new Enemy();
+        enemy2.setProgram(this);
+=======
         
         enemy2 = new Enemy();
         enemy2.setProgram(program);
+>>>>>>> refs/remotes/origin/main
         enemy2.spawnEnemy(platform.getPlatforms().get(5));
+        enemies.add(enemy2);
         
+<<<<<<< HEAD
+        Enemy enemy3 = new Enemy();
+        enemy2.setProgram(this);
+        enemy2.spawnEnemy(platform.getPlatforms().get(8));
+        enemies.add(enemy2);
+
+        Enemy enemy4 = new Enemy();
+        enemy2.setProgram(this);
+        enemy2.spawnEnemy(platform.getPlatforms().get(10));
+        enemies.add(enemy2);
+
+      
+=======
         enemy3 = new Enemy();
         enemy3.setProgram(program);
         enemy3.spawnEnemy(platform.getPlatforms().get(8));
@@ -117,6 +142,7 @@ public class Level_3 extends GraphicsPane {
         enemy4 = new Enemy();
         enemy4.setProgram(program);
         enemy4.spawnEnemy(platform.getPlatforms().get(10));
+>>>>>>> refs/remotes/origin/main
         
         
         //UI
@@ -124,14 +150,24 @@ public class Level_3 extends GraphicsPane {
         UI.setProgram(program);
         UI.createUI(coin, player); 
         
+<<<<<<< HEAD
+        deathMenu = new Menu();
+   	 deathMenu.setProgram(this);
+   	levelHandler = new LevelHandler(player, platform, enemies, coin, door, playerHitbox, UI);
+=======
 
         //death menu
  	  deathMenu = new Menu();
  	  deathMenu.setProgram(program);
+>>>>>>> refs/remotes/origin/main
     }
 
     public void updateLevel() {
     	if(!isGameOver) {
+<<<<<<< HEAD
+    		levelHandler.updateLevel();
+     
+=======
             player.update(); //updates the Player animation loop & movement
             coin.update(playerHitbox); //updates the collision to check if player is touching a coin
             platform.collision(player.getBounds());
@@ -151,6 +187,7 @@ public class Level_3 extends GraphicsPane {
             if (box != null) {
                 box.setLocation(player.getX(), player.getY());
             }            
+>>>>>>> refs/remotes/origin/main
           //restart the level once hp reaches 0
             if (player.getHP() <= 0) {
                 GameOverScreen();
@@ -186,6 +223,10 @@ public class Level_3 extends GraphicsPane {
       	    }
       	}
 
+<<<<<<< HEAD
+   
+
+=======
       	public void handlePlatformInteraction() {
     	    // Detect collision with a platform
     	    GRect touchedPlatform = platform.detectPlatformCollision(playerHitbox);
@@ -220,6 +261,7 @@ public class Level_3 extends GraphicsPane {
     	        }
     	    }
     	}
+>>>>>>> refs/remotes/origin/main
       	private void clearGrid() {
       	    for (GLine line : gridLines) {
       	        program.remove(line);

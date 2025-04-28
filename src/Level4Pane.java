@@ -1,5 +1,3 @@
-// Level0Pane.java
-
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -10,16 +8,17 @@ import javax.swing.Timer;
 
 import acm.graphics.*;
 
-public class Level0Pane extends GraphicsPane {
+public class Level4Pane extends GraphicsPane {
     private MainApplication program;
     private Player player;
     private Platform platform;
-    private Enemy enemy, enemy1;
+    private ArrayList<Enemy> enemies = new ArrayList<>();
     private testCoin coin;
     private Door door;
     private UI_Elements UI;
 
-  
+    
+
     private GImage background;
     private Timer timer;
     private Timer countdownTimer;
@@ -33,13 +32,13 @@ public class Level0Pane extends GraphicsPane {
     private GCompound restartButtonCompound;
     private GCompound exitButtonCompound;
 
-    public Level0Pane(MainApplication app) {
+    public Level4Pane(MainApplication app) {
         this.program = app;
     }
 
     @Override
     public void showContent() {
-      
+       
 
         background = new GImage("Media/Background1.png");
         program.add(background);
@@ -49,44 +48,51 @@ public class Level0Pane extends GraphicsPane {
         platform = new Platform();
         platform.setProgram(program);
 
-        platform.addPlatform(100, 400, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(200, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(400, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(600, 600, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(800, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
-        platform.addPlatform(1000, 500, 100, 30, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(40, 680, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(0, 280, 40, 40, Platform.PlatformTypes.MOVING, 2, -120, true);
+        platform.addPlatform(40, 360, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(120, 400, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(300, 40, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(480, 160, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(720, 160, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(200, 500, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(200, 660, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(400, 600, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(480, 600, 80, 40, Platform.PlatformTypes.MOVING, 2, 120, false);
+        platform.addPlatform(840, 600, 80, 40, Platform.PlatformTypes.MOVING, 2, -120, false);
+        platform.addPlatform(1040, 640, 120, 80, Platform.PlatformTypes.MOVING, 0, 0, false);
+        platform.addPlatform(160, 160, 80, 40, Platform.PlatformTypes.STATIC, 0, 0, false);
+        platform.addPlatform(320, 160, 80, 40, Platform.PlatformTypes.MOVING, 1, -80, false);
+       
+       
+        platform.addPlatform(1160, 640, 120, 80, Platform.PlatformTypes.MOVING, 0, 0, false);
         platform.addPlatformsToScreen();
 
-        coin = new testCoin(5);
+        coin = new testCoin(15);
         coin.setProgram(program);
         coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
         coin.init();
 
-        door = new Door(3, 1025, 415);
+        door = new Door(8, 1200, 600);
         door.setProgram(program);
         door.init();
 
-        player = new Player(100, 300);
+        player = new Player(40, 640);
         player.setProgram(program);
-        player.spawn(100, 300);
+        player.spawn(40, 640);
 
         playerHitbox = new hitBox();
         playerHitbox.createHitbox(player.getX(), player.getY(), player.getBounds().getWidth(), player.getBounds().getHeight(), 20, 3);
         program.add(playerHitbox.getHitbox());
 
+        enemies.clear();
+        spawnEnemies();
+
         UI = new UI_Elements();
         UI.setProgram(program);
         UI.createUI(coin, player);
 
-        setupCountdownTimer(30); // 30 seconds for Level 0
-
-        enemy = new Enemy();
-        enemy.setProgram(program);
-        enemy.spawnEnemy(platform.getPlatforms().get(0));
-
-        enemy1 = new Enemy();
-        enemy1.setProgram(program);
-        enemy1.spawnEnemy(platform.getPlatforms().get(2));
+        setupCountdownTimer(120); // 2 minutes for Level 4
 
         timer = new Timer(16, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -100,11 +106,15 @@ public class Level0Pane extends GraphicsPane {
                     isDead = true;
                     return;
                 }
+               
 
                 platform.handlePlatformInteraction(player, playerHitbox);
+                platform.updatePlatforms();
+                for (Enemy enemy : enemies) {
+                    enemy.update(playerHitbox, player);
+                }
+
                 coin.update(playerHitbox);
-                enemy.update(playerHitbox, player);
-                enemy1.update(playerHitbox, player);
                 door.checkIfplayerCanExit(coin.getCoinsCollected());
                 UI.init(door, coin, player);
 
@@ -113,7 +123,7 @@ public class Level0Pane extends GraphicsPane {
                     countdownTimer.stop();
                     int levelScore = (timeLeft * 500) + (coin.getCoinsCollected() * 250);
                     program.addToTotalScore(levelScore);
-                    program.switchToScoreboard(timeLeft, coin.getCoinsCollected(), 0); // Level 0
+                    program.switchToFinalScoreboard(timeLeft, coin.getCoinsCollected());
                 }
             }
         });
@@ -122,6 +132,18 @@ public class Level0Pane extends GraphicsPane {
         addPauseButton();
         program.addKeyListeners();
         program.addMouseListeners();
+    }
+
+    private void spawnEnemies() {
+        Enemy enemy1 = new Enemy();
+        enemy1.setProgram(program);
+        enemy1.spawnEnemy(platform.getPlatforms().get(1));
+        enemies.add(enemy1);
+
+        Enemy enemy2 = new Enemy();
+        enemy2.setProgram(program);
+        enemy2.spawnEnemy(platform.getPlatforms().get(2));
+        enemies.add(enemy2);
     }
 
     private void setupCountdownTimer(int startTime) {
@@ -219,7 +241,6 @@ public class Level0Pane extends GraphicsPane {
         program.add(deathMenuCompound);
     }
 
-
     @Override
     public void mouseClicked(MouseEvent e) {
         if (isDead) {
@@ -229,7 +250,7 @@ public class Level0Pane extends GraphicsPane {
 
             if (clicked != null) {
                 if (restartButtonCompound.getElementAt(clickX - restartButtonCompound.getX(), clickY - restartButtonCompound.getY()) != null) {
-                    program.restartLevel(0); // Restart Level 0
+                    program.restartLevel(4); // Restart Level 4
                 } else if (exitButtonCompound.getElementAt(clickX - exitButtonCompound.getX(), clickY - exitButtonCompound.getY()) != null) {
                     program.switchToWelcomeScreen();
                 }
@@ -249,7 +270,7 @@ public class Level0Pane extends GraphicsPane {
     public void keyPressed(KeyEvent e) {
         if (isDead) {
             if (e.getKeyCode() == KeyEvent.VK_R) {
-                program.restartLevel(0);
+                program.restartLevel(4);
             } else if (e.getKeyCode() == KeyEvent.VK_E) {
                 program.switchToWelcomeScreen();
             }
@@ -257,7 +278,7 @@ public class Level0Pane extends GraphicsPane {
         }
         player.keyPressed(e);
 
-      
+     
     }
 
     @Override
@@ -270,7 +291,7 @@ public class Level0Pane extends GraphicsPane {
         player.keyTyped(e);
     }
 
-  
+
 
     public void startTimer() {
         if (timer != null) timer.start();
@@ -286,7 +307,7 @@ public class Level0Pane extends GraphicsPane {
     public void hideContent() {
         if (timer != null) timer.stop();
         if (countdownTimer != null) countdownTimer.stop();
-      
+     
         program.clear();
     }
 }

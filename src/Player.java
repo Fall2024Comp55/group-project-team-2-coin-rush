@@ -185,7 +185,7 @@ public int getHP(){
 		//gets the health points of the player
 }
 
-private void setHP(int HP){
+public void setHP(int HP){
 	this.healthPoints = HP;
 }
 
@@ -417,6 +417,11 @@ public double getyVelocity() {
 public GImage getImage() {
 	return player;
 }
+
+public GraphicsProgram getProgram() {
+    return program;
+}
+
 
 
 }
