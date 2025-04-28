@@ -8,6 +8,7 @@ import acm.graphics.GRect;
 
 public class PausePane extends GraphicsPane {
     private MainApplication mainScreen;
+    private GCompound restartButtonCompound;
     private GCompound continueButtonCompound;
     private GCompound quitButtonCompound;
     private GRect overlay;
@@ -59,6 +60,28 @@ public class PausePane extends GraphicsPane {
         contents.add(continueButtonCompound);
         mainScreen.add(continueButtonCompound);
     }
+    private void createReStartButton() {
+        GImage restartButtonImage = new GImage("CGB02-yellow_M_btn.png");
+       restartButtonImage.scale(0.3, 0.3);
+
+        GLabel  restartLabel = new GLabel("Restart");
+        restartLabel.setFont("SansSerif-bold-18");
+        restartLabel.setColor(Color.WHITE);
+
+        restartButtonCompound = new GCompound();
+        restartButtonCompound.add( restartButtonImage, 0, 0);
+
+        double labelX = ( restartButtonImage.getWidth() - restartLabel.getWidth()) / 2;
+        double labelY = ( restartButtonImage.getHeight() +  restartLabel.getAscent()) / 2;
+        restartButtonCompound.add( restartLabel, labelX, labelY);
+
+        double x = (MainApplication.WINDOW_WIDTH / 2) - 100;
+        double y = 150;
+
+        restartButtonCompound.setLocation(x, y);
+        contents.add( restartButtonCompound);
+        mainScreen.add( restartButtonCompound);
+    }
 
     private void createQuitButton() {
         GImage quitButtonImage = new GImage("CGB02-yellow_M_btn.png");
@@ -91,6 +114,7 @@ public class PausePane extends GraphicsPane {
             if (continueButtonCompound.getElementAt(e.getX() - continueButtonCompound.getX(), e.getY() - continueButtonCompound.getY()) != null) {
                 mainScreen.resumePreviousPane();
             } 
+           
             else if (quitButtonCompound.getElementAt(e.getX() - quitButtonCompound.getX(), e.getY() - quitButtonCompound.getY()) != null) {
                 GraphicsPane previous = mainScreen.getPreviousPane();
                 if (previous != null) {

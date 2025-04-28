@@ -73,7 +73,7 @@ public class Level4Pane extends GraphicsPane {
         coin.spawnCoinsToPlatforms(coin.getCoinsOnPlatforms(), platform.getPlatforms(), true);
         coin.init();
 
-        door = new Door(8, 1155, 600);
+        door = new Door(8, 1155, 555);
         door.setProgram(program);
         door.init();
 
