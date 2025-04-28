@@ -10,9 +10,6 @@ public class ScoreboardPane extends GraphicsPane {
     private int finalScore;
     private int currentLevel;
 
-    private GLabel scoreLabel;
-    private GLabel timeBonusLabel;
-    private GLabel coinBonusLabel;
     private GCompound nextButtonCompound;
     private GCompound restartButtonCompound;
     private GCompound menuButtonCompound;
@@ -29,40 +26,40 @@ public class ScoreboardPane extends GraphicsPane {
 
     @Override
     public void showContent() {
-        // Transparent background
         overlay = new GRect(0, 0, MainApplication.WINDOW_WIDTH, MainApplication.WINDOW_HEIGHT);
         overlay.setFilled(true);
-        overlay.setFillColor(new Color(0, 0, 0, 100)); // Black with 100 alpha transparency
-        overlay.setColor(new Color(0, 0, 0, 0)); // No border
+        overlay.setFillColor(new Color(0, 0, 0, 50));
+        overlay.setColor(new Color(0, 0, 0, 0));
         program.add(overlay);
         contents.add(overlay);
 
-        // Time bonus label
-        timeBonusLabel = new GLabel("Time Bonus: " + timeLeft + " × 500 = " + (timeLeft * 500));
+        GLabel titleLabel = new GLabel("LEVEL COMPLETE!");
+        titleLabel.setFont("SansSerif-bold-48");
+        titleLabel.setColor(Color.WHITE);
+        titleLabel.setLocation((MainApplication.WINDOW_WIDTH - titleLabel.getWidth()) / 2, 100);
+        program.add(titleLabel);
+        contents.add(titleLabel);
+
+        GLabel timeBonusLabel = new GLabel("Time Bonus: " + timeLeft + " × 500 = " + (timeLeft * 500));
         timeBonusLabel.setFont("SansSerif-bold-24");
-        timeBonusLabel.setColor(Color.WHITE);
-        double timeBonusX = (MainApplication.WINDOW_WIDTH - timeBonusLabel.getWidth()) / 2;
-        timeBonusLabel.setLocation(timeBonusX, 120);
+        timeBonusLabel.setColor(Color.YELLOW);
+        timeBonusLabel.setLocation((MainApplication.WINDOW_WIDTH - timeBonusLabel.getWidth()) / 2, 200);
         program.add(timeBonusLabel);
         contents.add(timeBonusLabel);
 
-        // Coin bonus label
-        coinBonusLabel = new GLabel("Coins Bonus: " + coinsCollected + " × 250 = " + (coinsCollected * 250));
+        GLabel coinBonusLabel = new GLabel("Coins Bonus: " + coinsCollected + " × 250 = " + (coinsCollected * 250));
         coinBonusLabel.setFont("SansSerif-bold-24");
-        coinBonusLabel.setColor(Color.WHITE);
-        double coinBonusX = (MainApplication.WINDOW_WIDTH - coinBonusLabel.getWidth()) / 2;
-        coinBonusLabel.setLocation(coinBonusX, 170);
+        coinBonusLabel.setColor(Color.YELLOW);
+        coinBonusLabel.setLocation((MainApplication.WINDOW_WIDTH - coinBonusLabel.getWidth()) / 2, 250);
         program.add(coinBonusLabel);
         contents.add(coinBonusLabel);
 
-        // Final Score label
-        scoreLabel = new GLabel("Final Score: " + finalScore);
-        scoreLabel.setFont("SansSerif-bold-36");
-        scoreLabel.setColor(Color.WHITE);
-        double scoreX = (MainApplication.WINDOW_WIDTH - scoreLabel.getWidth()) / 2;
-        scoreLabel.setLocation(scoreX, 230);
-        program.add(scoreLabel);
-        contents.add(scoreLabel);
+        GLabel finalScoreLabel = new GLabel("Final Score: " + finalScore);
+        finalScoreLabel.setFont("SansSerif-bold-32");
+        finalScoreLabel.setColor(Color.CYAN);
+        finalScoreLabel.setLocation((MainApplication.WINDOW_WIDTH - finalScoreLabel.getWidth()) / 2, 320);
+        program.add(finalScoreLabel);
+        contents.add(finalScoreLabel);
 
         createNextButton();
         createRestartButton();
@@ -84,7 +81,7 @@ public class ScoreboardPane extends GraphicsPane {
         double labelY = (buttonImage.getHeight() + label.getAscent()) / 2;
         nextButtonCompound.add(label, labelX, labelY);
 
-        nextButtonCompound.setLocation((MainApplication.WINDOW_WIDTH - buttonImage.getWidth()) / 2, 330);
+        nextButtonCompound.setLocation((MainApplication.WINDOW_WIDTH - buttonImage.getWidth()) / 2, 400);
         program.add(nextButtonCompound);
         contents.add(nextButtonCompound);
     }
@@ -104,7 +101,7 @@ public class ScoreboardPane extends GraphicsPane {
         double labelY = (buttonImage.getHeight() + label.getAscent()) / 2;
         restartButtonCompound.add(label, labelX, labelY);
 
-        restartButtonCompound.setLocation((MainApplication.WINDOW_WIDTH - buttonImage.getWidth()) / 2, 400);
+        restartButtonCompound.setLocation((MainApplication.WINDOW_WIDTH - buttonImage.getWidth()) / 2, 470);
         program.add(restartButtonCompound);
         contents.add(restartButtonCompound);
     }
@@ -124,7 +121,7 @@ public class ScoreboardPane extends GraphicsPane {
         double labelY = (buttonImage.getHeight() + label.getAscent()) / 2;
         menuButtonCompound.add(label, labelX, labelY);
 
-        menuButtonCompound.setLocation((MainApplication.WINDOW_WIDTH - buttonImage.getWidth()) / 2, 470);
+        menuButtonCompound.setLocation((MainApplication.WINDOW_WIDTH - buttonImage.getWidth()) / 2, 540);
         program.add(menuButtonCompound);
         contents.add(menuButtonCompound);
     }
