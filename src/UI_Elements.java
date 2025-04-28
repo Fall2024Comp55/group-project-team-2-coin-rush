@@ -10,6 +10,7 @@ import acm.program.GraphicsProgram;
 public class UI_Elements { 
 	
 	private GraphicsProgram program;
+	 private GLabel timerText;
 
 	// Sets the GraphicsProgram context
     public void setProgram(GraphicsProgram program) {
@@ -143,6 +144,21 @@ public class UI_Elements {
 	    hp.setLocation(65,2); 
 	    program.add(hp);
   }
+ 
+
+  public void createTimer(int startTime) {
+      timerText = new GLabel("Time Left: " + startTime, 1000, 30);
+      timerText.setFont("SansSerif-bold-16");
+      timerText.setColor(Color.WHITE);
+      program.add(timerText);
+  }
+
+  public void updateTimer(int timeLeft) {
+      if (timerText != null) {
+          timerText.setLabel("Time Left: " + timeLeft);
+      }
+  }
+
   
   public void UILevel1() {
 	GImage UIimage = new GImage("Media/UI_Image.png");  

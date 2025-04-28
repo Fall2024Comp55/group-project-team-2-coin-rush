@@ -1,3 +1,4 @@
+import acm.graphics.GObject;
 import acm.program.GraphicsProgram;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
@@ -110,7 +111,7 @@ public class MainApplication extends GraphicsProgram {
         else if (currentPane instanceof Level4Pane) ((Level4Pane) currentPane).startTimer();
     }
 
-<<<<<<< HEAD
+
     public void pauseCurrentLevelTimer() {
         if (currentPane instanceof Level0Pane) ((Level0Pane) currentPane).pauseGame();
         else if (currentPane instanceof Level1Pane) ((Level1Pane) currentPane).pauseGame();
@@ -118,16 +119,12 @@ public class MainApplication extends GraphicsProgram {
         else if (currentPane instanceof Level3Pane) ((Level3Pane) currentPane).pauseGame();
         else if (currentPane instanceof Level4Pane) ((Level4Pane) currentPane).pauseGame();
     }
-=======
-		//TheDefaultPane
-		switchToScreen(welcomePane);
-	}
-	/*
+	
 	public static void main(String[] args) {
 		new MainApplication().start();
->>>>>>> refs/remotes/origin/main
+	}
 
-<<<<<<< HEAD
+
     public void switchToNextLevel(int currentLevel) {
         if (currentLevel == 0) switchToLevel1Pane();
         else if (currentLevel == 1) switchToLevel2Pane();
@@ -179,38 +176,13 @@ public class MainApplication extends GraphicsProgram {
 
 
 
-    public void switchToWelcomeScreen() {
-        switchToWelcomePane();
-    }
-
+  
 
     public GraphicsPane getPreviousPane() {
         return previousPane;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if (currentPane != null) currentPane.mouseClicked(e);
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (currentPane != null) currentPane.keyPressed(e);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (currentPane != null) currentPane.keyReleased(e);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        if (currentPane != null) currentPane.keyTyped(e);
-    }
-
-    public static void main(String[] args) {
-        new MainApplication().start();
-    }
+   
     public int getTotalScore() {
         return totalScore;
     }
@@ -218,16 +190,9 @@ public class MainApplication extends GraphicsProgram {
     public void addToTotalScore(int score) {
         totalScore += score;
     }
-=======
-	}
-	*/
-    public static void main(String[] args) {
-        new LevelManager().start();
-    }
+
 	
-	public void switchToDescriptionScreen() {
-		switchToScreen(descriptionPane);
-	}
+
 	
 	public void switchToWelcomeScreen() {
 		switchToScreen(welcomePane);
@@ -238,14 +203,11 @@ public class MainApplication extends GraphicsProgram {
 		switchToScreen(level0Pane);
 	}
 	
-	public void switchToPauseScreen()  {
-		pausePane.showContent();
-		currentScreen = pausePane;
-	}
+	
 	
 	public void hidePauseScreen() {
 		pausePane.hideContent();
-		currentScreen = level0Pane;
+		 currentPane = level0Pane;
 	}
 	
 	public void startLevel0Timer() {
@@ -253,11 +215,11 @@ public class MainApplication extends GraphicsProgram {
 	}
 	
 	protected void switchToScreen(GraphicsPane newScreen) {
-		if(currentScreen != null) {
-			currentScreen.hideContent();
+		if( currentPane != null) {
+			 currentPane.hideContent();
 		}
 		newScreen.showContent();
-		currentScreen = newScreen;
+		 currentPane = newScreen;
 	}
 	
 	public GObject getElementAtLocation(double x, double y) {
@@ -266,59 +228,59 @@ public class MainApplication extends GraphicsProgram {
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if(currentScreen != null) {
-			currentScreen.mousePressed(e);
+		if( currentPane != null) {
+			 currentPane.mousePressed(e);
 		}
 	}
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if(currentScreen != null) {
-			currentScreen.mouseReleased(e);
+		if( currentPane != null) {
+			 currentPane.mouseReleased(e);
 		}
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(currentScreen != null) {
-			currentScreen.mouseClicked(e);
+		if( currentPane != null) {
+			 currentPane.mouseClicked(e);
 		}
 	}
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if(currentScreen != null) {
-			currentScreen.mouseDragged(e);
+		if( currentPane != null) {
+			 currentPane.mouseDragged(e);
 		}
 	}
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if(currentScreen != null) {
-			currentScreen.mouseMoved(e);
+		if( currentPane != null) {
+			 currentPane.mouseMoved(e);
 		}
 	}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(currentScreen != null) {
-			currentScreen.keyPressed(e);
+		if( currentPane != null) {
+			 currentPane.keyPressed(e);
 		}
 	}
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(currentScreen != null) {
-			currentScreen.keyReleased(e);
+		if( currentPane != null) {
+			 currentPane.keyReleased(e);
 		}
 	}
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if(currentScreen != null) {
-			currentScreen.keyTyped(e);
+		if( currentPane != null) {
+			 currentPane.keyTyped(e);
 		}
 	}
->>>>>>> refs/remotes/origin/main
+
 
 }
