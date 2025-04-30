@@ -209,7 +209,7 @@ public class Level4Pane extends GraphicsPane {
         deathMenuCompound.add(deathLabel, 90, 80); // adjust inside the menu
 
         // Restart Button
-        GImage restartButton = new GImage("CGB02-yellow_M_btn.png");
+        GImage restartButton = new GImage("CGB02-yellow_L_btn.png");
         restartButton.scale(0.3, 0.3);
         GLabel restartLabel = new GLabel("RESTART");
         restartLabel.setFont("SansSerif-bold-18");
@@ -226,7 +226,7 @@ public class Level4Pane extends GraphicsPane {
         deathMenuCompound.add(restartButtonCompound);
 
         // Exit Button
-        GImage exitButton = new GImage("CGB02-yellow_M_btn.png");
+        GImage exitButton = new GImage("CGB02-yellow_L_btn.png");
         exitButton.scale(0.3, 0.3);
         GLabel exitLabel = new GLabel("EXIT");
         exitLabel.setFont("SansSerif-bold-18");

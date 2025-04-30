@@ -152,7 +152,7 @@ public class Level1Pane extends GraphicsPane {
     }
 
     private void addPauseButton() {
-        GImage pauseButton = new GImage("CGB02-yellow_M_btn.png");
+        GImage pauseButton = new GImage("CGB02-yellow_L_btn.png");
         pauseButton.scale(0.3, 0.3);
 
         GLabel buttonLabel = new GLabel("PAUSE");
@@ -184,7 +184,7 @@ public class Level1Pane extends GraphicsPane {
         deathMenuCompound.add(deathLabel, 90, 80); // adjust inside the menu
 
         // Restart Button
-        GImage restartButton = new GImage("CGB02-yellow_M_btn.png");
+        GImage restartButton = new GImage("CGB02-yellow_L_btn.png");
         restartButton.scale(0.3, 0.3);
         GLabel restartLabel = new GLabel("RESTART");
         restartLabel.setFont("SansSerif-bold-18");
@@ -201,7 +201,7 @@ public class Level1Pane extends GraphicsPane {
         deathMenuCompound.add(restartButtonCompound);
 
         // Exit Button
-        GImage exitButton = new GImage("CGB02-yellow_M_btn.png");
+        GImage exitButton = new GImage("CGB02-yellow_L_btn.png");
         exitButton.scale(0.3, 0.3);
         GLabel exitLabel = new GLabel("EXIT");
         exitLabel.setFont("SansSerif-bold-18");

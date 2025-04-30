@@ -54,7 +54,7 @@ public class FinalScoreboardPane extends GraphicsPane {
     }
 
     private void createRestartButton() {
-        GImage buttonImage = new GImage("CGB02-yellow_M_btn.png");
+        GImage buttonImage = new GImage("CGB02-yellow_L_btn.png");
         buttonImage.scale(0.3, 0.3);
 
         GLabel label = new GLabel("RESTART");
@@ -74,7 +74,7 @@ public class FinalScoreboardPane extends GraphicsPane {
     }
 
     private void createMenuButton() {
-        GImage buttonImage = new GImage("CGB02-yellow_M_btn.png");
+        GImage buttonImage = new GImage("CGB02-yellow_L_btn.png");
         buttonImage.scale(0.3, 0.3);
 
         GLabel label = new GLabel("MAIN MENU");
